@@ -1,0 +1,55 @@
+/* --- main settings --- */
+
+* { 
+	padding: 0px;
+	margin: 0px;
+	text-decoration: none;
+}
+
+body{
+   font-family: Helvetica,Arial,sans-serif;
+	background-image: url(bg.png);
+	background-repeat: repeat-x;
+	padding-left: 200px;
+	background-color: #dddddd;	
+
+}
+
+h1{
+	font-weight: normal;
+	color: #ff5353;
+	font-size: 27px;
+	display: block;
+	padding: 25px 0 29px 10px;
+	border-bottom: 1px solid #f3f3f3;
+	width: 800px;
+	margin-bottom: 50px;
+    letter-spacing: -1px;
+}
+
+p{
+	font-size: 16px;
+	color: #5c5c5c;
+	letter-spacing: 1px;
+	line-height: 20px;
+	width: 800px;
+	display: block;
+	
+}
+ul{
+	padding: 40px 0;
+}
+ul li{
+	list-style-type: none;
+	display: block;
+	line-height: 30px;
+	color: #5c5c5c;
+	width: 600px;
+}
+ul li a{
+	color: #ff5353;
+	padding-left: 15px;	
+}
+ul li a:hover{
+	color: white;
+}
