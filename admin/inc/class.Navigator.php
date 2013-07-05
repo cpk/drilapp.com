@@ -56,7 +56,7 @@ class Navigator
 		
 		if($this->actualPage - $neighbor -1 > 0){
 			$i = $this->actualPage - $neighbor;
-			$this->html .= " ... ";
+			$this->html .= '<span class="dots">...</span> ';
 		}else{
 			$i = 2;
 		}
@@ -83,7 +83,7 @@ class Navigator
 		
 		
 		if($this->actualPage + $neighbor + 1 < $this->totalPages){
-			$this->html .= " ... ";
+			$this->html .= '<span class="dots">...</span> ';
 		}
 		
 		if($this->totalPages != $this->actualPage) { $this->getPageLink($this->totalPages); }

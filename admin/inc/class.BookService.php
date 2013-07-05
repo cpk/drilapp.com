@@ -91,7 +91,11 @@ class BookService {
         $_GET['lang_q'] = (isset($_GET['lang_q']) ? intval($_GET['lang_q']) : 0);
         $_GET['lang_a'] = (isset($_GET['lang_a']) ? intval($_GET['lang_a']) : 0);
         $_GET['level'] = (isset($_GET['level']) ? intval($_GET['level']) : 0);
-       
+        
+        if(isset($_GET['query'])){
+            $_GET['query'] = $this->conn->clean($_GET['query']);
+        }
+
         $where = array();
         if(isset($_GET['lang_q']) && $_GET['lang_q'] != 0) 
             $where[] =  " (bv.`lang` ='".$_GET['lang_q']."' OR bv.`lang_a` ='".$_GET['lang_q']."' )"; 

@@ -16,18 +16,21 @@
         $strings['en']['langDefault'] = "Default language:";  
         $strings['sk']['langTarget'] = "Cieľový jazyk:";  
         $strings['en']['langTarget'] = "Target language:"; 
-        $strings['sk']['author'] = "Názov/autor učebnice:";  
-        $strings['en']['author'] = "Name / author of textbook:"; 
+        $strings['sk']['author'] = "Vyľadať:";  
+        $strings['en']['author'] = "Search:"; 
         $strings['sk']['order'] = "Zoradiť podľa:";  
         $strings['en']['order'] = "Order by:";  
         $strings['sk']['orderVals'] =  array( "Najnovších", "Najstarších", "Autora A-Z", "Autora Z-A", "Najstahovanejšie" );
         $strings['en']['orderVals'] =  array( "Newest", "Oldest", "Author A-Z", "Author Z-A", "Most download" );
+        $strings['sk']['filter'] = "Filtrovať";
+        $strings['en']['filter'] = "Filter";
 
         
         $_GET["lang_q"] = (isset($_GET["lang_q"]) ? (int)$_GET["lang_q"] : "");
         $_GET["lang_a"] = (isset($_GET["lang_a"]) ? (int)$_GET["lang_a"] : "");
         $_GET["level"] = (isset($_GET["level"]) ? (int)$_GET["level"] : "");
-        
+
+
         $bookPrezenter = new BookPrezenter($conn);
         if(isset($_GET['id'])){
             $book = $bookPrezenter->getBook($_GET['id']);
@@ -83,37 +86,40 @@
             $pageContent .= '
                 <form id="filter">
                     <div class="coll">
-                        <div class="flang">
+                        <div class="bx flang">
                             <label>'.$strings[$lang]["langDefault"].'</label>
                             <select name="lang_q">'.getLangsOptions(intval($_GET["lang_q"]) , $langs,  $strings, $lang).'</select>
                         </div>
-                        <div class="flang">
+                        <div class="bx flang">
                             <label>'.$strings[$lang]["langTarget"].'</label>
                             <select name="lang_a">'.getLangsOptions(intval($_GET["lang_a"]) , $langs,  $strings, $lang).'</select>
                         </div>
                     </div>
 
                     <div class="coll">
-                        <div class="long">
-                            <label>'.$strings[$lang]["level"].':</label>
-                            <select name="level">'.getLevelOptions($conn, $strings , $lang).'</select>
+                        <div class="bx long">
+                            <label>'.$strings[$lang]["level"].'</label>
+                            <select class="fr" name="level">'.getLevelOptions($conn, $strings , $lang).'</select>
+                            <div class="clear"></div>
                         </div>
-                        <div class="long">
-                            <label>'.$strings[$lang]['author'].':</label>
-                            <input name="query" class="query" '.(isset($_GET["query"]) ? 'value="'.$_GET["query"].'"' : "").'  />
+                        <div class="bx long">
+                            <label>'.$strings[$lang]['author'].'</label>
+                            <input name="query" class="query fr" '.(isset($_GET["query"]) ? 'value="'.$_GET["query"].'"' : "").'  />
+                            <div class="clear"></div>
                         </div>
                     </div>
 
                     <div class="coll">
-                        <div class="long">
-                            <label>'.$strings[$lang]['order'].':</label>
-                            <select name="level">'.getOrderOpitons($strings[$lang]['orderVals']).'</select>
+                        <div class="bx long">
+                            <label>'.$strings[$lang]['order'].'</label>
+                            <select name="order">'.getOrderOpitons($strings[$lang]['orderVals']).'</select>
                         </div>
-                        <div class="long">
-                            <input type="submit" value="Filtrovať" />
+                        <div class="bx long">
+                            <input type="submit" class="filter fr" value="'.$strings['en']['filter'].'" />
+                            <div class="clear"></div> 
                         </div>
                     </div>
-
+                    <div class="clear"></div>   
                 </form>
             ';
             $pageContent .= $bookPrezenter->printBooks($_GET['s'], 15);

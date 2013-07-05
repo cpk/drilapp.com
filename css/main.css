@@ -14,6 +14,17 @@ body{ font-family: 'Signika', sans-serif;font-size:12px;background:#f5f8f9;}
 .white{background: #fff !important;}
 .w50{width:50px;}
 #mobile{display: none;}
+
+
+#filter{background:red;padding:10px;clear:both;margin-bottom: 10px;}
+#filter .coll{float:left;width:310px;padding:0 3px;}
+#filter .bx{background:olive;display:block;padding:5px;clear:both;border-top:1px solid #ccc;}
+#filter label{float:left;display:block;width:110px;;height:auto;margin:2px 0;line-height:20px;font-size:11px;}
+#filter select{width:170px;padding:2px 2px 0px 2px;background:#fff;border:2px solid #bbb;font-size:12px;}
+#filter select option{padding:2px;}
+#filter .query{padding:4px!important;height:16px;width:158px !important;}
+#filter .fr{float:right;}
+
 #vote{position:absolute;display:block;right:100px;top:15px;opacity:.9;border:1px solid #fff;padding:8px 19px;font-weight:Bold;background: rgb(255,48,25);border-radius:5px;color:#fff;text-align:center;
 background: -moz-linear-gradient(top,  rgba(255,48,25,1) 0%, rgba(207,4,4,1) 100%);
 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,48,25,1)), color-stop(100%,rgba(207,4,4,1)));
@@ -61,7 +72,7 @@ h2.cst{width:900px;margin:10px;}
 .navigator span{display:block;float:left;padding:3px 7px;margin: 0 2px;background:#eee;border:1px solid #ddd;}
 .navigator a{padding:5px 10px;background:#5dae62;display:block;float:left;text-decoration:none;margin: 0 4px;color:#fff;}
 .navigator a:hover{background:#458A49;}
-
+.navigator .dots{display:inline-block;float:left;}
 #comment{margin:10px;padding-top:20px;border-top:4px solid #777}
 
 #status{position:absolute;z-index:99999;background:url(../img/tbg.png);padding:40px;display:none;font-size: 15px;}
