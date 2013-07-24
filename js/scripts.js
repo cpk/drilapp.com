@@ -59,23 +59,93 @@ function reindex(){
     
 }
 
-function addFiled(index){
+function addFiled(index, answer, question){
     var table = $('#table tbody'),
-        filed = '<tr><td class="w50"><span class="no">'+(index+2)+'</span></td><td><input type="text" name="question[]" maxlength="255" />'+
-                '</td><td><input type="text" name="answer[]"  maxlength="255" /></td><td class="w50"><a href="#" class="del" tabindex="-1"></a></td></tr>'  
-         table.append(filed);         
+        filed = '<tr><td class="w50"><span class="no">'+(index+2)+
+                '</span></td><td><input type="text" value="'+question+'" name="question[]" maxlength="255" />'+
+                '</td><td><input type="text" value="'+answer+'" name="answer[]"  maxlength="255" /></td>' +
+                '<td class="w50"><a href="#" class="del" tabindex="-1"></a></td></tr>'  
+        table.append(filed);         
 }
 
+function saveJSON(json){
+  if(json.data.length > 0);
+  localStorage.setItem("draft", JSON.stringify(json));
+}
+
+function loadJSON(){
+ var data = localStorage.getItem("draft");
+ if(data !== null){
+    return $.parseJSON(data);
+ } 
+ return { "data" : [] };
+}
+
+function loadWords(){
+  var json = loadJSON() , idx = 0;
+  for(var i in json.data){
+      var item = json.data[i];
+      if(idx === 0) {
+        $('#table tr .fq').val(item.question);
+        $('#table tr .fa').val(item.answer);
+      }else{
+        addFiled(idx, item.answer, item.question);
+      }
+      idx++;
+  }
+}
+
+function getData(forLocalStorage){
+  var json = {}, 
+      counter = 0,
+      serializedForm = $('form.ajax').serializeArray();
+      $.each(serializedForm, function(i,v){
+          if(v.name === "question[]" || v.name === "answer[]"){  
+            if(json[counter] === undefined) json[counter] = { question : '', answer: '' };
+            if((i % 2 === 0)){
+              json[counter].question = v.value;
+            }else{
+              json[counter].answer = v.value;
+               if(i !== 0) counter++;
+            }
+          }
+      });
+     if(forLocalStorage){
+        var localStorageData = [];
+        for(var i in json){
+          if(json[i].question.length > 0 || json[i].answer.length > 0){
+            localStorageData.push({ "question" : json[i].question , "answer" : json[i].answer});
+          }
+        }
+        return localStorageData;
+     }
+     return json;
+}
+
+
+function saveWords(){
+    saveJSON( { "data" : getData(true) } );
+}
+
+function deleteWords(){
+    saveJSON( { "data" : [] } );
+}
 
 
 $(function() {
  $('.lightbox').lightBox();
  $('.focus').focus();
  $('#mobile').fadeIn(500);
- 
+  loadWords();
  $("table").delegate("table tr:last-child input", "focus", function() {
-     addFiled($(this).parent().parent().index());
+     addFiled($(this).parent().parent().index(), '', '');
   });
+
+ $("table").delegate("input", "change", function() {
+     saveWords();
+  });
+
+
   
    $('#share-btn').click(function(){
         $(this).hide(500);
@@ -88,6 +158,7 @@ $(function() {
  $("table").delegate("table .del", "click", function() {
      $(this).parent().parent().remove();
      reindex();
+     saveWords();
      return false;
   });
     
@@ -105,27 +176,16 @@ $(function() {
       }
       return false;
   }); 
+
+
   
   $("#slider").easySlider({auto: true, continuous: true });
   $('#tabs').easytabs(); 
   
   $('.ajax').submit(function(){
-      var query = $(this).serializeArray();
-      var json = {},data = {}, counter = 0;
-
-      $.each(query, function(i,v){
-          if(v.name === "question[]" || v.name === "answer[]"){  
-            if(json[counter] === undefined) json[counter] = { question : '', answer: '' };
-            if((i % 2 === 0)){
-              json[counter].question = v.value;
-            }else{
-              json[counter].answer = v.value;
-               if(i !== 0) counter++;
-            }
-          }
-      });
+      var data = {};    
       data.act = 1;
-      data.data = json;
+      data.data = getData(false);
       data.email = $('input[name=email]').val();
       data.lang = $('input[name=lang]').val();
       data.captcha = $('input[name=captcha]').val();
@@ -149,6 +209,7 @@ $(function() {
             if(response.err === 0){
                 $('form.ajax').html('<p class="ok">'+response.msg + '</p>');
                 $('#infoImport').show();
+                deleteWords();
             }
             showStatus(response);
         }, "json");
