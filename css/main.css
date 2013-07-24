@@ -16,14 +16,43 @@ body{ font-family: 'Signika', sans-serif;font-size:12px;background:#f5f8f9;}
 #mobile{display: none;}
 
 
-#filter{background:red;padding:10px;clear:both;margin-bottom: 10px;}
+#filter{background:#fff;padding:10px;clear:both;margin-bottom: 10px;border:1px solid #ddd;}
 #filter .coll{float:left;width:310px;padding:0 3px;}
-#filter .bx{background:olive;display:block;padding:5px;clear:both;border-top:1px solid #ccc;}
+#filter .bx{background:#f5f5f5;display:block;padding:5px;clear:both;border-top:1px solid #ddd;}
 #filter label{float:left;display:block;width:110px;;height:auto;margin:2px 0;line-height:20px;font-size:11px;}
 #filter select{width:170px;padding:2px 2px 0px 2px;background:#fff;border:2px solid #bbb;font-size:12px;}
 #filter select option{padding:2px;}
 #filter .query{padding:4px!important;height:16px;width:158px !important;}
 #filter .fr{float:right;}
+
+.filter {
+	-moz-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+	box-shadow:inset 0px 1px 0px 0px #bbdaf7;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
+	background:-moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#79bbff', endColorstr='#378de5');
+	background-color:#79bbff;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	border:1px solid #84bbf3;
+	display:inline-block;
+	color:#ffffff;
+	font-family:arial;
+	font-size:13px;
+        height:28px;
+	font-weight:bold;
+	padding:1px 20px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #528ecc;
+}.filter:hover {
+        cursor:pointer;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff) );
+	background:-moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#378de5', endColorstr='#79bbff');
+	background-color:#378de5;
+}
 
 #vote{position:absolute;display:block;right:100px;top:15px;opacity:.9;border:1px solid #fff;padding:8px 19px;font-weight:Bold;background: rgb(255,48,25);border-radius:5px;color:#fff;text-align:center;
 background: -moz-linear-gradient(top,  rgba(255,48,25,1) 0%, rgba(207,4,4,1) 100%);

@@ -9,3 +9,5 @@
 [2013-07_04 00:02:38] Code: 1054 - Message: SQL preparing failed: Unknown column 'title_0' in 'field list' SQL: SELECT `id_article`, `sub_id`, `type`, `title_0`, `subtitle_0`, `header_0` FROM `article`  WHERE `link_0`=? AND `active`=1 LIMIT 1
 [2013-07_04 00:03:53] Code: 1054 - Message: SQL preparing failed: Unknown column 'title_0' in 'field list' SQL: SELECT `id_article`, `sub_id`, `type`, `title_0`, `subtitle_0`, `header_0` FROM `article`  WHERE `link_0`=? AND `active`=1 LIMIT 1
 [2013-07_04 00:06:26] Code: 1054 - Message: SQL preparing failed: Unknown column 'title_0' in 'field list' SQL: SELECT `id_article`, `sub_id`, `type`, `title_0`, `subtitle_0`, `header_0` FROM `article`  WHERE `link_0`=? AND `active`=1 LIMIT 1
+[2013-07_24 22:44:36] Code: 1449 - Message: SQL preparing failed: The user specified as a definer ('db_drilapp_com'@'localhost') does not exist SQL: SELECT * FROM book_view bv  ORDER BY bv.`_id` DESC LIMIT 0,  15
+[2013-07_24 22:53:02] Code: 1449 - Message: SQL preparing failed: The user specified as a definer ('db_drilapp_com'@'localhost') does not exist SQL: SELECT * FROM book_view bv  ORDER BY bv.`_id` DESC LIMIT 0,  15
