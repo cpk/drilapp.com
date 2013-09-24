@@ -11,6 +11,8 @@
          include "section.contact.php";
     }elseif($meta['id_article'] == 9){
          include "section.word.php";
+    }elseif($meta['id_article'] == 11){
+         include "section.fqa.php";
     }else{
         include "section.article.php";
     }

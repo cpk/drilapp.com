@@ -238,3 +238,6 @@ footer .addthis_toolbox{top:40px;position:absolute;}
 footer .ext.play-en{right: 160px;background-image: url(../img/ext-play-en.png);}
 
 
+.fqa{font-size:16px;padding:0 40px;}
+.fqa li{margin:5px 0;border-bottom:1px solid #ccc;padding:15px 10px}
+.fqa li:hover{background:#f5f5f5;}
