@@ -1,0 +1,26 @@
+[2013-01_17 17:46:48] Code: 1054 - Message: SQL preparing failed: Unknown column 'title_cz' in 'field list' SQL: SELECT `id_article`, `sub_id`, `type`, `title_cz`, `subtitle_cz`, `header_cz` FROM `article`  WHERE `link_cz`=? AND `active`=1 LIMIT 1
+[2013-01_17 17:47:06] Code: 1054 - Message: SQL preparing failed: Unknown column 'title_cz' in 'field list' SQL: SELECT `id_article`, `sub_id`, `type`, `title_cz`, `subtitle_cz`, `header_cz` FROM `article`  WHERE `link_cz`=? AND `active`=1 LIMIT 1
+[2013-03_23 12:08:41] Code: 1146 - Message: SQL preparing failed: Table 'db_drilapp_com.lang2' doesn't exist SQL: SELECT `id_lang2`, `name_sk` FROM `lang2`
+[2013-03_23 12:13:06] Code: 1048 - Message: SQL execution failed: Column 'lang_a' cannot be null SQL: INSERT INTO `import_book` (`lang`,`lang_a`, `level`, `name`, `descr`,`author`,`import_id`,`email`) VALUES (?,?,?,?,?,?,?,?)
+[2013-03_23 12:13:13] Code: 1048 - Message: SQL execution failed: Column 'lang_a' cannot be null SQL: INSERT INTO `import_book` (`lang`,`lang_a`, `level`, `name`, `descr`,`author`,`import_id`,`email`) VALUES (?,?,?,?,?,?,?,?)
+[2013-04_17 03:53:07] Code: 1054 - Message: SQL preparing failed: Unknown column 'title_text' in 'field list' SQL: SELECT `id_article`, `sub_id`, `type`, `title_text`, `subtitle_text`, `header_text` FROM `article`  WHERE `link_text`=? AND `active`=1 LIMIT 1
+[2013-05_03 11:54:05] Code: 1054 - Message: SQL preparing failed: Unknown column 'title_cz' in 'field list' SQL: SELECT `id_article`, `sub_id`, `type`, `title_cz`, `subtitle_cz`, `header_cz` FROM `article`  WHERE `link_cz`=? AND `active`=1 LIMIT 1
+[2013-07_04 00:02:24] Code: 1054 - Message: SQL preparing failed: Unknown column 'title_0' in 'field list' SQL: SELECT `id_article`, `sub_id`, `type`, `title_0`, `subtitle_0`, `header_0` FROM `article`  WHERE `link_0`=? AND `active`=1 LIMIT 1
+[2013-07_04 00:02:38] Code: 1054 - Message: SQL preparing failed: Unknown column 'title_0' in 'field list' SQL: SELECT `id_article`, `sub_id`, `type`, `title_0`, `subtitle_0`, `header_0` FROM `article`  WHERE `link_0`=? AND `active`=1 LIMIT 1
+[2013-07_04 00:03:53] Code: 1054 - Message: SQL preparing failed: Unknown column 'title_0' in 'field list' SQL: SELECT `id_article`, `sub_id`, `type`, `title_0`, `subtitle_0`, `header_0` FROM `article`  WHERE `link_0`=? AND `active`=1 LIMIT 1
+[2013-07_04 00:06:26] Code: 1054 - Message: SQL preparing failed: Unknown column 'title_0' in 'field list' SQL: SELECT `id_article`, `sub_id`, `type`, `title_0`, `subtitle_0`, `header_0` FROM `article`  WHERE `link_0`=? AND `active`=1 LIMIT 1
+<<<<<<< HEAD
+[2013-07_05 15:14:24] Code: 1449 - Message: SQL preparing failed: The user specified as a definer ('db_drilapp_com'@'localhost') does not exist SQL: SELECT * FROM book_view bv  ORDER BY bv.`_id` DESC LIMIT 0,  15
+[2013-07_05 15:20:33] Code: 1049 - Message: Unknown database 'drilapp'
+[2013-07_05 15:20:33] Code: 1049 - Message: Unknown database 'drilapp'
+[2013-07_05 15:20:34] Code: 1049 - Message: Unknown database 'drilapp'
+[2013-07_05 15:20:37] Code: 1049 - Message: Unknown database 'drilapp'
+[2013-07_05 15:21:17] Code: 1146 - Message: SQL preparing failed: Table 'drilapp.article' doesn't exist SQL: SELECT `id_article` FROM `article` WHERE `sub_id`=0 AND `active`=1 ORDER BY `order` LIMIT 1
+[2013-07_05 15:21:20] Code: 1146 - Message: SQL preparing failed: Table 'drilapp.article' doesn't exist SQL: SELECT `id_article` FROM `article` WHERE `sub_id`=0 AND `active`=1 ORDER BY `order` LIMIT 1
+[2013-10_04 11:46:46] Code: 1449 - Message: SQL preparing failed: The user specified as a definer ('db_drilapp_com'@'localhost') does not exist SQL: SELECT * FROM book_view bv  ORDER BY bv.`_id` DESC LIMIT 0,  15
+[2013-10_04 11:52:31] Code: 1449 - Message: SQL preparing failed: The user specified as a definer ('db_drilapp_com'@'localhost') does not exist SQL: SELECT * FROM book_view bv  ORDER BY bv.`_id` DESC LIMIT 0,  15
+[2013-10_04 15:35:09] Code: 1064 - Message: SQL preparing failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '`active`=1 AND `blocked`=0 LIMIT 1' at line 1 SQL: SELECT `id_user`,`id_user_type`, `login` FROM `user` WHERE `id_user`=? `active`=1 AND `blocked`=0 LIMIT 1
+=======
+[2013-07_24 22:44:36] Code: 1449 - Message: SQL preparing failed: The user specified as a definer ('db_drilapp_com'@'localhost') does not exist SQL: SELECT * FROM book_view bv  ORDER BY bv.`_id` DESC LIMIT 0,  15
+[2013-07_24 22:53:02] Code: 1449 - Message: SQL preparing failed: The user specified as a definer ('db_drilapp_com'@'localhost') does not exist SQL: SELECT * FROM book_view bv  ORDER BY bv.`_id` DESC LIMIT 0,  15
+>>>>>>> 8ef64dc534a0c64e575e9097bde6c2493c15efd7

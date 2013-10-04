@@ -16,6 +16,11 @@ body{ font-family: 'Signika', sans-serif;font-size:12px;background:#f5f8f9;}
 #mobile{display: none;}
 
 
+<<<<<<< HEAD
+=======
+.info.msg{border:3px solid #E4EDF2;background:#F5FBFF url(../img/info.png) no-repeat 10px center;padding-left:60px;margin-top:10px;}
+
+>>>>>>> 8ef64dc534a0c64e575e9097bde6c2493c15efd7
 #filter{background:#fff;padding:10px;clear:both;margin-bottom: 10px;border:1px solid #ddd;}
 #filter .coll{float:left;width:310px;padding:0 3px;}
 #filter .bx{background:#f5f5f5;display:block;padding:5px;clear:both;border-top:1px solid #ddd;}
@@ -236,6 +241,7 @@ footer .addthis_toolbox{top:40px;position:absolute;}
 footer .ext.play-en{right: 160px;background-image: url(../img/ext-play-en.png);}
 
 
+<<<<<<< HEAD
 /* User section */
 .loginform{padding:20px;background:#fafafa;border:3px solid #e5e5e5;width:500px;margin:0 auto;}
 .loginform > div{background:#eee;padding:10px 0 !important;margin:10px 0 !important;}
@@ -249,3 +255,8 @@ footer .ext.play-en{right: 160px;background-image: url(../img/ext-play-en.png);}
 .user-nav ul li a{display:block;background:#5dae62;margin-bottom:5px;color:#fff;padding:7px 10px;font-weight:bold;text-decoration:none;border-bottom:3px solid #ddd;}
 .user-nav ul li a:hover{background:#44A64A;}
 .user-nav strong.navi{background:#333;display:block;padding:10px;color:#fff;text-align:center;}
+=======
+.fqa{font-size:16px;padding:0 40px;}
+.fqa li{margin:5px 0;border-bottom:1px solid #ccc;padding:15px 10px}
+.fqa li:hover{background:#f5f5f5;}
+>>>>>>> 8ef64dc534a0c64e575e9097bde6c2493c15efd7
