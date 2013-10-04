@@ -36,6 +36,7 @@
             	<?php echo (isset($_SESSION["status"]) ? '<p class="error">'.$_SESSION["status"].'</p>' : ""); unset($_SESSION["status"]); ?>
                 <div><label>Prihlasovacie meno: </label><input type="text" name="login"  class="w200 required" /></div>
                 <div><label>Prihlasovacie heslo: </label><input type="password" name="pass" class="w200 required fiveplus" /></div>
+                <div><label>Zostať prihlásený: </label> <input type="checkbox" name="rememberMe" /></div>
                 <input type="hidden" name="token" value="<?php echo session_id(); ?>" / >
                 <input type="submit" name="btn" value="Prihlásiť" class="ibtn" />
                 <div class="clear"></div>

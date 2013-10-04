@@ -13,7 +13,14 @@
 
 		try{
 			$auth = new Authenticate($conn);
-			$auth->login($_POST['login'] ,$_POST['pass'], $_POST['token']);
+
+			
+			if(isset($_POST['rememberMe']) && $_POST['rememberMe'] == 'on'){
+				$_POST['rememberMe'] = true;
+			}else{
+				$_POST['rememberMe'] = false;
+			}
+			$auth->login($_POST['login'] ,$_POST['pass'], $_POST['rememberMe'], $_POST['token']);
 		}catch(AuthException $e){
 			$_SESSION['status'] = $e->getMessage();
 		}

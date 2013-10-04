@@ -72,7 +72,7 @@ class BookPrezenter {
     
     public function createNavigator($pageNumber, $peerPage){
         $queryStr = str_replace("lang=".$_GET['lang']."&p=".$_GET['p']."&a=index", '', $_SERVER['QUERY_STRING']);
-        $queryStr = preg_replace("/(\?|&)?s=[0-9]*/", "", $queryStr);
+        $queryStr = preg_replace("/&?s=[0-9]*/", "", $queryStr);
 
         $nav = new Navigator( $this->bookService->getCount() , $pageNumber , substr($_SERVER['REQUEST_URI'], 0, strpos($_SERVER['REQUEST_URI'], '?')) , $peerPage, $queryStr);
         $nav->setSeparator("?s=");

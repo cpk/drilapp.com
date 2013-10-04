@@ -11,6 +11,8 @@
          include "section.contact.php";
     }elseif($meta['id_article'] == 9){
          include "section.word.php";
+    }elseif($meta['id_article'] == 16){
+         include "section.user.php";
     }else{
         include "section.article.php";
     }

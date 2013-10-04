@@ -112,10 +112,11 @@
                     <div class="coll">
                         <div class="bx long">
                             <label>'.$strings[$lang]['order'].'</label>
-                            <select name="order">'.getOrderOpitons($strings[$lang]['orderVals']).'</select>
+                            <select class="fr" name="order">'.getOrderOpitons($strings[$lang]['orderVals']).'</select>
+                            <div class="clear"></div> 
                         </div>
                         <div class="bx long">
-                            <input type="submit" class="filter fr" value="'.$strings['en']['filter'].'" />
+                            <input type="submit" class="filter fr" value="'.$strings[$lang]['filter'].'" />
                             <div class="clear"></div> 
                         </div>
                     </div>

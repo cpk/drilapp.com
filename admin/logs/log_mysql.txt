@@ -9,3 +9,13 @@
 [2013-07_04 00:02:38] Code: 1054 - Message: SQL preparing failed: Unknown column 'title_0' in 'field list' SQL: SELECT `id_article`, `sub_id`, `type`, `title_0`, `subtitle_0`, `header_0` FROM `article`  WHERE `link_0`=? AND `active`=1 LIMIT 1
 [2013-07_04 00:03:53] Code: 1054 - Message: SQL preparing failed: Unknown column 'title_0' in 'field list' SQL: SELECT `id_article`, `sub_id`, `type`, `title_0`, `subtitle_0`, `header_0` FROM `article`  WHERE `link_0`=? AND `active`=1 LIMIT 1
 [2013-07_04 00:06:26] Code: 1054 - Message: SQL preparing failed: Unknown column 'title_0' in 'field list' SQL: SELECT `id_article`, `sub_id`, `type`, `title_0`, `subtitle_0`, `header_0` FROM `article`  WHERE `link_0`=? AND `active`=1 LIMIT 1
+[2013-07_05 15:14:24] Code: 1449 - Message: SQL preparing failed: The user specified as a definer ('db_drilapp_com'@'localhost') does not exist SQL: SELECT * FROM book_view bv  ORDER BY bv.`_id` DESC LIMIT 0,  15
+[2013-07_05 15:20:33] Code: 1049 - Message: Unknown database 'drilapp'
+[2013-07_05 15:20:33] Code: 1049 - Message: Unknown database 'drilapp'
+[2013-07_05 15:20:34] Code: 1049 - Message: Unknown database 'drilapp'
+[2013-07_05 15:20:37] Code: 1049 - Message: Unknown database 'drilapp'
+[2013-07_05 15:21:17] Code: 1146 - Message: SQL preparing failed: Table 'drilapp.article' doesn't exist SQL: SELECT `id_article` FROM `article` WHERE `sub_id`=0 AND `active`=1 ORDER BY `order` LIMIT 1
+[2013-07_05 15:21:20] Code: 1146 - Message: SQL preparing failed: Table 'drilapp.article' doesn't exist SQL: SELECT `id_article` FROM `article` WHERE `sub_id`=0 AND `active`=1 ORDER BY `order` LIMIT 1
+[2013-10_04 11:46:46] Code: 1449 - Message: SQL preparing failed: The user specified as a definer ('db_drilapp_com'@'localhost') does not exist SQL: SELECT * FROM book_view bv  ORDER BY bv.`_id` DESC LIMIT 0,  15
+[2013-10_04 11:52:31] Code: 1449 - Message: SQL preparing failed: The user specified as a definer ('db_drilapp_com'@'localhost') does not exist SQL: SELECT * FROM book_view bv  ORDER BY bv.`_id` DESC LIMIT 0,  15
+[2013-10_04 15:35:09] Code: 1064 - Message: SQL preparing failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '`active`=1 AND `blocked`=0 LIMIT 1' at line 1 SQL: SELECT `id_user`,`id_user_type`, `login` FROM `user` WHERE `id_user`=? `active`=1 AND `blocked`=0 LIMIT 1

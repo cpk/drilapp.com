@@ -17,7 +17,7 @@
 
 	$auth = new Authenticate($conn);
 	
-	if($auth->isLogined()){
+	if($auth->isLogined() && $auth->isAdmin()){
 		include "./inc/main.index.php";
 	}else{
 		include "./inc/login/page.php";

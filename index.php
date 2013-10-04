@@ -6,6 +6,7 @@
     require_once "admin/inc/fnc.main.php";
     require_once "admin/page/fnc.page.php";
     require_once "inc/fnc.php";
+    require_once "inc/messageSource.php";
 
     function __autoload($class) {
             require_once 'admin/inc/class.'.$class.'.php';
@@ -19,7 +20,7 @@
         if(intval($meta['c_status']) == 0){
             die($meta['c_offline_msg']);
         }
-	$nav = printMenu(0, "",false);
+	       $nav = printMenu(0, "",false);
         $catalogNav = null;
         
         if(isset($_GET['id'])){

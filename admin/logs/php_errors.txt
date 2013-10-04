@@ -1,1 +1,11 @@
 x
+[04-Oct-2013 12:42:22 UTC] PHP Parse error:  syntax error, unexpected '*', expecting ',' or ';' in /opt/lampp/htdocs/drilapp/admin/inc/class.Authenticate.php on line 7
+[04-Oct-2013 12:42:37 UTC] PHP Parse error:  syntax error, unexpected '(' in /opt/lampp/htdocs/drilapp/admin/inc/class.Authenticate.php on line 7
+[04-Oct-2013 12:44:23 UTC] PHP Parse error:  syntax error, unexpected '$this' (T_VARIABLE) in /opt/lampp/htdocs/drilapp/admin/inc/class.Authenticate.php on line 30
+[04-Oct-2013 12:44:24 UTC] PHP Parse error:  syntax error, unexpected '$this' (T_VARIABLE) in /opt/lampp/htdocs/drilapp/admin/inc/class.Authenticate.php on line 30
+[04-Oct-2013 12:44:39 UTC] PHP Parse error:  syntax error, unexpected '$this' (T_VARIABLE) in /opt/lampp/htdocs/drilapp/admin/inc/class.Authenticate.php on line 157
+[04-Oct-2013 12:51:15 UTC] PHP Fatal error:  Call to private method Authenticate::isAdmin() from context '' in /opt/lampp/htdocs/drilapp/admin/index.php on line 20
+[04-Oct-2013 13:19:24 UTC] PHP Fatal error:  Call to undefined function areCookiesValid() in /opt/lampp/htdocs/drilapp/admin/inc/class.Authenticate.php on line 53
+[04-Oct-2013 13:22:42 UTC] PHP Fatal error:  Call to undefined function str_length() in /opt/lampp/htdocs/drilapp/admin/inc/class.Authenticate.php on line 135
+[04-Oct-2013 13:29:11 UTC] PHP Parse error:  syntax error, unexpected 'getCookieDomain' (T_STRING), expecting variable (T_VARIABLE) in /opt/lampp/htdocs/drilapp/admin/inc/class.Authenticate.php on line 183
+[04-Oct-2013 13:35:00 UTC] PHP Fatal error:  Call to undefined function generateCookieId() in /opt/lampp/htdocs/drilapp/admin/inc/class.Authenticate.php on line 123
