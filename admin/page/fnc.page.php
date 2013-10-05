@@ -116,7 +116,7 @@ function getArticle($type = "basic", $id = null, $lang = "sk"){
 			break;
 			
 		case "link" :
-			$article = $conn->select("SELECT `id_article`, `sub_id`, `type`, `title_$lang`, `link_$lang` FROM  `article` WHERE `id_article`=? AND `active`=1 LIMIT 1", array( $id ));
+			$article = $conn->select("SELECT `id_article`, `sub_id`, `type`, `title_$lang`, `link_$lang` FROM  `article` WHERE `id_article`=? LIMIT 1", array( $id ));
 			$article[0] = cleanArticle($article[0]);
 			break;	
 	}
@@ -381,7 +381,15 @@ function convertToFloat($price){
     
 function makeLinkByArticleId($articleId){
     global $conn;
-    $data = $conn->select("SELECT `title_sk`,`type` FROM `article` WHERE `active`=1 AND `id_article`=?", array( $articleId ));
+    $data = $conn->select("SELECT `title_sk`,`type` FROM `article` WHERE  `id_article`=? LIMIT 1", array( $articleId ));
     return '<a href="'.linker($articleId, $data[0]['type']).'" title="'.$data[0]['title_sk'].'">'.$data[0]['title_sk'].'</a>';
 }
 
+function xss($data){
+    $cleaned = array();
+     foreach ($data as $rs) {
+        $cleaned[] = array_map("htmlspecialchars", $rs);
+      
+    }
+    return $cleaned;
+}

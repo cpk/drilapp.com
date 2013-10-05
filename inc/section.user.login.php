@@ -19,9 +19,9 @@
 		}
 	}
 $article = getArticle("fullHidden", $meta['id_article'], $lang);  
-//echo $article[0]["content_${lang}"];
 
-echo '<h1>'.$article[0]["title_${lang}"].'</h1>'.$article[0]["content_${lang}"];
+
+echo '<h1>'.$article[0]["title_${lang}"].'</h1>';
 ?>
 <script>
 $(function() {
@@ -33,8 +33,8 @@ $(function() {
 	$('input[name=login]').focus();
 });
 </script>
-	<form method="post" class="loginform">
-		<?php echo (isset($_SESSION["status"]) ? '<p class="error">'.$_SESSION["status"].'</p>' : ""); unset($_SESSION["status"]); ?>
+	<form method="post" class="loginform" action="<?php echo linker(16, 1, $lang); ?>" >
+		<?php echo (isset($_SESSION["status"]) ? '<p class="err">'.$_SESSION["status"].'</p>' : ""); unset($_SESSION["status"]); ?>
         <div>
         	<label><?php printMessage("username")?>:</label>
         	<input type="text" name="login"  class="w200 required" />
@@ -51,8 +51,11 @@ $(function() {
         	<div class="clear"></div>
         </div>
         <input type="hidden" name="token" value="<?php echo session_id(); ?>" / >
-		
 	</form>
+
+	<div class="reg-descr">
+			<?php echo $article[0]["content_${lang}"]; ?>
+	</div>
 </article>
 </div>    
 

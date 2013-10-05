@@ -32,24 +32,32 @@ class BookService {
     
     
     public function getBooks($pageNumber, $peerPage){
-        
         $offset = ($pageNumber == 1 ? 0 :  ($pageNumber * $peerPage) - $peerPage);
-        return  $this->conn->select( "SELECT * FROM book_view bv ".
+        $data =  $this->conn->select( "SELECT * FROM book_view bv ".
                                       $this->where().
                                       $this->orderBy().
                                       "LIMIT ".$offset.",  ".$peerPage);
+
+        return xss($data);
     }
+
     
     public function getById($id){        
-       return  $this->conn->select( "SELECT b.name as book_name, b.author, b.descr, b.import_id, b.create, la.name_sk, le.name,
-                                        (SELECT count(w._id) FROM import_word w WHERE w.token=b.import_id ) as count
-                                      FROM import_book b, lang la, level le
-                                      WHERE b.lang = la.id_lang AND b.level = le.id_level AND b._id=?
-                                      LIMIT 1", array($id));
+       $data =  $this->conn->select( "SELECT b.name as book_name, b.author, b.descr, b.import_id, b.create, le.name, b.lang AS lang, b.lang_a AS lang_a, ".
+                                      "lang_answer.name_sk AS lang_answer, lang_question.name_sk AS lang_question, ".
+                                      "(SELECT count(w._id) FROM import_word w WHERE w.token=b.import_id ) as count ".
+                                      "FROM import_book b ".
+                                        "JOIN lang lang_question ON lang_question.id_lang=b.lang ".
+                                        "JOIN lang lang_answer ON lang_answer.id_lang=b.lang_a ".
+                                        "JOIN level le ON le.id_level=b.level ".
+                                      "WHERE b.level = le.id_level AND b._id=? ".
+                                      "LIMIT 1", array($id));
+       return xss($data);
     }
     
     public function getBooksWords($importId){        
-       return  $this->conn->select( "SELECT * FROM `import_word` WHERE `token`=?", array($importId));
+       $data = $this->conn->select( "SELECT * FROM `import_word` WHERE `token`=?", array($importId));
+       return xss($data);
     }
     
     
@@ -97,6 +105,8 @@ class BookService {
         }
 
         $where = array();
+        if(isset($_GET['id_user'])) 
+            $where[] =  " bv.`id_user`=".$_GET['id_user']." "; 
         if(isset($_GET['lang_q']) && $_GET['lang_q'] != 0) 
             $where[] =  " (bv.`lang` ='".$_GET['lang_q']."' OR bv.`lang_a` ='".$_GET['lang_q']."' )"; 
         if(isset($_GET['lang_a']) && $_GET['lang_a'] != 0) 
@@ -109,11 +119,7 @@ class BookService {
     }
 
 
-    
-
-
-    
-
+   
     
 }
 

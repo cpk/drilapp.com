@@ -44,6 +44,23 @@ class BookPrezenter {
        $html .= "</tbody></table>".$this->navigator;
        return $html;
     }
+
+    public function printUserBooks($uid, $pageNumber, $peerPage){
+       $data =  $this->bookService->getUserBooks($uid, $pageNumber, $peerPage);
+       if($data == null || count($data) == 0){
+           return '<p class="alert">'.getMessage("noBooks").'</p>';
+       }
+       
+       $this->createNavigator($pageNumber, $peerPage);
+       
+       $html = $this->navigator.'<div class="claer"></div><table id="books">';
+       $html .= $this->getTableHead().'<tbody>';
+       for($i=0 ; $i < count($data); $i++ ){
+           $html .= $this->getOrderTableRow($data[$i]);
+       }
+       $html .= "</tbody></table>".$this->navigator;
+       return $html;
+    }
     
     
     private function getTableHead(){

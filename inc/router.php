@@ -11,13 +11,10 @@
          include "section.contact.php";
     }elseif($meta['id_article'] == 9){
          include "section.word.php";
-<<<<<<< HEAD
-    }elseif($meta['id_article'] == 16){
+    }elseif($meta['id_article'] == 16 || $meta['id_parent'] == 16){
          include "section.user.php";
-=======
     }elseif($meta['id_article'] == 11){
          include "section.fqa.php";
->>>>>>> 8ef64dc534a0c64e575e9097bde6c2493c15efd7
     }else{
         include "section.article.php";
     }

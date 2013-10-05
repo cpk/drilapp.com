@@ -1,5 +1,5 @@
 CREATE VIEW `book_view` AS 
-SELECT `book`.`_id` AS `_id`, `book`.`name` AS `name`
+SELECT `book`.`_id` AS `_id`, `book`.`name` AS `name`, `book`.`id_user` as `id_user`
 	, `book`.`lang` AS `lang`, `book`.`lang_a` AS `lang_a`, `book`.`level` AS
 	`level`, `book`.`descr` AS `descr`, `book`.`author` AS
 	`author`, `book`.`import_id` AS `import_id`, `book`.`email` AS `email`, `book`.`create` AS `create`,

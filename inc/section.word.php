@@ -46,7 +46,7 @@
                 </tr>
                 <tr>
                      <td class="bold">Jazyk učebnice:</td>
-                    <td>'.$book[0]['name_sk'].'</td>    
+                    <td>'.$book[0]['lang_answer'].' / '.$book[0]['lang_question'].'</td>    
                 </tr>
                 <tr>
                      <td class="bold">Úroveň náročnosti:</td>

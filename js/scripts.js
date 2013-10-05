@@ -246,9 +246,145 @@ $(function() {
            li.hide();
        }
        */
-       
+    var userUrl = "/inc/ajax.user.php",
+        $words = $("#words");
+    $words.on("click", ".delete a.d", function(){
+      if(!confirm($("#confirmMsg").text())){
+        return false;
+      }
+      var o = $(this),
+        data = {
+          id : o.attr("href").replace("#", ""),
+          lang : getLang(),
+          act : 1
+      };
+      $.getJSON(userUrl, data, function(json) {  
+          if(json.err === 0){
+            o.parent().parent().hide(1000);
+          }else{
+            showStatus(json); 
+          }
+      }); 
+    });
+
+    $words.on("click", ".edit a.e", function(){
+      var $tr = $(this).parent().parent(),
+          $tds = $tr.find("td"),
+          $qTD = $tds.eq(0),
+          $aTD = $tds.eq(1),
+          qText = $qTD.text(),
+          aText = $aTD.text();
+
+          $tr.addClass("editing");
+          $qTD.html(makeInput("question", qText));
+          $aTD.html(makeInput("answer", aText));
+          
+          $words.find("a").addClass("hidden");
+          $tds.eq(2).append('<a href="#" title="Uložiť / Save" class="save"></a>');
+          $tds.eq(3).append('<a href="#" title="Zrušit / Cancel" class="back"></a>');
+
+          $tr.on("click", ".back", function(){
+              finishEditing(qText, aText);
+              return false;
+          });
+
+          $tr.on("click", ".save", processSave);
+
+          function makeInput(name, val){
+            return '<input type="text" value="'+val+'" name="'+name+'" />';
+          }
+
+          function finishEditing(qT, aT){
+            $qTD.html('').text(qT);
+            $aTD.html('').text(aT);
+            $tr.removeClass("editing");
+            $tr.find(".save").remove();
+            $tr.find(".back").remove();
+            $words.find("a.hidden").removeClass("hidden");
+          }
+
+
+          function processSave(){
+            var data = {
+                  id :  $tr.attr("id").replace("id", ""),
+                  lang : getLang(),
+                  question : $tds.eq(0).find("input").val(),
+                  answer : $tds.eq(1).find("input").val(),
+                  act : 2
+              };
+            if(!areDataSet(data)){
+              return false;
+            }
+            $.getJSON(userUrl, data, function(json) {  
+                if(json.err === 0){
+                  finishEditing(data.question, data.answer);
+                }else{
+                  showStatus(json); 
+                }
+            }); 
+            return false;
+          }
+    });
+
+    $(document).on("click", ".addNewWord .btn", addNewWord);
+    $(document).on("keypress", function(e) {
+        if(e.which == 13) {
+            return addNewWord();
+        }
+    });
+
+    function addNewWord(){
+       var data = {
+           question : $.trim($("#addNewWord .q").val()),
+           answer : $.trim($("#addNewWord .a").val()),
+           lang : getLang(),
+           importId : parseInt($("#importId2").text(), 10),
+           act : 3
+       };
+      if(!areDataSet(data)){
+        return false;
+      }
+      $.getJSON(userUrl, data, function(json) {  
+        if(json.err === 0){
+           data.id = json.id;
+           appendRow(data);
+           $("#addNewWord .q").val('').focus();
+           $("#addNewWord .a").val('');
+        }else{
+          showStatus(json); 
+        }
+      }); 
+
+      function appendRow(data){
+        if($words.find("tr").length === 0){
+          $words.html(row(data));
+        }else{
+          $words.append(row(data));
+        }
+        function row(data){
+          return '<tr id="id'+ data.id +'">'+
+                    '<td>'+data.question+'</td>'+
+                    '<td>'+data.answer+'</td>'+
+                    '<td class="edit"><a class="e" href="#'+ data.id +'" ></a></td>'+
+                    '<td class="delete"><a class="d" href="#'+ data.id +'" ></a></td>'+  
+                '</tr>';
+        }
+      }
+
+      return false;
+    }
 });
 
+function areDataSet(data){
+  if(data.question.length === 0 || data.answer.length === 0){
+    return false;
+  }
+  return true;  
+}
+
+function getLang(){
+  return $("#words").attr("data-lang");
+}
 
 jQuery.fn.center = function () {
     this.css("position","absolute");
