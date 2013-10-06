@@ -49,22 +49,26 @@ class UserPrezenter {
     
     private function getTableHead(){
         return '<thead><tr>
-                    <th>Názov učebnice</th>
-                    <th>Jazyk</th>
-                    <th>Úroveň</th>
-                    <th>Pč.</th>
-                    <th>Dátum</th>
-                    <th>Upraviť</th>
+                    <th>'.getMessage("bookName").'</th>
+                    <th>'.getMessage("bookLang").'</th>
+                    <th>'.getMessage("bookLevel").'</th>
+                    <th>'.getMessage("bookCount").'</th>
+                    <th>'.getMessage("bookDate").'</th>
+                    <th>'.getMessage("bookPublished").'</th>
+                    <th>'.getMessage("edit").'</th>
                 </tr></thead>';
     }
         
     private function getOrderTableRow($row){
-        return "<tr>".
+        $yes = getMessage("yes");
+        $no = getMessage("no");
+        return "<tr id=\"".$row["_id"]."\">".
                 '<td class=""><a href="?book="'.$row["_id"].'">'.$row["name"].'</a></td>'.
                 '<td class="c">'.mb_substr($row["lang_question"], 0, 4, "UTF-8").' / '. mb_substr($row["lang_answer"],0, 4,"UTF-8").'</td>'.
                 '<td class="c">'.substr($row["level_name"], 0, strpos($row["level_name"], ' ', 15)).'</td>'.
                 '<td class="c">'.$row["count"].'</td>'.
                 '<td class="c">'.date("d.m.Y" ,strtotime($row["create"])).'</td>'.
+                '<td class="c shared'.$row["shared"].'"><a href="#">'.($row["shared"] == 1 ? $yes : $no).'</a></td>'.
                 '<td class="c edit"><a href="?book='.$row["_id"].'">'.getMessage("edit").'</a></td>'.
                "</tr>";
     }

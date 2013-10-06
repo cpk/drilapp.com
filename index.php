@@ -16,7 +16,11 @@
         $lang = (!isset($_GET['lang']) ? "sk" : $_GET['lang']);
         $conn = Database::getInstance($config['db_server'], $config['db_user'], $config['db_pass'], $config['db_name']);
         $meta = MAIN();
-
+        $auth = new Authenticate($conn);
+        if($meta["id_article"] == 20){
+          $auth->logout();
+          header('Location: ' . linker(16, 1, $lang));  
+        }
         if(intval($meta['c_status']) == 0){
             die($meta['c_offline_msg']);
         }
@@ -73,6 +77,7 @@
                 <img src="/img/logo.png" alt="ANDROID DRIL APP" />
             </a>
             <?php echo printLangNav(); ?>
+            <span id="news"><?php echo ($lang=="sk" ? "novinka" : "new")?><em>&darr;</em> </span>
             <nav>
                 <ul>
                     <?php echo $nav; ?>

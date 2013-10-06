@@ -65,12 +65,12 @@ class BookPrezenter {
     
     private function getTableHead(){
         return '<thead><tr>
-                    <th>Názov učebnice</th>
-                    <th>Autor</th>
-                    <th>Jazyk</th>
-                    <th>Úroveň</th>
-                    <th>Pč.</th>
-                    <th>Dátum</th>
+                    <th>'.getMessage("bookName").'</th>
+                    <th>'.getMessage("bookAuthor").'</th>
+                    <th>'.getMessage("bookLang").'</th>
+                    <th>'.getMessage("bookLevel").'</th>
+                    <th>'.getMessage("bookCount").'</th>
+                    <th>'.getMessage("bookDate").'</th>
                     <th>Import ID</th>
                 </tr></thead>';
     }

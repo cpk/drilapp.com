@@ -56,7 +56,7 @@ class BookService {
     }
     
     public function getBooksWords($importId){        
-       $data = $this->conn->select( "SELECT * FROM `import_word` WHERE `token`=?", array($importId));
+       $data = $this->conn->select( "SELECT * FROM `import_word` WHERE `token`=? order by _id ", array($importId));
        return xss($data);
     }
     
@@ -105,6 +105,7 @@ class BookService {
         }
 
         $where = array();
+        $where[] =  " bv.`shared`=1 "; 
         if(isset($_GET['id_user'])) 
             $where[] =  " bv.`id_user`=".$_GET['id_user']." "; 
         if(isset($_GET['lang_q']) && $_GET['lang_q'] != 0) 

@@ -1,12 +1,4 @@
 <?php
-	
-
-	$auth = new Authenticate($conn);
-
-	// logout
-	if($meta['id_article'] == 20){
-		$auth->logout();
-	}
 
 
 	if(!$auth->isLogined()){
@@ -25,7 +17,9 @@
 				 	include 'section.user.books.php';
 				 }
 				break;
-			
+			case 18 :
+					include 'section.user.edit.php';
+				break;
 			default:
 				# code...
 				break;

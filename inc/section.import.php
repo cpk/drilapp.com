@@ -34,9 +34,23 @@ $strings["en"]['answer'] = 'Answer';
 $strings["sk"]['question'] = 'Otázka';
 $strings["en"]['question'] = 'Question';
 
+$logged = false;
 $article = getArticle("fullHidden", $meta['id_article'], $lang);  
-//echo $article[0]["content_${lang}"];
+if(isset($_SESSION["id"])){
+    $userService = new UserService($conn);
+    $user = $userService->getUserById($_SESSION["id"]);
+    if(count($user) == 1){
+        $logged = true;
+    }
+}
 
+if($logged){
+?>
+    <div class="user-nav gradientGray">
+        <?php include 'section.user.nav.php'; ?>
+    </div>
+<?php
+}
 echo '<h1>'.$article[0]["title_${lang}"].'</h1>'.$article[0]["content_${lang}"];
 
 ?>      <p class="info msg">
@@ -57,17 +71,19 @@ echo '<h1>'.$article[0]["title_${lang}"].'</h1>'.$article[0]["content_${lang}"];
             
         </table>
             <div id="share">
+                <?php if(!$logged){ ?>
                 <a href="#" id="share-btn" title="<?php echo $strings[$lang]['share_btn']; ?>">
                     <?php echo $strings[$lang]['share_btn']; ?>
                 </a>
+                <?php } ?>
                 
-                <div id="share-form">
+                <div id="share-form" <?php echo  ($logged ? ' class="showen"' : ''); ?>>
                     <span class="row">
                         <span><?php echo $strings[$lang]['book']; ?></span><input type="text" name="name" maxlength="50" class="w250" />
                         <div class="clear"></div>
                     </span>
                      <span class="row">
-                        <span><?php echo $strings[$lang]['author']; ?></span><input type="text" name="author" maxlength="50" class="w250" />
+                        <span><?php echo $strings[$lang]['author']; ?></span><input type="text" name="author" maxlength="50" class="w250" value="<?php echo  ($logged ? $user[0]["login"] : ''); ?>" />
                         <div class="clear"></div>
                     </span>
                     <span class="row">
@@ -87,19 +103,21 @@ echo '<h1>'.$article[0]["title_${lang}"].'</h1>'.$article[0]["content_${lang}"];
                         <div class="clear"></div>
                     </span>
                     <span class="row">
-                        <span><?php echo $strings[$lang]['share']; ?> </span><input type="checkbox" name="share" />
+                        <span><?php echo $strings[$lang]['share']; ?> </span><input type="checkbox" name="share" <?php echo  ($logged ? 'checked' : ''); ?> />
                         <div class="clear"></div>
                     </span>
                 </div>
                 
             </div>
             <div class="email">
-                <span><?php echo $strings[$lang]['email']?>: </span><input type="text" name="email" maxlength="50" />
+                <span><?php echo $strings[$lang]['email']?>: </span><input type="text" name="email" maxlength="50" value="<?php echo  ($logged ? $user[0]["email"] : ''); ?>" />
             </div>
             <a id="importMini" href="/img/import.png" class="lightbox" title="Návod">
                 <img  src="/img/import_mini.png" alt="Nnávod" />
             </a>
             <input type="submit" value="<?php echo $strings[$lang]['submit'] ?>" class="btn" />
+            
+            <?php if(!$logged){ ?>
             <label><?php echo $strings[$lang]['captchalabel'] ?>
                 <input type="text" maxlength="15" class="captcha w100" name="captcha"  /></label>
            
@@ -109,6 +127,9 @@ echo '<h1>'.$article[0]["title_${lang}"].'</h1>'.$article[0]["content_${lang}"];
 <a href="#" onclick="
     document.getElementById('captcha').src='../captcha.php?'+Math.random();return false;" id="change-image"><?php echo $strings[$lang]['captcha'] ?></a>
             
+            <?php } else{
+                echo '<div class="clear"></div>';
+            }?>
             
             </div>
             <input type="hidden" value="<?php echo $lang; ?>" name="lang" />

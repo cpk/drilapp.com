@@ -63,7 +63,7 @@
                 }
                 $html .= '</table>';
            }else{
-               $html .= '<p class="alert">Učebnica neobsahuje žiadne kartičky.</p>';
+               $html .= '<table id="words" data-lang="'.$lang.'"><p class="alert">Učebnica neobsahuje žiadne kartičky.</p></table>';
            }
            echo $html;
 		?>

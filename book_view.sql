@@ -5,7 +5,7 @@ SELECT `book`.`_id` AS `_id`, `book`.`name` AS `name`, `book`.`id_user` as `id_u
 	`author`, `book`.`import_id` AS `import_id`, `book`.`email` AS `email`, `book`.`create` AS `create`,
 	`book`.`downloads` AS `downloads`, `lang_answer`.`name_sk` AS `lang_answer`,
 	`lang_question`.`name_sk` AS `lang_question`, count(`words`.`token`) AS `count`,
-	`l`.`name` AS `level_name` 
+	`l`.`name` AS `level_name`, `book`.`shared` AS `shared`
 FROM `import_book` `book` 
 JOIN `lang` `lang_question` ON `book`.`lang` = `lang_question`.`id_lang`
 JOIN `lang` `lang_answer` ON `book`.`lang_a` = `lang_answer`.`id_lang`

@@ -24,6 +24,7 @@
             echo $pageContent;
 			?>
 		</div>
+		<input type="hidden" name="lang" value="<?php echo $lang; ?>" />
 		<div class="clear"></div>
 	</article>
 </div>

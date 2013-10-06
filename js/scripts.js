@@ -183,14 +183,17 @@ $(function() {
   $('#tabs').easytabs(); 
   
   $('.ajax').submit(function(){
-      var data = {};    
+      var data = {},
+      logged = ($(".user-nav").length > 0);
       data.act = 1;
       data.data = getData(false);
       data.email = $('input[name=email]').val();
       data.lang = $('input[name=lang]').val();
-      data.captcha = $('input[name=captcha]').val();
-      if ($('input[name=share]').is(':checked')) {
-          data.share = 1;
+      if($('input[name=captcha]').length > 0){
+        data.captcha = $('input[name=captcha]').val();
+      }
+      if (logged || $('input[name=share]').is(':checked')) {
+          data.share = ($('input[name=share]').is(':checked') ? 1 : 0);
           data.lang2 = $('select[name=lang2] option:selected').val();
           data.level = $('select[name=level] option:selected').val();
           data.name = $('input[name=name]').val();
@@ -201,7 +204,7 @@ $(function() {
          data.share = 0; 
       }
       
-      if(data.captcha.length === 0){ 
+      if(!logged && data.captcha.length === 0){ 
           var e = (data.lang === "sk" ? 'Opíšte text obrázka' : 'Fill captcha please.');
           showStatus({ err : 1, msg : e});
       }else{ 
@@ -260,7 +263,7 @@ $(function() {
       };
       $.getJSON(userUrl, data, function(json) {  
           if(json.err === 0){
-            o.parent().parent().hide(1000);
+            o.parent().parent().hide(500);
           }else{
             showStatus(json); 
           }
@@ -373,6 +376,71 @@ $(function() {
 
       return false;
     }
+
+    $(document).on("submit","form[name=userInfoEdit]", function(){
+       var data = {
+             surname : $.trim($("input[name=surname]").val()),
+             givenname : $.trim($("input[name=givenname]").val()),
+             lang : $("input[name=lang]").val(),
+             act : 4
+         };
+        $.getJSON(userUrl, data, function(json) {  
+           showStatus(json);
+        }); 
+        return false;
+    });
+
+    $(document).on("submit", "form[name=userPassForm]", function(){
+       var data = {
+             oldPass : $.trim($("input[name=oldPass]").val()),
+             newPass : $.trim($("input[name=newPass]").val()),
+             newPassConfirm : $.trim($("input[name=newPassConfirm]").val()),
+             lang : $("input[name=lang]").val(),
+             act : 5
+         };
+         if(data.oldPass.length === 0 || data.newPass.length === 0 || data.newPassConfirm.length === 0){
+            return false;
+         }
+         $.getJSON(userUrl, data, function(json) {  
+           showStatus(json);
+        });
+         return false;
+    });
+
+
+    $(document).on("click", ".shared0, .shared1", function(){
+       var $this = $(this),
+            s1Class = "shared1",
+            s0Class = "shared0",
+            data = {
+             id : $this.parent().attr("id").replace("id", ""),
+             shared : ($this.hasClass(s0Class) ? 1 : 0),
+             lang : $("input[name=lang]").val(),
+             act : 6
+         },
+         msg = [];
+         msg["sk"] = [];
+         msg["en"] = [];
+         msg["sk"]["yes"] = "Áno";
+         msg["sk"]["no"] = "Nie";
+         msg["en"]["yes"] = "Yes";
+         msg["en"]["no"] = "No";
+        
+         $.getJSON(userUrl, data, function(json) {  
+           if(json.err == 0){
+              if(data.shared === 1){
+                $this.removeClass(s0Class).addClass(s1Class);
+                $this.find("a").text(msg[data.lang]["yes"]);
+              }else{
+                $this.removeClass(s1Class).addClass(s0Class);
+                $this.find("a").text(msg[data.lang]["no"]);
+              }
+           }else{
+              showStatus(json);
+           }
+        });
+         return false;
+    });
 });
 
 function areDataSet(data){

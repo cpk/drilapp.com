@@ -62,7 +62,7 @@ try{
         exit;
     } 
 
-    if (!isset($_SESSION['captcha']) || trim(strtolower($_POST['captcha'])) != $_SESSION['captcha']) {
+    if (!isset($_SESSION['id']) && !isset($_SESSION['captcha']) || trim(strtolower($_POST['captcha'])) != $_SESSION['captcha']) {
         echo json_encode( array( "err" => 1, "msg" => $str[$lang]["err_captcha"]) );
         exit;
     } 
@@ -70,10 +70,15 @@ try{
       $token =  getToken($conn);
       $count = (count($_POST['data']) - 1);
       $rows = array();
+      if($_POST['share'] == 0 && isset($_SESSION['id'])){
+        $share = 1;
+      }else{
+        $share = $_POST['share'];
+      }
       for($i = 0; $i < $count; $i++){
           if(strlen(trim($_POST['data'][$i]["question"])) != 0 &&
              strlen(trim($_POST['data'][$i]["answer"])) != 0 ){
-              $rows[] = "('".addslashes(trim($_POST['data'][$i]["question"]))."','".addslashes(trim($_POST['data'][$i]["answer"]))."',".$token.",".$_POST['share'].")";
+              $rows[] = "('".addslashes(trim($_POST['data'][$i]["question"]))."','".addslashes(trim($_POST['data'][$i]["answer"]))."',".$token.",".$share.")";
               
           }
       }
@@ -82,15 +87,20 @@ try{
           throw new Exception($str[$lang]["err_data"]);
       }
       
-      if($_POST['share'] == 1){ 
-        $q = "INSERT INTO `import_book` (`lang`,`lang_a`, `level`, `name`, `descr`,`author`,`import_id`,`email`) VALUES (?,?,?,?,?,?,?,?)";
-        $conn->insert($q, array($_POST['lang2'], $_POST['lang_a'], $_POST['level'], $_POST['name'], $_POST['descr'], $_POST['author'], $token, $_POST['email']));
+      if($_POST['share'] == 1 || isset($_SESSION['id'])){ 
+        if(!isset($_SESSION['id'])){
+          $uid= NULL;
+        }else{
+          $uid = $_SESSION['id'];
+        }
+        $q = "INSERT INTO `import_book` (`lang`,`lang_a`, `level`, `name`, `descr`,`author`,`import_id`,`email`,`shared`,`id_user`) VALUES (?,?,?,?,?,?,?,?,?,?)";
+        $conn->insert($q, array($_POST['lang2'], $_POST['lang_a'], $_POST['level'], $_POST['name'], $_POST['descr'], $_POST['author'], $token, $_POST['email'], $_POST['share'], $uid));
       }
       $q = "INSERT INTO `import_word` (`question`, `answer`, `token`, `share`) VALUES ".implode(",", $rows);
       $conn->simpleQuery($q);
       }
       
-      if(isset($_POST['email']) && strlen($_POST['email']) > 5  ){
+      if(isset($_POST['email']) && strlen($_POST['email']) > 5  && $_SERVER['REMOTE_ADDR']  != "127.0.0.1"){
             $mail = new PHPMailer();
             $mail->From = "info@drilapp.com";
             $mail->FromName = "Android Dril";

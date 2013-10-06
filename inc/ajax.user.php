@@ -12,12 +12,16 @@ function __autoload($class) {
   require_once '../admin/inc/class.'.$class.'.php';
 }
 
-
+if(!isset($_GET['lang'])){
+    $lang = "sk";
+}else{
+    $lang = $_GET['lang'];
+}
 
 
 try{
     
-    $lang = $_GET['lang'];
+
     $conn = Database::getInstance($config['db_server'], $config['db_user'], $config['db_pass'], $config['db_name']);
     $auth = new Authenticate($conn);
     if(!$auth->isLogined()){
@@ -47,13 +51,35 @@ try{
     		break;
 
     	// pridanie
-    	case 3:
-    		if(!$userService->isUserOwner($_GET['importId'])){
-				throw new AuthException(getMessage("errPerm"));
-			}
-			$id = $userService->createWord($_GET['importId'], $_GET['question'], $_GET['answer']);
-			$data = array( "err" => 0, "id" => $id );
-    		break;
+        case 3:
+            if(!$userService->isUserOwner($_GET['importId'])){
+                throw new AuthException(getMessage("errPerm"));
+            }
+            $id = $userService->createWord($_GET['importId'], $_GET['question'], $_GET['answer']);
+            $data = array( "err" => 0, "id" => $id );
+            break;
+        
+        
+        // editacia uzivatela
+        case 4:
+            $id = $userService->updateUserInfo($_GET);
+            $data = array( "err" => 0, "msg" => getMessage("successfullySaved") );
+            break; 
+       
+       // zmena hesla
+        case 5:
+            $id = $userService->changeUserPass($_GET);
+            $data = array( "err" => 0, "msg" => getMessage("successfullySaved") );
+            break;
+        // zmena hesla
+        case 6:
+            if(!$userService->isUserOwner($_GET['id'])){
+                throw new AuthException(getMessage("errPerm"));
+            }
+            $id = $userService->updateBookSharing($_GET['shared'], $_GET['id']);
+            $data = array( "err" => 0, "msg" => getMessage("successfullySaved") );
+            break;
+        
     	default:
     		throw new Exception("Invalid operation.");
     		break;

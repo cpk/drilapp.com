@@ -2,25 +2,7 @@
 <article>
     
 <?php 
-
-	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-		if(!isset($auth)){
-			$auth = new Authenticate($conn);
-		}
-		try{
-			if(isset($_POST['rememberMe']) && $_POST['rememberMe'] == 'on'){
-				$_POST['rememberMe'] = true;
-			}else{
-				$_POST['rememberMe'] = false;
-			}
-			$auth->login($_POST['login'] ,$_POST['pass'], $_POST['rememberMe'], $_POST['token']);
-		}catch(AuthException $e){
-			$_SESSION['status'] = $e->getMessage();
-		}
-	}
-$article = getArticle("fullHidden", $meta['id_article'], $lang);  
-
-
+$article = getArticle("fullHidden", $meta['id_article'], $lang);
 echo '<h1>'.$article[0]["title_${lang}"].'</h1>';
 ?>
 <script>
@@ -33,7 +15,7 @@ $(function() {
 	$('input[name=login]').focus();
 });
 </script>
-	<form method="post" class="loginform" action="<?php echo linker(16, 1, $lang); ?>" >
+	<form method="post" class="loginform" action="/inc/user.action.php" >
 		<?php echo (isset($_SESSION["status"]) ? '<p class="err">'.$_SESSION["status"].'</p>' : ""); unset($_SESSION["status"]); ?>
         <div>
         	<label><?php printMessage("username")?>:</label>
@@ -51,6 +33,7 @@ $(function() {
         	<div class="clear"></div>
         </div>
         <input type="hidden" name="token" value="<?php echo session_id(); ?>" / >
+        <input type="hidden" name="action" value="login" / >
 	</form>
 
 	<div class="reg-descr">

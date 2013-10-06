@@ -126,7 +126,7 @@ class UserService {
     }
 
     public function getUserById($uid){
-        $data =  $this->conn->select("SELECT `id_user`,`login`, `reg_time`, `email`, `givenname`, `surname` from `user` WHERE `id_user`=? and `active`=1 LIMIT 1", array(intval($uid))); 
+        $data =  $this->conn->select("SELECT * from `user` WHERE `id_user`=? and `active`=1 LIMIT 1", array(intval($uid))); 
         return xss($data);       
     }
 
@@ -167,6 +167,15 @@ class UserService {
         $this->sendEmail($user['email'], getMessage("regEmailSubject"), $body);
     }
 
+    public function updateUserInfo($user){
+        $this->conn->insert("UPDATE `user` set `givenname`=?, `surname`=? WHERE id_user=? LIMIT 1", 
+                array(  $user['givenname'],
+                        $user['surname'],
+                        intval($_SESSION['id'])
+                        ) 
+                );
+    }
+
     private function sendEmail($toEmail, $subject, $body){
         $mail = new PHPMailer();
         $mail->From = "info@drilapp.com";
@@ -179,6 +188,24 @@ class UserService {
         if($_SERVER['REMOTE_ADDR']  != "127.0.0.1"){
             $mail->Send();
         }
+    }
+
+    public function changeUserPass($data){
+        if($data['newPass'] != $data['newPassConfirm']){
+            new Exception(getMessage("errUserPassMatch"));
+        }
+        $user = $this->getUserById($_SESSION['id']);
+        if(count($user) != 1){
+            throw new Exception("Error Processing Request");    
+        }
+        if(hash_hmac( 'sha256', $data["oldPass"] , $user[0]['salt']) != $user[0]['pass']){
+            throw new Exception(getMessage("errUserOldPassMatch"));
+        }
+        if(strlen($data["newPass"]) < 5){
+            throw new InvalidArgumentException(getMessage("errPassLen"));
+        }
+        $newHash = hash_hmac( 'sha256', $data["newPass"] , $user[0]['salt']);
+        $this->conn->update("update user set pass=? WHERE id_user=? LIMIT 1", array($newHash, intval($_SESSION["id"]) ));
     }
     
 
@@ -194,7 +221,7 @@ class UserService {
 
     public function isUserOwner($importId){
         $result = $this->conn->simpleQuery(
-            "select count(*) from import_book b WHERE b.import_id=".intval($importId)." AND b.id_user=".intval($_SESSION["id"])
+            "select count(*) from import_book b WHERE b.import_id=".intval($importId)." || b._id=".intval($importId)." AND b.id_user=".intval($_SESSION["id"])
             );
         return ($result[0]["count(*)"] == 1);
     }
@@ -205,6 +232,10 @@ class UserService {
 
     public function updateWord($wordId, $question, $answer){
         $this->conn->update("update import_word set question=?, answer=? where _id=? LIMIT 1", array($question, $answer, $wordId));
+    }
+
+    public function updateBookSharing($newState, $bookId){
+        $this->conn->update("update import_book set shared=? where _id=? LIMIT 1", array($newState, $bookId));
     }
 
 

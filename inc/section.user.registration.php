@@ -23,7 +23,7 @@ $(function() {
 	$('form').submit(function(e){
 		e.stopPropagation();
 		if(!validate($(this))){
-			//	return false;
+			return false;
 		}
 	});
 });

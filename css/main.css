@@ -5,6 +5,7 @@ body{ font-family: 'Signika', sans-serif;font-size:12px;background:#f5f8f9;}
 .clear{ clear:both;}
 .formerr{border:2px solid #e45e5e !important;}
 .hidden{ display:none !important;}
+.showen{ display:block !important;}
 .c{ text-align:center;}
 .l{ text-align:left;}
 .blind {   left: -5000px;position: absolute; top: -5000px;}
@@ -242,9 +243,9 @@ footer .ext.play-en{right: 160px;background-image: url(../img/ext-play-en.png);}
 
 /* User section */
 .loginform{width:500px;}
-.loginform, .regform{padding:20px;background:#fafafa;border:3px solid #e5e5e5;margin:0 auto;}
-.loginform > div, .regform > div{background:#eee;padding:10px 0 !important;margin:10px 0 !important;}
-.loginform label,.regform label{display:inline-block;float:left;min-width:150px;padding:7px 0;margin:0;height:auto;}
+.loginform, .regform, .form{padding:20px;background:#fafafa;border:3px solid #e5e5e5;margin:0 auto;}
+.loginform > div, .regform > div, .form > div{background:#eee;padding:10px 0 !important;margin:10px 0 !important;}
+.loginform label,.regform label, .form label{display:inline-block;float:left;min-width:150px;padding:7px 0;margin:0;height:auto;}
 .loginform .ch{margin:0 10px;}
 .loginform .checkbox{padding:20px 10px!important;position:relative;height:20px;}
 .loginform .checkbox .btn{position:absolute;left:260px;top:-16px;height:40px;}
@@ -266,7 +267,7 @@ background: -ms-linear-gradient(top,  #45484d 0%,#000000 100%); /* IE10+ */
 background: linear-gradient(to bottom,  #45484d 0%,#000000 100%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
 }
-.user-nav ul li a:hover{background:#ccc;color:#333 }
+.user-nav ul li a:hover,.user-nav ul li.curr a{background:#ccc;color:#333 }
 
 .user-content{min-height:350px;}
 .user-content h2.cst{width:910px;margin:10px;display:block;float:none;}
@@ -274,7 +275,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', end
 
 .reg-descr{padding:10px 20px;border-top:5px solid #ccc;margin:25px;}
 .regurl {font-size:16px;margin:0 5px 0 10px;font-weight:bold;}
-
+.form .btn{margin:0 20px;}
 .regform label{text-align: right;padding-right: 15px}
 .regform .email{border-bottom-color: #aaa;padding:5px;margin:0;text-align: left;}
 .regform .btnbox{padding:0;}
@@ -301,3 +302,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', end
 .tip b{margin:0 5px;}
 .tip.block{display:block;}
 .tip.block.r{text-align:right;}
+
+.shared1 a,.shared0 a{background-repeat:no-repeat;display:inline-block;margin:0;padding:0 0 0 25px !important;background-position: center left;}
+.shared1 a:hover,.shared0 a:hover{background-repeat: no-repeat;background-position: center left;}
+.shared0 a{background-image:url(../img/no_ico.png) !important;}
+.shared1 a{background-image:url(../img/ok_ico.png) !important;}
+
+#news{position:absolute;right:115px;top:20px;;color:#FF124D;font-size:13px;text-align:center;line-height:12px;background:#333;padding:5px;min-width:40px;}
+#news em{display:block;}
