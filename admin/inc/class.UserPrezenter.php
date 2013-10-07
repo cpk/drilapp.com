@@ -63,7 +63,7 @@ class UserPrezenter {
         $yes = getMessage("yes");
         $no = getMessage("no");
         return "<tr id=\"".$row["_id"]."\">".
-                '<td class=""><a href="?book="'.$row["_id"].'">'.$row["name"].'</a></td>'.
+                '<td><a href="?book='.$row["_id"].'">'.$row["name"].'</a></td>'.
                 '<td class="c">'.mb_substr($row["lang_question"], 0, 4, "UTF-8").' / '. mb_substr($row["lang_answer"],0, 4,"UTF-8").'</td>'.
                 '<td class="c">'.substr($row["level_name"], 0, strpos($row["level_name"], ' ', 15)).'</td>'.
                 '<td class="c">'.$row["count"].'</td>'.

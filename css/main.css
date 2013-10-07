@@ -269,7 +269,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', end
 }
 .user-nav ul li a:hover,.user-nav ul li.curr a{background:#ccc;color:#333 }
 
-.user-content{min-height:350px;}
+.user-content{min-height:350px;position:relative;}
 .user-content h2.cst{width:910px;margin:10px;display:block;float:none;}
 .user-content #words{margin:10px;width:950px;}
 
@@ -310,3 +310,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', end
 
 #news{position:absolute;right:115px;top:20px;;color:#FF124D;font-size:13px;text-align:center;line-height:12px;background:#333;padding:5px;min-width:40px;}
 #news em{display:block;}
+
+#export{position:absolute;top:70px;right:10px;list-style:none;background:#fff;padding:0}
+#export a{display:block;padding:9px 10px;border-bottom:1px solid #ccc;}

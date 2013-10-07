@@ -1,7 +1,8 @@
 <?php
-	$bookPrezenter = new BookPrezenter($conn);
-	$book = $bookPrezenter->getBook($_GET['book']);
-	$notFound = (count($book) == 0);
+	$userService = new UserService($conn);
+	$book = $userService->getById($_GET['book']);
+	
+  $notFound = (count($book) == 0 || $book[0]['id_user'] != $_SESSION['id']);
 ?>
 <div id="article">
 	<article class="user-section fullscreen">
@@ -21,7 +22,7 @@
 		</div>
 		<div class="user-content">
 			<?php
-			
+			      $bookPrezenter = new BookPrezenter($conn);
             $words = $bookPrezenter->getBooksWords($book[0]['import_id']);
             echo '<h1>'.$book[0]['book_name'].'</h1>';
             
@@ -49,7 +50,12 @@
                      <td class="bold">Import ID:</td>
                     <td><strong id="importId2">'.$book[0]['import_id'].'</strong></td>    
                 </tr>
-             </table>';
+             </table>
+             <ul id="export">
+                <li class="head">Možnosti</li>
+                <li><a  class="book-menu print" target="_blank" href="/inc/export.php?t=print&amp;id='.$_GET['book'].'">Vytlačiť</a></li>
+                <li><a class="book-menu pdf"href="/inc/export.php?t=pdf&amp;id='.$_GET['book'].'">Exportovať do PDF</a></li>
+            </ul>';
             if($count > 0){
                 $html .= '<h2 class="cst">Obsah učebnice '.$book[0]['book_name'].'</h2>'.
                             '<table id="words" data-lang="'.$lang.'">';
@@ -66,6 +72,11 @@
                $html .= '<table id="words" data-lang="'.$lang.'"><p class="alert">Učebnica neobsahuje žiadne kartičky.</p></table>';
            }
            echo $html;
+           /*
+<li><a class="book-menu xls" href="/inc/export.php?t=pdf&amp;id='.$_GET['book'].'">Exportovať do Excelu</a></li>
+                <li><a class="book-menu csv" href="/inc/export.php?t=pdf&amp;id='.$_GET['book'].'">Exportovať do CSV</a></li>
+              
+           */
 		?>
 		
 		<div class="addNewWord" id="addNewWord">

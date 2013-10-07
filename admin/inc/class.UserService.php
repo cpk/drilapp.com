@@ -14,7 +14,7 @@ class UserService {
     
     private $conn;
     
-    private $countOfItems = null;
+    private $countOfItems = 0;
 
     private $peerPage = 20;
            
@@ -46,11 +46,15 @@ class UserService {
 
     
     public function getById($id){        
-       $data =  $this->conn->select( "SELECT b.name as book_name, b.author, b.descr, b.import_id, b.create, la.name_sk, le.name,
-                                        (SELECT count(w._id) FROM import_word w WHERE w.token=b.import_id ) as count
-                                      FROM import_book b, lang la, level le
-                                      WHERE b.lang = la.id_lang AND b.level = le.id_level AND b._id=?
-                                      LIMIT 1", array($id));
+       $data =  $this->conn->select( "SELECT b.name as book_name, b.id_user, b.author, b.descr, b.import_id, b.create, le.name, b.lang AS lang, b.lang_a AS lang_a, ".
+                                      "lang_answer.name_sk AS lang_answer, lang_question.name_sk AS lang_question, ".
+                                      "(SELECT count(w._id) FROM import_word w WHERE w.token=b.import_id ) as count ".
+                                      "FROM import_book b ".
+                                        "JOIN lang lang_question ON lang_question.id_lang=b.lang ".
+                                        "JOIN lang lang_answer ON lang_answer.id_lang=b.lang_a ".
+                                        "JOIN level le ON le.id_level=b.level ".
+                                      "WHERE b.level = le.id_level AND b._id=? ".
+                                      "LIMIT 1", array($id));
        return xss($data);
     }
     
@@ -104,7 +108,6 @@ class UserService {
         $where = array();
         if(isset($_GET['id_user'])) 
             $where[] =  " bv.`id_user`=".$_GET['id_user']." "; 
-            $this->findBooksAndAssign($_GET['id_user']);
         if(isset($_GET['lang_q']) && $_GET['lang_q'] != 0) 
             $where[] =  " (bv.`lang` ='".$_GET['lang_q']."' OR bv.`lang_a` ='".$_GET['lang_q']."' )"; 
         if(isset($_GET['lang_a']) && $_GET['lang_a'] != 0) 
