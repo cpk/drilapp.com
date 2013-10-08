@@ -1,6 +1,6 @@
 <?php
 session_start(); 
-ini_set("display_errors", 1);
+ini_set("display_errors", 0);
 
 require_once "../admin/config.php";
 require_once "../admin/inc/fnc.main.php";
