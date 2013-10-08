@@ -6,10 +6,17 @@
     require_once "../admin/page/fnc.page.php";
     require_once "../inc/fnc.php";
     require_once "../inc/messageSource.php";
-
+    require_once "../admin/inc/PHPExcel.php";
+/*
     function __autoload($class) {
             require_once '../admin/inc/class.'.$class.'.php';
     }
+  
+*/
+// Or, using an anonymous function as of PHP 5.3.0
+    spl_autoload_register(function ($class) {
+        require_once '../admin/inc/class.'.$class.'.php';;
+    });
 
     try{
         $bookId = intval($_GET['id']);
@@ -35,15 +42,23 @@
 	    			include 'export/print.php';
 	    		break;
 	    	case 'pdf':
-	    			include 'export/pdf.php';
-	    		break;
+            include 'export/pdf.php';
+          break;
+        case 'xls':
+            include 'export/xls.php';
+          break;
+        case 'csv':
+            include 'export/csv.php';
+          break;
 	    	default:
-	    		# code...
+	    		throw new Exception("Error Processing Request", 1);
 	    		break;
 	    }
 
     }catch(MysqlException $e){
         echo '<!DOCTYPE HTML><html><head><meta charset="utf-8" /></head><body>'.
              'Vyskytol sa problém s databázou, opráciu skúste zopakovať</body></html>';
+    }catch(Exception $e){
+      die('Invalid operation: ' . $_GET['t']);
     } 
 ?>

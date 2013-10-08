@@ -117,8 +117,19 @@ class Navigator
 			if($this->actualPage == $i){
 				$this->html .= '<span>'.$i.'</span>';
 			}else{
-				$this->html .= '<a href="'.$this->url.($i == 1 ? "" : $this->separator.$i).$this->queryStr.'">'.$i.'</a>';
+				$this->html .= '<a href="'.$this->url.$this->getQueryString($i).'">'.$i.'</a>';
 			}
+	}
+
+	private function getQueryString($pageNo){
+		$strLen = strlen($this->queryStr);
+		if($pageNo == 1){
+			if($strLen > 2){
+				return "?".substr($this->queryStr, 1, $strLen);
+			}
+			return "";
+		}
+		return $this->separator.$pageNo.$this->queryStr;
 	}
 	
 	// -------------------------------------------------------------------------
