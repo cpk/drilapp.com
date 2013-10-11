@@ -77,7 +77,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3019', end
 #books .name{min-width:200px;}
 #books a{color:#000;padding:5px;}
 #books a:hover{color:#fff;}
-#books .author{width:140px;}
 #books .lang{width:80px;}
 #books .level{width:150px;}
 #books .count{widht:50px;}
@@ -320,3 +319,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', end
 #export .xls{ background-image:url(../img/export_xls.png); }
 #export .csv{ background-image:url(../img/export_csv.png); }
 #export .pdf{ background-image:url(../img/export_pdf.png); }
+
+table .favorite{text-align:center;padding:0 !important;margin:0}
+table .favorite span{background-color:transparent;padding:0;margin:0;width:24px;height:24px;display:inline-block;background-image:url(../img/star_ico.png)}
+table .favorite:hover{cursor:pointer;}
+table .favorite.is1 span{background-position:0 -48px;}
+table .favorite:hover span{background-position:0 -24px;}
+

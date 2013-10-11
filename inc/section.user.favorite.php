@@ -4,7 +4,7 @@
 			$parent = getArticle("basic", $meta["id_parent"], $lang);
 		?>
 
-		<h1><?php echo $parent[0]["title_$lang"]. ' - '. $meta["title_$lang"]?></h1>
+		<h1><?php echo $parent[0]["title_$lang"] . ' - '. $meta["title_$lang"] ?></h1>
 
 
 		<div class="user-nav gradientGray">
@@ -19,8 +19,8 @@
 			}
 			
 
-			$userPresenter = new UserPrezenter($conn);
-			$pageContent = $userPresenter->printUserBooks(intval($_SESSION["id"]), intval($_GET['s']));
+			$BookPrezenter = new BookPrezenter($conn);
+			$pageContent = $BookPrezenter->printUserFavoriteBooks(intval($_SESSION["id"]), intval($_GET['s']), 20);
             echo $pageContent;
 			?>
 		</div>

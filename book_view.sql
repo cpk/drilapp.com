@@ -11,5 +11,6 @@ JOIN `lang` `lang_question` ON `book`.`lang` = `lang_question`.`id_lang`
 JOIN `lang` `lang_answer` ON `book`.`lang_a` = `lang_answer`.`id_lang`
 JOIN `level` `l` ON `book`.`level` = `l`.`id_level`
 LEFT JOIN `import_word` `words` ON `book`.`import_id` = `words`.`token`
+LEFT OUTER JOIN `user_has_favorite`  f on f.`id_book`=`book`.`_id` and f.`id_user`=1
 GROUP BY `book`.`_id` 
 ORDER BY `book`.`_id` DESC 

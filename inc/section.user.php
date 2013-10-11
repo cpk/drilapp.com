@@ -20,6 +20,9 @@
 			case 18 :
 					include 'section.user.edit.php';
 				break;
+			case 19 :
+					include 'section.user.favorite.php';
+				break;	
 			default:
 				# code...
 				break;

@@ -19,6 +19,10 @@ class BookService {
     private $totalPrice = null;
     
     private $totalSalePrice = null;
+
+    private $isLoggined = false;
+
+
         
    
    public function __construct($conn) {
@@ -28,12 +32,14 @@ class BookService {
         }
         
         $this->conn = $conn;
+        $this->isLoggined = isset($_SESSION['id']);
     }
     
     
     public function getBooks($pageNumber, $peerPage){
         $offset = ($pageNumber == 1 ? 0 :  ($pageNumber * $peerPage) - $peerPage);
-        $data =  $this->conn->select( "SELECT * FROM book_view bv ".
+        $data =  $this->conn->select( "SELECT bv.* ".($this->isLoggined ? ", f.id_book as favorite " : "")."FROM book_view bv ".
+                                      $this->appendFavoriteBooks().
                                       $this->where().
                                       $this->orderBy().
                                       "LIMIT ".$offset.",  ".$peerPage);
@@ -41,9 +47,28 @@ class BookService {
         return xss($data);
     }
 
+    private function appendFavoriteBooks(){
+        if($this->isLoggined){
+            return ' LEFT OUTER JOIN `user_has_favorite`  f on f.`id_book`=`bv`.`_id` and f.`id_user`='.intval($_SESSION['id']).' ';
+        }
+        return '';
+        
+    }
+
+    public function getUserFavoriteBooks($uid, $pageNumber, $peerPage){
+        $offset = ($pageNumber == 1 ? 0 :  ($pageNumber * $peerPage) - $peerPage);
+        $data =  $this->conn->select( "SELECT * FROM book_view bv ".
+                                      "INNER JOIN user_has_favorite f ON f.id_book=bv.`_id` AND f.`id_user`=? ".
+                                      $this->where().
+                                      $this->orderBy().
+                                      "LIMIT ".$offset.",  ".$peerPage, array($uid));
+
+        return xss($data);
+    }
+
     
     public function getById($id){        
-       $data =  $this->conn->select( "SELECT b.name as book_name, b.author, b.descr, b.import_id, b.create, le.name, b.lang AS lang, b.lang_a AS lang_a, ".
+       $data =  $this->conn->select( "SELECT b.name as book_name, b._id, b.author, b.descr, b.import_id, b.create, b.id_user, le.name, b.lang AS lang, b.lang_a AS lang_a, ".
                                       "lang_answer.name_sk AS lang_answer, lang_question.name_sk AS lang_question, ".
                                       "(SELECT count(w._id) FROM import_word w WHERE w.token=b.import_id ) as count ".
                                       "FROM import_book b ".
@@ -69,6 +94,14 @@ class BookService {
     public function getCount(){
         if($this->countOfItems == null){
             $count =  $this->conn->select("SELECT count(*) FROM book_view bv ".$this->where());
+            $this->countOfItems = $count[0]["count(*)"];
+        }
+        return (int)$this->countOfItems;
+    }
+
+    public function getCountOfFavoriteUsersBook($uid){
+        if($this->countOfItems == null){
+            $count =  $this->conn->select("SELECT count(*) FROM user_has_favorite f where id_user=$uid");
             $this->countOfItems = $count[0]["count(*)"];
         }
         return (int)$this->countOfItems;
