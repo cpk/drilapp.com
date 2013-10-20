@@ -388,8 +388,12 @@ function makeLinkByArticleId($articleId){
 function xss($data){
     $cleaned = array();
      foreach ($data as $rs) {
-        $cleaned[] = array_map("htmlspecialchars", $rs);
+        $cleaned[] = array_map("cleanOutput", $rs);
       
     }
     return $cleaned;
+}
+
+function cleanOutput($str){
+	return stripslashes(htmlspecialchars($str));
 }
