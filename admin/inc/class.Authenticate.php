@@ -181,7 +181,7 @@ class Authenticate
 		if($_SERVER['REMOTE_ADDR'] == "127.0.0.1"){
 			return ".drilapp.dev";
 		}else{
-			return ".drilapp.com";
+			return  str_replace("www.", "", $_SERVER['SERVER_NAME']);
 		}
 	}
 }

@@ -56,16 +56,8 @@ body{ font-family: 'Signika', sans-serif;font-size:12px;background:#f5f8f9;}
 	background-color:#378de5;
 }
 
-#vote{position:absolute;display:block;right:100px;top:15px;opacity:.9;border:1px solid #fff;padding:8px 19px;font-weight:Bold;background: rgb(255,48,25);border-radius:5px;color:#fff;text-align:center;
-background: -moz-linear-gradient(top,  rgba(255,48,25,1) 0%, rgba(207,4,4,1) 100%);
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,48,25,1)), color-stop(100%,rgba(207,4,4,1)));
-background: -webkit-linear-gradient(top,  rgba(255,48,25,1) 0%,rgba(207,4,4,1) 100%);
-background: -o-linear-gradient(top,  rgba(255,48,25,1) 0%,rgba(207,4,4,1) 100%);
-background: -ms-linear-gradient(top,  rgba(255,48,25,1) 0%,rgba(207,4,4,1) 100%);
-background: linear-gradient(to bottom,  rgba(255,48,25,1) 0%,rgba(207,4,4,1) 100%);
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff3019', endColorstr='#cf0404',GradientType=0 );
-}
-#vote:hover{opacity:1;}
+#vote{position:absolute;display:block;left:200px;top:0px;background: url(../img/dril_progress.png) no-repeat;width: 200px;height: 40px;cursor: default;}
+
 .author{font-size:11px;margin:10px;}
 
 #bc{display:block;background:#fafafa;padding:2px 10px;font-size:11px;margin:0 10px;opacity:.8}

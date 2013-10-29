@@ -83,7 +83,7 @@
                     <?php echo $nav; ?>
                 </ul>
             </nav>
-     <!--   <a id="vote" title="Páči sa Vám táto applikácia? Zahlasujte za ňu v súťaži a podporte tak autora." href="http://apps.rulezz.sk/2013/works/view/dril-anglictina-efektivne" target="_blank">Podporte aplikáciu v súťaži</a> -->
+       <a id="vote" title="Version 2.0" href="#version-2" target="_blank"></a> 
 	</div>
         
     </header>
