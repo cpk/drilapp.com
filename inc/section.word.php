@@ -152,6 +152,9 @@
         <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
         </div>
       <?php } ?>  
+      <input type="hidden" name="lang" value="<?php echo $lang; ?>" />
+      <input type="hidden" name="is0" value="<?php printMessage("favoriteRemove0"); ?>" />
+      <input type="hidden" name="is1" value="<?php printMessage("favoriteRemove1"); ?>" />
 </article>
 </div>    
 <?php

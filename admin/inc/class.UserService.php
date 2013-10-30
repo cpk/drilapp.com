@@ -208,7 +208,7 @@ class UserService {
             throw new InvalidArgumentException(getMessage("errPassLen"));
         }
         $newHash = hash_hmac( 'sha256', $data["newPass"] , $user[0]['salt']);
-        $this->conn->update("update user set pass=? WHERE id_user=? LIMIT 1", array($newHash, intval($_SESSION["id"]) ));
+        $this->conn->update("UPDATE user set pass=? WHERE id_user=? LIMIT 1", array($newHash, intval($_SESSION["id"]) ));
     }
     
 
@@ -224,21 +224,38 @@ class UserService {
 
     public function isUserOwner($importId){
         $result = $this->conn->simpleQuery(
-            "select count(*) from import_book b WHERE b.import_id=".intval($importId)." || b._id=".intval($importId)." AND b.id_user=".intval($_SESSION["id"])
+            "SELECT count(*) from import_book b WHERE b.import_id=".intval($importId)." || b._id=".intval($importId)." AND b.id_user=".intval($_SESSION["id"])
             );
         return ($result[0]["count(*)"] == 1);
     }
 
     public function removeWord($wordId){
-        $this->conn->simpleQuery("delete from import_word where _id=".intval($wordId)." LIMIT 1");
+        $this->conn->simpleQuery("DELETE from import_word WHERE _id=".intval($wordId)." LIMIT 1");
     }
 
     public function updateWord($wordId, $question, $answer){
-        $this->conn->update("update import_word set question=?, answer=? where _id=? LIMIT 1", array($question, $answer, $wordId));
+        $this->conn->update("UPDATE import_word SET question=?, answer=? WHERE _id=? LIMIT 1", array($question, $answer, $wordId));
     }
 
     public function updateBookSharing($newState, $bookId){
-        $this->conn->update("update import_book set shared=? where _id=? LIMIT 1", array($newState, $bookId));
+        $this->conn->update("UPDATE import_book SET shared=? WHERE _id=? LIMIT 1", array($newState, $bookId));
+    }
+
+
+    public function hasUserBookInFavorite($uid, $bid){
+        $result = $this->conn->simpleQuery("SELECT count(*) FROM user_has_favorite WHERE id_book=$bid AND id_user=$uid");
+        return ($result[0]["count(*)"] == 1);
+    }
+
+    public function addBookToFavorite($uid, $bid){
+        if(!$this->hasUserBookInFavorite($uid, $bid)){
+            $this->conn->insert("INSERT INTO user_has_favorite (`id_book`,`id_user`) VALUES (?,?)", array($bid, $uid));       
+        }
+    }
+
+    public function removeBookFromFavorite($uid, $bid){
+        $this->conn->delete("DELETE FROM user_has_favorite WHERE id_book=? AND id_user=? LIMIT 1", array($bid, $uid));       
+        
     }
 
 

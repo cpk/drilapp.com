@@ -10,7 +10,7 @@
             }else{
         ?>
 
-        <h1><?php echo $parent[0]["title_$lang"]?></h1>
+        <h1><?php echo $parent[0]["title_$lang"]. ' - '. $meta["title_$lang"] ?></h1>
 
 
         <div class="user-nav gradientGray">

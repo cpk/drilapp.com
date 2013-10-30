@@ -1,6 +1,6 @@
 <?php
 session_start(); 
-ini_set("display_errors", 0);
+ini_set("display_errors", 1);
 
 require_once "../admin/config.php";
 require_once "../admin/inc/fnc.main.php";
@@ -71,6 +71,7 @@ try{
             $id = $userService->changeUserPass($_GET);
             $data = array( "err" => 0, "msg" => getMessage("successfullySaved") );
             break;
+        
         // zmena hesla
         case 6:
             if(!$userService->isUserOwner($_GET['id'])){
@@ -79,6 +80,16 @@ try{
             $id = $userService->updateBookSharing($_GET['shared'], $_GET['id']);
             $data = array( "err" => 0, "msg" => getMessage("successfullySaved") );
             break;
+
+        // zmena hesla
+        case 7:
+            if(intval($_GET['isFavorite']) == 1){
+                $userService->removeBookFromFavorite($_SESSION['id'], intval($_GET['id']));
+            }else{
+                $userService->addBookToFavorite($_SESSION['id'], intval($_GET['id']));
+            }
+            $data = array( "err" => 0, "msg" => getMessage("successfullySaved") );
+            break;    
         
     	default:
     		throw new Exception("Invalid operation.");

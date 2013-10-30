@@ -441,6 +441,30 @@ $(function() {
         });
          return false;
     });
+
+    $(document).on("click", ".favorite", function(){
+       var $this = $(this),
+           data = {
+             id : $this.parent().attr("id").replace("id", ""),
+             isFavorite : ($this.hasClass("is1") ? 1 : 0),
+             lang : $("input[name=lang]").val(),
+             act : 7
+         };
+         $.getJSON(userUrl, data, function(json) {  
+           if(json.err === 0){
+              if($this.hasClass("is1")){
+                $this.removeClass("is1").addClass("is0");
+                $this.attr("title", $('input[name=is0]').val());
+              }else{
+                $this.removeClass("is0").addClass("is1");
+                $this.attr("title", $('input[name=is1]').val());
+              }
+           }else{
+            showStatus(json);
+           }
+        });
+         return false;
+    });
 });
 
 function areDataSet(data){
