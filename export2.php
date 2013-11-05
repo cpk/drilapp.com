@@ -31,7 +31,7 @@ function __autoload($class) {
 
     if(isset($_GET['importId'])){
     // DRILAPP.COM ------------------------------------------------------------
-       $words  = $conn->select("SELECT `question`,`answer` FROM `import_word` WHERE `token`=?", array( intval($_GET['importId']) ));
+       $words  = $conn->select("SELECT `question` as a,`answer` as q FROM `import_word` WHERE `token`=?", array( intval($_GET['importId']) ));
 	     $conn->update("UPDATE `import_book` SET `downloads`= `downloads`+1 WHERE `import_id`=? LIMIT 1", array( intval($_GET['importId'])));
        echo json_encode(array('words'=> $words)) ;
 
@@ -58,7 +58,7 @@ function __autoload($class) {
             $lectures  = $conn->select("SELECT * FROM `lecture` WHERE `book_id`=?", array( $books[$i]['_id'] )); 
               
             for($j = 0; $j < count($lectures); $j++){
-              $words  = $conn->select("SELECT `question`,`answer` FROM `word` WHERE `lecture_id`=?", array( $lectures[$j]['_id'] ));
+              $words  = $conn->select("SELECT `question` as q ,`answer` as a FROM `word` WHERE `lecture_id`=?", array( $lectures[$j]['_id'] ));
 
               $JSONarray[$i]["lectures"][$j] = array( 
                             "lecture_name" =>  $lectures[$j]['lecture_name'],
