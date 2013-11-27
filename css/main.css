@@ -56,7 +56,8 @@ body{ font-family: 'Signika', sans-serif;font-size:12px;background:#f5f8f9;}
 	background-color:#378de5;
 }
 
-#vote{position:absolute;display:block;left:200px;top:0px;background: url(../img/dril_progress.png) no-repeat;width: 200px;height: 40px;cursor: default;}
+#vote{position:absolute;display:block;left:200px;top:0px;background: url(../img/testdril.png) no-repeat;width: 200px;height: 40px;}
+#vote:hover{opacity: .8}
 
 .author{font-size:11px;margin:10px;}
 

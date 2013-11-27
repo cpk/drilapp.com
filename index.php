@@ -83,7 +83,7 @@
                     <?php echo $nav; ?>
                 </ul>
             </nav>
-       <a id="vote" title="Version 2.0" href="#version-2" target="_blank"></a> 
+       <a id="vote" title="Version 2.0" href="https://play.google.com/apps/testing/sk.peterjurkovic.dril" target="_blank"></a> 
 	</div>
         
     </header>
