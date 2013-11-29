@@ -53,12 +53,7 @@ if($logged){
 }
 echo '<h1>'.$article[0]["title_${lang}"].'</h1>'.$article[0]["content_${lang}"];
 
-?>      <p class="info msg">
-            <strong>24.07.2013</strong>
-            Od teraz už nemusíte slovíčka napísať a hneť odoslať! Rozpísané slovíčka sa Vám automaticky ukladajú. 
-            Čo to znamená? Napríklad po dopísaní prvých 3 slovíčok môžťe Váš prehliadač zatvoriť a po znovu-zobrazení 
-            tejto stránky ich tu nájdete predvypľnené! 
-        </p>
+?>     
         <form class="ajax">
             <span class="nol">Pč.</span><span class="ql"><?php echo $strings[$lang]['question']; ?></span><span class="al"><?php echo $strings[$lang]['answer']; ?></span>
         <table id="table">
