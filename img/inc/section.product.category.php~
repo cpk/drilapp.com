@@ -1,0 +1,20 @@
+<div id="catalog" class="shaddow catalog2">
+    <div class="left cbox">
+        <strong class="head hleft">Katalóg</strong>
+        
+        <ul>
+            <?php echo printMenu(1, "",false); ?>
+        </ul>
+    </div>
+    <div class="right cbox items">
+        <strong class="head hright"><?php echo $meta["title_${lang}"]; ?></strong>
+        <div id="products">
+            <?php 
+                    $p =  prictCategoryProduct( $meta["id_article"] ); 
+                    echo $p.$p.$p;
+            ?>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+

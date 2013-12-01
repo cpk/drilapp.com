@@ -56,7 +56,7 @@ body{ font-family: 'Signika', sans-serif;font-size:12px;background:#f5f8f9;}
 	background-color:#378de5;
 }
 
-#vote{position:absolute;display:block;left:200px;top:0px;background: url(../img/testdril.png) no-repeat;width: 200px;height: 40px;}
+#vote{position:absolute;display:block;left:200px;top:0px;background: url(../img/dril_progress.png) no-repeat;width: 200px;height: 40px;}
 #vote:hover{opacity: .8}
 
 .author{font-size:11px;margin:10px;}
@@ -318,4 +318,7 @@ table .favorite span{background-color:transparent;padding:0;margin:0;width:24px;
 table .favorite:hover{cursor:pointer;}
 table .favorite.is1 span{background-position:0 -48px;}
 table .favorite:hover span{background-position:0 -24px;}
+
+
+span.form-note{font-size:12px;line-height: 18px;min-width:440px;;font-style: normal;display:block;}
 

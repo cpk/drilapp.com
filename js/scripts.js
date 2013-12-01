@@ -196,10 +196,19 @@ $(function() {
           data.share = ($('input[name=share]').is(':checked') ? 1 : 0);
           data.lang2 = $('select[name=lang2] option:selected').val();
           data.level = $('select[name=level] option:selected').val();
-          data.name = $('input[name=name]').val();
+          data.name = $.trim($('input[name=name]').val());
           data.author = $('input[name=author]').val();
           data.descr = $('textarea[name=descr]').val();
           data.lang_a = $('select[name=lang_a] option:selected').val();
+
+          if(data.name.length < 8){
+            alert((data.lang === "sk" ? "Názov učebnice musí mať minimálne 8 znakov." : "Name of textbook must have at least 8 characters"));
+            return false;
+          }
+
+          if(data.lang2 === data.lang_a && !confirm((data.lang === "sk" ? 'Zvolené jazyky sa zhodujú, pokračovať?' : 'Selected languages are same, continue?'))){
+            return false;
+          }
       }else{
          data.share = 0; 
       }

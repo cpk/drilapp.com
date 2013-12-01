@@ -4,8 +4,7 @@
 <?php 
  
   
-$strings['sk']['bookname'] = "Názov učebnice musí mať min. <b>8 znakov</b>. Zvoľte, prosím, plnohodnotný názov, odpovedajúci obsahu učebnice.";
-$strings['en']['bookname'] = "Name of textbook must have at least <b>8 characters</b>. Please, choose appropriate name,  describe content of given book.";  
+  
 $strings['en']['captcha'] = "Not readable? Change text.";
 $strings['sk']['captcha'] = "Nečitateľné? Vygenerovať iný.";
 $strings['sk']['submit'] = "Dokončiť a vygenerovať identifikátor";
@@ -76,7 +75,6 @@ echo '<h1>'.$article[0]["title_${lang}"].'</h1>'.$article[0]["content_${lang}"];
                 <div id="share-form" <?php echo  ($logged ? ' class="showen"' : ''); ?>>
                     <span class="row">
                         <span><?php echo $strings[$lang]['book']; ?></span><input type="text" name="name" maxlength="50" class="w250" />
-                        <span class="form-note"><?php echo $strings[$lang]['bookname']; ?></span>
                         <div class="clear"></div>
                     </span>
                      <span class="row">
