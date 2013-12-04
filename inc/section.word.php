@@ -16,7 +16,7 @@
         $strings['en']['langDefault'] = "Default language:";  
         $strings['sk']['langTarget'] = "Cieľový jazyk:";  
         $strings['en']['langTarget'] = "Target language:"; 
-        $strings['sk']['author'] = "Vyľadať:";  
+        $strings['sk']['author'] = "Vyhladať:";  
         $strings['en']['author'] = "Search:"; 
         $strings['sk']['order'] = "Zoradiť podľa:";  
         $strings['en']['order'] = "Order by:";  
