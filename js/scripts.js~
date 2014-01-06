@@ -213,7 +213,7 @@ $(function() {
          data.share = 0; 
       }
 
-	if($("input[name=userId]").length === 1){
+	if($("input[name=input]").length === 1){
 		return true;	
 	}
       

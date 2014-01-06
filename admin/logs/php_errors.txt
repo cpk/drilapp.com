@@ -137,3 +137,11 @@ x
 [15-Nov-2013 00:42:56 Europe/Berlin] PHP Notice:  Undefined index: act in /opt/lampp/htdocs/drilapp.com/export.php on line 43
 [15-Nov-2013 00:42:56 Europe/Berlin] PHP Notice:  Undefined index: lang in /opt/lampp/htdocs/drilapp.com/export.php on line 44
 [15-Nov-2013 00:42:56 Europe/Berlin] PHP Notice:  Undefined index: ver in /opt/lampp/htdocs/drilapp.com/export.php on line 45
+[07-Jan-2014 00:18:39 Europe/Berlin] PHP Notice:  Undefined index: price in /opt/lampp/htdocs/drilapp.com/admin/inc/ajax.post.php on line 47
+[07-Jan-2014 00:18:39 Europe/Berlin] PHP Notice:  Undefined index: redirect_to in /opt/lampp/htdocs/drilapp.com/admin/inc/ajax.post.php on line 62
+[07-Jan-2014 00:18:39 Europe/Berlin] PHP Notice:  Undefined index: product_text in /opt/lampp/htdocs/drilapp.com/admin/inc/ajax.post.php on line 63
+[07-Jan-2014 00:18:39 Europe/Berlin] PHP Notice:  Undefined index: price in /opt/lampp/htdocs/drilapp.com/admin/inc/ajax.post.php on line 64
+[07-Jan-2014 00:19:38 Europe/Berlin] PHP Notice:  Undefined index: price in /opt/lampp/htdocs/drilapp.com/admin/inc/ajax.post.php on line 47
+[07-Jan-2014 00:19:38 Europe/Berlin] PHP Notice:  Undefined index: redirect_to in /opt/lampp/htdocs/drilapp.com/admin/inc/ajax.post.php on line 62
+[07-Jan-2014 00:19:38 Europe/Berlin] PHP Notice:  Undefined index: product_text in /opt/lampp/htdocs/drilapp.com/admin/inc/ajax.post.php on line 63
+[07-Jan-2014 00:19:38 Europe/Berlin] PHP Notice:  Undefined index: price in /opt/lampp/htdocs/drilapp.com/admin/inc/ajax.post.php on line 64

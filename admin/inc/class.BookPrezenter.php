@@ -115,9 +115,9 @@ class BookPrezenter {
     private function getOrderTableRow($row){
         return "<tr id=\"".$row["_id"]."\">".
                 '<td class="name"><a href="'.$this->linkToBookDetail."?id=".$row["_id"].'">'.$row["name"].'</a></td>'.
-                '<td class="author c">'.(strlen($row["author"]) == 0 ? 'neuvedený' : $row["author"] ).'</td>'.
+                '<td class="author c">'.(isset($row["login"]) ? $row["login"] : (strlen($row["author"]) == 0 ? 'neuvedený' : $row["author"] )).'</td>'.
                 '<td class="lang c">'.mb_substr($row["lang_question"], 0, 4, "UTF-8").' / '. mb_substr($row["lang_answer"],0, 4,"UTF-8").'</td>'.
-                '<td class="level c">'.substr($row["level_name"], 0, strpos($row["level_name"], ' ', 15)).'</td>'.
+                '<td class="level c">'.($row["level_name"] == "Advanced - C1 (pokročilý)" ? 'Advanced - C1' : substr($row["level_name"], 0, strpos($row["level_name"], ' ', 15))).'</td>'.
                 '<td class="count c">'.$row["count"].'</td>'.
                 '<td class="date c">'.date("d.m.Y" ,strtotime($row["create"])).'</td>'.
                 '<td class="import-id c"><em>'.$row["import_id"].'</em></td>'.

@@ -5,7 +5,9 @@
         include "section.home.php";
     }elseif($meta['id_article'] == 2){
          include "section.import.php";
-    } elseif($meta['id_article'] == 3){
+    }elseif($meta['id_article'] == 26){
+         include "section.import.xls.php";
+    }elseif($meta['id_article'] == 3){
          include "section.disqus.php";
     }elseif($meta['id_article'] == 5){
          include "section.contact.php";

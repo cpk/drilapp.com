@@ -42,11 +42,11 @@
            $html =  '<table id="book">
                 <tr>
                     <td class="bold">Autor učebnice / dátum:</td>
-                    <td>'.$book[0]['author']. ' / '.date("d.m.Y H:i" ,strtotime($book[0]["create"])).'</td>
+                    <td>'.(isset($book[0]['login']) ? $book[0]['login'] : $book[0]['author']). ' / '.date("d.m.Y H:i" ,strtotime($book[0]["create"])).'</td>
                 </tr>
                 <tr>
                      <td class="bold">Jazyk učebnice:</td>
-                    <td>'.$book[0]['lang_answer'].' / '.$book[0]['lang_question'].'</td>    
+                    <td>'.$book[0]['lang_question'].' / '.$book[0]['lang_answer'].'</td>    
                 </tr>
                 <tr>
                      <td class="bold">Úroveň náročnosti:</td>

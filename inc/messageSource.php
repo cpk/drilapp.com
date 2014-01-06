@@ -55,6 +55,10 @@
 			"err404" => "<b>404</b> Položka neexistuje.",
 			"errLogined" => "Boli ste odhlásený, prihláste sa prosím a operáciu zopakujte.",
 			"errPerm" => "Nemáte oprávnenie pre vykonanie tejto akcie.",
+			"errNoLang" => "Zvolte, prosím, jazyk otázky a odpovede.",
+			"errBookName" => "Chybne vyplený názov učebnice. (min. 8 znakov)",
+			"errNoXlsFile" => "Nahrávať je možné len XLS súbory.",
+			"errData" => "Dokument obsahuje chybné, alebo žiadne dáta.",
 			//We apologize, there was some problem with the database, try it again leater.
 
 			"successRegistraged" => "Registrácia prebehla úspešne.",
@@ -69,6 +73,10 @@
 			"favoriteRemove1" => "Odstraniť z oblubených",
 			"regEmailSubject" => "Registrácia",
 			"successfullySaved" => "Zmeny boli úspešne uložené",
+
+			"xlsImport" => "Excel import",
+			"importSuccess" => "Import prebehol úspešne, počet importovaných kartičiek: <b>{0}</b>", 
+			"chooseFile" => "Vyberte XLS súbor",
 			"regEmailBody" => "Dobrý deň, <br>boli ste úspešne registrovaný na portály <a href=\"http:www.drilapp.com\">www.drilapp.com</a>. Vaše prihlasovacie údaje sú nasledovné:<br><br><b>Prihlasovacie meno:</b>{0}<br><b>Prihlasovacie heslo:</b>{1}",
 		);
 		$messages["en"] = array(
@@ -120,6 +128,10 @@
 			"err404" => "<b>404</b> Not found",
 			"errLogined" => "You have been logged out, please login and repeat the operation.",
 			"errPerm" => "You do not have permission to perform this action.",
+			"errNoLang" => "Please, select languages",
+			"errBookName" => "Invalid name of book. Please, select length of book greater than 7 characters.",
+			"errNoXlsFile" => "Only XLS/XLSX files can be uploaded",
+			"errData" => "Dokument contains invalid or any data",
 
 			"successRegistraged" => "Registration was successful.",
 			"confirmCardDel" => "Are you sure that you want delete this card?",
@@ -132,6 +144,9 @@
 			"favoriteRemove0" => "Add to favorite",
 			"favoriteRemove1" => "Remove from favorite",
 
+			"xlsImport" => "Excel import",
+			"importSuccess" => "Import was successfully. Count of imported words: <b>{0}</b>",
+			"chooseFile" => "Choose file", 
 			"regEmailSubject" => "Registration",
 			"successfullySaved" => "Changes were successfully saved",
 			"regEmailBody" => "Hello, <br><br> you have been successfully registrated on <a href=\"http:www.drilapp.com\">www.drilapp.com</a>. Yours credentials are:<br><br><b>Login:</b>{0}<br><b>Password:</b>{1}",

@@ -1,7 +1,6 @@
 <?php
 	$userService = new UserService($conn);
 	$book = $userService->getById($_GET['book']);
-	
   $notFound = (count($book) == 0 || $book[0]['id_user'] != $_SESSION['id']);
 ?>
 <div id="article">
@@ -25,14 +24,20 @@
 			      $bookPrezenter = new BookPrezenter($conn);
             $words = $bookPrezenter->getBooksWords($book[0]['import_id']);
             echo '<h1>'.$book[0]['book_name'].'</h1>';
-            
-           $count = count($words);
+            $count = count($words);
+
+            if(isset($_SESSION['importStatus'])){
+              echo '<p class="ok" style="display:inline-block">'.getMessage('importSuccess', $count).'</p>';
+              unset($_SESSION['importStatus']);
+            }
+
+           
            $editLabel = getMessage("edit");
            $deleteLabel = getMessage("delete");
            $html =  '<table id="book">
                 <tr>
                     <td class="bold">Autor učebnice / dátum:</td>
-                    <td>'.$book[0]['author']. ' / '.date("d.m.Y H:i" ,strtotime($book[0]["create"])).'</td>
+                    <td>'.(isset($book[0]['login']) ? $book[0]['login'] : $book[0]['author']). ' / '.date("d.m.Y H:i" ,strtotime($book[0]["create"])).'</td>
                 </tr>
                 <tr>
                      <td class="bold">Jazyk učebnice:</td>
