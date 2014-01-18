@@ -25,7 +25,7 @@ function __autoload($class) {
 
     $conn = Database::getInstance($config['db_server'], $config['db_user'], $config['db_pass'], $config['db_name']);
     if(!isAuthorized($conn)){
-    //  sendUnauthorizedResponse();
+      sendUnauthorizedResponse();
     }
     
 
