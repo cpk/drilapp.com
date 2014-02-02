@@ -7,7 +7,7 @@
 	$config["db_server"]	= "localhost";		
 	$config["db_user"]		= "root";			
 	$config["db_pass"]		= "";		
-	$config["db_name"]		= "drilapp";	
+	$config["db_name"]		= "db_drillapp_com";	
 	
 	
 	$config["ga_token"]		= "1/zJiDAON3Qq_KhAgamwHckEAlVjuS466PHe5Ii6f8AVQ";

@@ -25,7 +25,7 @@ function __autoload($class) {
 
     $conn = Database::getInstance($config['db_server'], $config['db_user'], $config['db_pass'], $config['db_name']);
     if(!isAuthorized($conn)){
-      sendUnauthorizedResponse();
+     sendUnauthorizedResponse();
     }
     
 
@@ -34,7 +34,8 @@ function __autoload($class) {
        $book  = $conn->select("SELECT `name` FROM `import_book` WHERE `import_id`=? LIMIT 1", array( intval($_GET['importId']) ));
        $words  = $conn->select("SELECT `question` as a,`answer` as q FROM `import_word` WHERE `token`=?", array( intval($_GET['importId']) ));
 	     $conn->update("UPDATE `import_book` SET `downloads`= `downloads`+1 WHERE `import_id`=? LIMIT 1", array( intval($_GET['importId'])));
-       echo json_encode(array('words'=> $words, "name" => $book[0]["name"] )) ;
+	$arr = stripslashes_deep(array('words'=> $words, "name" => $book[0]["name"] ));       
+	echo json_encode($arr) ;
 
     }else{
       $action = intval($_GET['act']);      
@@ -71,7 +72,7 @@ function __autoload($class) {
         }
       }        
     
-    echo json_encode(array('books'=>$JSONarray)) ;
+    echo json_encode(array('books'=> stripslashes_deep( $JSONarray))) ;
     }
   }catch(MysqlException $ex){
     header('HTTP/1.0 400 Bad Request');
@@ -94,4 +95,13 @@ function sendUnauthorizedResponse(){
   header('WWW-Authenticate: Basic realm="My Realm"');
   header('HTTP/1.0 401 Unauthorized');
   die();
+}
+
+function stripslashes_deep($value)
+{
+    $value = is_array($value) ?
+                array_map('stripslashes_deep', $value) :
+                stripslashes($value);
+
+    return $value;
 }
