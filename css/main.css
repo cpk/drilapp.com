@@ -201,9 +201,13 @@ input,  textarea{padding:5px 5px;border:2px solid #aaa;height:25px;}
 .ajax .ok strong{margin:0 8px; }
 
 #share{border-bottom:2px solid #5dae62;padding:0px 20px 20px 20px;margin-bottom:20px;}
-#share .row{display:block;background:#f5f5f5;margin:5px;padding:5px;border-bottom:1px dotted #aaa;}
-#share .row span{display:block;float:left;width:150px;}
+#share .row,
+.dialog-form .row{display:block;background:#f5f5f5;margin:5px;padding:5px;border-bottom:1px dotted #aaa;}
+#share .row span,
+.dialog-form .row span{display:block;float:left;width:150px;}
+.dialog-form input, .dialog-form textarea, .dialog-form select,
 #share input, #share textarea, #share select{float:left;margin-right:20px;}
+#share select,
 #share select{background:#fff;padding:5px 10px !important;;border:2px solid #aaa;}
 #share option{padding:2px;}
 #share .w250{min-width:280px;}
@@ -211,6 +215,16 @@ input,  textarea{padding:5px 5px;border:2px solid #aaa;height:25px;}
 #share-btn{display:block;background:orange;border:2px solid #fff;padding:15px 20px;font-size:18px;text-decoration:none;color:#fff;-webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px;}
 #share-btn:hover{background: #E08B1B;}
 #share-form{display:none;}
+
+
+#dialog-form{padding:0}
+.dialog-form textarea{height:80px;}
+.dialog-form input{width:300px;}
+.dialog-form select, .dialog-form input{background:#fff;padding:2px;border:2px solid #ccc;}
+.dialog-form select{width:300px;padding:5px;}
+.dialog-form select option{padding: 3px;}
+.dialog-form .row{padding: 10px}
+
 
 .nol,.ql,.al{display:block;float:left;padding:4px;}
 .ql{padding:4px 400px 4px 25px;}
@@ -275,13 +289,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', end
 .req{font-weight:bold;}
 .req em{color:red;margin:5px;}
 
-#words a{background-color:red;display:block;width:42px;height:25px;}
+#words a{display:block;width:42px;height:25px;}
 #words .delete,#words .edit{padding:0}
 #words .delete .d{background: url(../img/del_ico.png) no-repeat center;}
-#words .edit .e{background:url(../img/edit_ico.png) no-repeat  center;}
+#words .edit .e, .edit-box .edit{background-image:url(../img/edit_ico.png);background-repeat:no-repeat; background-position:center;}
 #words a.save{background: url(../img/save_ico.png) no-repeat center;}
 #words a.back{background:url(../img/stop_ico.png) no-repeat  center;}
 #words a:hover{opacity:.7}
+
+h1{position:relative;}
+.edit-box{background:#8ADE8F;height:38px;position:absolute;right:10px;top:5px;text-align:right;}
+.edit-box a{display:inline-block;block;width:40px;height:29px;margin:5px;background-color:#eee;}
 
 .editing{background:#D9F0FC !important;-webkit-box-shadow:  0px 0px 5px 2px #aaa; box-shadow:  0px 0px 5px 2px #aaa;}
 .editing input{padding:4px 5px !important;width:auto;min-width:380px;margin:5px;}

@@ -89,6 +89,16 @@ try{
                 $userService->addBookToFavorite($_SESSION['id'], intval($_GET['id']));
             }
             $data = array( "err" => 0, "msg" => getMessage("successfullySaved") );
+            break;  
+
+        // editacia knihy
+        case 8:
+            if(!$userService->isUserOwner($_GET['id'])){
+                throw new AuthException(getMessage("errPerm"));
+            }
+            $userService->validateBook($_GET);
+            $userService->updateBook($_GET['name'], intval($_GET['lang_q']), intval($_GET['lang_a']), intval($_GET['level']), $_GET['descr'], intval($_GET['id']));
+            $data = array( "err" => 0, "msg" => getMessage("successfullySaved") );
             break;    
         
     	default:

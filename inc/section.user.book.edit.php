@@ -3,6 +3,8 @@
 	$book = $userService->getById($_GET['book']);
   $notFound = (count($book) == 0 || $book[0]['id_user'] != $_SESSION['id']);
 ?>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css" />
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <div id="article">
 	<article class="user-section fullscreen">
 		<?php 
@@ -23,7 +25,7 @@
 			<?php
 			      $bookPrezenter = new BookPrezenter($conn);
             $words = $bookPrezenter->getBooksWords($book[0]['import_id']);
-            echo '<h1>'.$book[0]['book_name'].'</h1>';
+            echo '<h1><span class="dataBookName">'.$book[0]['book_name'].'</span><span class="edit-box"><a href="#" class="edit e"></a></span></h1>';
             $count = count($words);
 
             if(isset($_SESSION['importStatus'])){
@@ -41,15 +43,15 @@
                 </tr>
                 <tr>
                      <td class="bold">Jazyk učebnice:</td>
-                    <td>'.$book[0]['lang_answer'].' / '.$book[0]['lang_question'].'</td>    
+                    <td class="dataLang">'.$book[0]['lang_question'].' / '.$book[0]['lang_answer'].'</td>    
                 </tr>
                 <tr>
                      <td class="bold">Úroveň náročnosti:</td>
-                    <td>'.$book[0]['name'].'</td>    
+                    <td class="dataLevel">'.$book[0]['name'].'</td>    
                 </tr>
                    <tr>
                      <td class="bold">Poznámka autora:</td>
-                    <td>'.$book[0]['descr'].'</td>    
+                    <td class="dataDescr">'.$book[0]['descr'].'</td>    
                 </tr>
                    <tr>
                      <td class="bold">Import ID:</td>
@@ -64,7 +66,7 @@
                 <li><a class="book-menu csv" href="/inc/export.php?t=csv&amp;id='.$_GET['book'].'">'.getMessage('exportCsv').'</a></li>
             </ul>';
             if($count > 0){
-                $html .= '<h2 class="cst">Obsah učebnice '.$book[0]['book_name'].'</h2>'.
+                $html .= '<h2 class="cst">Obsah učebnice <span class="dataBookName">'.$book[0]['book_name'].'</span></h2>'.
                             '<table id="words" data-lang="'.$lang.'">';
                 for($i = 0; $i < $count; $i++){
                     $html .= '<tr id="id'.$words[$i]['_id'].'">
@@ -93,4 +95,37 @@
 		<div class="hidden" id="confirmMsg"><?php  printMessage("confirmCardDel"); ?></div>
 		<div class="clear"></div>
 	</article>
+</div>
+
+<div id="dialog-form" data-lang="<?php echo $lang; ?>">
+	<form class="dialog-form">
+		<fieldset>
+			<span class="row">
+	            <span><?php printMessage('bookName'); ?></span>
+	            <input name="name" class="w250 required fiveplus" value="<?php echo $book[0]['book_name']; ?>" />
+	            <div class="clear"></div>
+	        </span>
+			<span class="row">
+	            <span><?php printMessage('bookLangQuestion'); ?></span>
+	            	<select name="lang_q" class="w250"><?php echo getOptions( $conn, "lang", "name_${lang}", $book[0]['lang'] ); ?></select>
+	            <div class="clear"></div>
+	        </span>
+	        <span class="row">
+	            <span><?php printMessage('bookLangAnswer'); ?></span>
+	            <select name="lang_a" class="w250"><?php echo getOptions( $conn, "lang", "name_${lang}", $book[0]['lang_a'] ); ?></select>
+	            <div class="clear"></div>
+	        </span>
+	         <span class="row">
+	            <span><?php printMessage('bookLevel'); ?></span>
+	            <select name="level" class="w250"><?php echo getOptions( $conn, "level", "name" , $book[0]['level']); ?></select>
+	            <div class="clear"></div>
+	        </span>
+	        <span class="row">
+	            <span><?php printMessage('bookNote'); ?></span>
+	            <textarea name="descr" rows="10" cols="50"><?php echo $book[0]['descr']; ?></textarea>
+	            <div class="clear"></div>
+	        </span>
+	        <input type="hidden" name="id" value="<?php echo $_GET['book']; ?>" />
+		</fieldset>
+	</form>
 </div>

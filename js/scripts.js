@@ -497,3 +497,89 @@ jQuery.fn.center = function () {
     this.css("left", (($(window).width() - this.outerWidth()) / 2) + $(window).scrollLeft() + "px");
     return this;
 }
+
+
+ $(function() {
+  var name = $( "#name" ),
+  email = $( "#email" ),
+  password = $( "#password" ),
+  allFields = $( [] ).add( name ).add( email ).add( password ),
+  tips = $( ".validateTips" );
+    function updateTips( t ) {
+      tips
+      .text( t )
+      .addClass( "ui-state-highlight" );
+      setTimeout(function() {
+      tips.removeClass( "ui-state-highlight", 1500 );
+      }, 500 );
+    }
+    function checkLength( o, n, min, max ) {
+      if ( o.val().length > max || o.val().length < min ) {
+        o.addClass( "ui-state-error" );
+        updateTips( "Length of " + n + " must be between " +
+        min + " and " + max + "." );
+        return false;
+      } else {
+        return true;
+    }
+  }
+  function checkRegexp( o, regexp, n ) {
+    if ( !( regexp.test( o.val() ) ) ) {
+      o.addClass( "ui-state-error" );
+      updateTips( n );
+      return false;
+    } else {
+      return true;
+    }
+  }
+  var $dialog =  $( "#dialog-form" );
+
+  if($dialog.length){
+      lang = $dialog.attr("data-lang");
+     $dialog.dialog({
+      autoOpen: false,
+      height: 490,
+      width: 550,
+      modal: true,
+       buttons: 
+        [ 
+          {
+            text : (lang  == "sk" ? "Zrušiť" : "Cancel"),
+            click : function() {
+                $( this ).dialog( "close" );
+              }
+
+          },
+          { text : (lang  == "sk" ? "Uložiť" : "Save"),
+            click : function() {
+                      var $form = $( "#dialog-form form" ),
+                          data = renameArr( $form.serializeArray());
+                      if(!validate($form)){
+                        return false;
+                      }
+                      data.act = 8;
+                      data.lang = lang;
+                      $.getJSON("/inc/ajax.user.php", data, function(json) { 
+                          showStatus(json);
+                          if(json.err === 0){
+                            $('.dataBookName').text(data.name);
+                            $('.dataDescr').text(data.descr);
+                            $('.dataLevel').text(selectedName("level"));
+                            $('.dataLang').text(selectedName("lang_q") + ' / ' + selectedName("lang_a "));
+                            $dialog.dialog("close");
+                          }
+                      });
+
+                      function selectedName(name){
+                        return $form.find('select[name='+name+'] option:selected').text();
+                      }
+                    }
+          }
+        ]      
+    });
+        
+    $(document).on('click', ".edit-box a", function(){
+      $dialog.dialog( "open" );
+    });
+  }
+});

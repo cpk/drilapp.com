@@ -46,7 +46,7 @@ class UserService {
 
     
     public function getById($id){        
-       $data =  $this->conn->select( "SELECT b.name as book_name, b.id_user, b.author, b.descr, b.import_id, b.create, le.name, u.login , b.lang AS lang, b.lang_a AS lang_a, ".
+       $data =  $this->conn->select( "SELECT b.name as book_name, b.id_user, b.author, b.level, b.descr, b.descr, b.import_id, b.create, le.name, u.login , b.lang AS lang, b.lang_a AS lang_a, ".
                                       "lang_answer.name_sk AS lang_answer, lang_question.name_sk AS lang_question, ".
                                       "(SELECT count(w._id) FROM import_word w WHERE w.token=b.import_id ) as count ".
                                       "FROM import_book b ".
@@ -151,6 +151,16 @@ class UserService {
         }
     }
 
+    public function validateBook($book){
+        if(strlen(trim($book["name"])) < 5){
+            throw new InvalidArgumentException(getMessage("errBookName"));
+        }elseif(intval($book["lang_q"]) == 0 || intval($book["lang_a"]) == 0){
+            throw new InvalidArgumentException(getMessage("errNoLang"));
+        }elseif(intval($book["level"]) == 0){
+            throw new InvalidArgumentException(getMessage("errData"));
+        }
+    }
+
 
     public function createUser($user){
         $salt = createSalt();
@@ -236,6 +246,11 @@ class UserService {
 
     public function updateWord($wordId, $question, $answer){
         $this->conn->update("UPDATE import_word SET question=?, answer=? WHERE _id=? LIMIT 1", array($question, $answer, $wordId));
+    }
+
+    public function updateBook($name, $lang, $lang_a, $level, $descr, $id){
+        $this->conn->update("UPDATE import_book SET name=?, lang=?, lang_a=?, level=?, descr=? WHERE _id=? LIMIT 1", 
+                    array($name, $lang, $lang_a, $level, $descr, $id));
     }
 
     public function updateBookSharing($newState, $bookId){
