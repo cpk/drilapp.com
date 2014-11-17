@@ -77,14 +77,13 @@
                 <img src="/img/logo.png" alt="ANDROID DRIL APP" />
             </a>
             <?php echo printLangNav(); ?>
-            <span id="news"><?php echo ($lang=="sk" ? "novinka" : "new")?><em>&darr;</em> </span>
+           <!-- <span id="news"><?php echo ($lang=="sk" ? "novinka" : "new")?><em>&darr;</em> </span> -->
             <nav>
                 <ul>
                     <?php echo $nav; ?>
                 </ul>
             </nav>
-       <a id="vote" title="Version 2.0" href="https://play.google.com/apps/testing/sk.peterjurkovic.dril" target="_blank"></a> 
-	</div>
+    	</div>
         
     </header>
     

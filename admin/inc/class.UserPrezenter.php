@@ -56,6 +56,7 @@ class UserPrezenter {
                     <th>'.getMessage("bookDate").'</th>
                     <th>'.getMessage("bookPublished").'</th>
                     <th>'.getMessage("edit").'</th>
+                    <th>&nbsp;</th>
                 </tr></thead>';
     }
         
@@ -70,6 +71,7 @@ class UserPrezenter {
                 '<td class="c">'.date("d.m.Y" ,strtotime($row["create"])).'</td>'.
                 '<td class="c shared'.$row["shared"].'"><a href="#">'.($row["shared"] == 1 ? $yes : $no).'</a></td>'.
                 '<td class="c edit"><a href="?book='.$row["_id"].'">'.getMessage("edit").'</a></td>'.
+                '<td class="c delete"><a href="?id='.$row["_id"].'&amp;token='.$row["import_id"].'">'.getMessage("delete").'</a></td>'.
                "</tr>";
     }
     
@@ -95,6 +97,16 @@ class UserPrezenter {
     
     public function getBooksWords($importId){
         return $this->userService->getBooksWords($importId); 
+    }
+
+    public function removeBook($importId){
+            $user = $this->userService->getUserById($_SESSION['id']);
+            if(count($user) <> 1){
+                echo "<div class=\"err\">".getMessage("err404")."</div>";
+            }else{
+                $this->userService->removeBook($importId);
+                echo '<p class="ok" style="display:inline-block">'.getMessage("successDelete").'</p>';
+            }
     }
     
 }

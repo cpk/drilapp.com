@@ -66,6 +66,7 @@
 
 			"successRegistraged" => "Registrácia prebehla úspešne.",
 			"confirmCardDel" => "Skutočne si prajete odstraniť kartičku?",
+			"confirmBookDel" => "Skutočne si prajete odstraniť učebnicu?",
 
 			"print" => "Vytlačiť",
 			"exportPdf" => "Exportovať do PDF",
@@ -76,6 +77,7 @@
 			"favoriteRemove1" => "Odstraniť z oblubených",
 			"regEmailSubject" => "Registrácia",
 			"successfullySaved" => "Zmeny boli úspešne uložené",
+			"successDelete"  => "Učebnica bola úspešne odstránená",
 
 			"xlsImport" => "Excel import",
 			"importSuccess" => "Import prebehol úspešne, počet importovaných kartičiek: <b>{0}</b>", 
@@ -141,6 +143,7 @@
 
 			"successRegistraged" => "Registration was successful.",
 			"confirmCardDel" => "Are you sure that you want delete this card?",
+			"confirmBookDel" => "Are you sure that you want delete this book?",
 
 			"print" => "Print",
 			"exportPdf" => "PDF Export",
@@ -149,6 +152,7 @@
 			"favorite" => "Favorite",
 			"favoriteRemove0" => "Add to favorite",
 			"favoriteRemove1" => "Remove from favorite",
+			"successDelete"  => "Sucessfully deleted",
 
 			"xlsImport" => "Excel import",
 			"importSuccess" => "Import was successfully. Count of imported words: <b>{0}</b>",

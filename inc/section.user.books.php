@@ -1,3 +1,10 @@
+<script>
+	$(function(){
+		$(document).on('click', '.delete', function(){
+			return confirm('<?php printMessage("confirmBookDel"); ?>');
+		});
+	});
+</script>
 <div id="article">
 	<article class="user-section fullscreen">
 		<?php 

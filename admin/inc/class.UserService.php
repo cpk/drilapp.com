@@ -285,6 +285,11 @@ class UserService {
             );
         return $this->getInsertId();
     }
+ 
+    public function removeBook($importId){
+        $this->conn->delete("DELETE FROM import_word WHERE token =".intval($importId));
+        $this->conn->delete("DELETE FROM import_book WHERE import_id = ".intval($importId)." LIMIT 1;");
+    }
 }
 
 ?>

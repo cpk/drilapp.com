@@ -14,6 +14,9 @@
 				 if(isset($_GET["book"])){
 				 	include 'section.user.book.edit.php';
 				 }else{
+				 	if(isset($_GET["token"])){
+				 		include 'section.user.books.remove.php';
+				 	}
 				 	include 'section.user.books.php';
 				 }
 				break;
