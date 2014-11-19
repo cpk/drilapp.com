@@ -122,9 +122,16 @@ class BookPrezenter {
                 '<td class="date c">'.date("d.m.Y" ,strtotime($row["create"])).'</td>'.
                 '<td class="import-id c"><em>'.$row["import_id"].'</em></td>'.
                 $this->getFavoriteRow($row).
+                $this->getDelColl($row).
                "</tr>";
     }
 
+    private function getDelColl($row){
+      if($this->isLoggined && $_SESSION['type'] > 1){
+        return '<td class="delete"><a href="?rm='.$row["import_id"].'">delete</a></td>';
+      }
+      return '';
+    }
     private function getFavoriteRow($book){
        if($this->isLoggined){
           if($this->isFavoritePage || $book['id_user'] <> $_SESSION['id']){

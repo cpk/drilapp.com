@@ -80,6 +80,10 @@
            echo $html;
            
         }else{
+            if(isset($_GET['rm']) && isset($_SESSION['type']) && $_SESSION['type'] > 1){
+                $userService = new UserService($conn);
+                $userService->removeBook(intval($_GET['rm']));
+            }
             $langs = $conn->select("SELECT * FROM `lang`");
             $article = getArticle("fullHidden", $meta['id_article'], $lang);  
             $pageContent = '<h1>'.$article[0]["title_${lang}"].'</h1>'.$article[0]["content_${lang}"];
