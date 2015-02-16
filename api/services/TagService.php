@@ -28,7 +28,7 @@ class TagService
     }
 
     public function deleteAllBookTags( $bookId ){
-    	$this->conn->delete(" DELETE FROM dril_book_has_tag WHERE dril_book_id = ?; ", $array( $bookId ) );
+    	$this->conn->delete(" DELETE FROM dril_book_has_tag WHERE dril_book_id = ?; ", array( $bookId ) );
     }
 
 

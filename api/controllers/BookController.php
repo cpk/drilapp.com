@@ -8,24 +8,47 @@ class BookController
      *
      * @url GET /book/$id
      */
-    public function getBook($id = null)
+    public function getBook( $id )
     {
         global $bookService;
         return $bookService->getFetchedBookById($id);
     }
 
     /**
-     * Saves a user to the database
+     * Create new book
      *
-     * @url POST /users
-     * @url PUT /users/$id
+     * @url POST /book
      */
-    public function saveUser($id = null, $data)
+    public function create( $data )
     {
-        // ... validate $data properties such as $data->username, $data->firstName, etc.
-        // $data->id = $id;
-        // $user = User::saveUser($data); // saving the user to the database
-        $user = array("id" => $id, "name" => null);
-        return $user; // returning the updated or newly created user object
+        //print_r($data);exit;
+        global $bookService;
+        return $bookService->create($data);
     }
+
+
+     /**
+     * Update existing book
+     *
+     * @url PUT /book/$id
+     */
+    public function update( $id, $data )
+    {
+        global $bookService;
+        return $bookService->update($id);
+    }
+
+
+    /**
+     * DELETE book
+     *
+     * @url DELETE /book/$id
+     */
+    public function delete( $id  )
+    {
+        global $bookService;
+        return $bookService->delete($id);
+    }
+
+   
 }

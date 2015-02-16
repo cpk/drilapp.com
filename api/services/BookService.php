@@ -19,16 +19,16 @@ class BookService
     public function create( $book ){
         $this->validate( $book );
 
-        if($this->isBookNameUniqe($book['name'], $book['user_id'])){
+        if($this->isBookNameUniqe($book->name, $book->user_id)){
             $sql = 
               "INSERT INTO `dril_book` (`name`, `question_lang_id`, `answer_lang_id`, `level_id`, `user_id`) ".
               "VALUES (?, ?, ?, ?, ? )";
             $this->conn->insert($sql,  array(
-                $book['name'], $book['question_lang_id'], $book['answer_lang_id'], $book['level_id'], $book['user_id']
+                $book->name, $book->question_lang_id, $book->answer_lang_id, $book->level_id, $book->user_id
               ));
             return $this->conn->getInsertId();
         }
-        throw new IllegalAgumentException("The book with given name already exists.", 1);
+        throw new InvalidArgumentException("The book with given name already exists.", 1);
     }
 
 
@@ -50,20 +50,18 @@ class BookService
               ));
             return $this->conn->getInsertId();
         }
-        throw new IllegalAgumentException("The book with given name already exists.", 1);
+        throw new InvalidArgumentException("The book with given name already exists.", 1);
     }
 
 
     public function delete( $id ){
-      $this->conn->simpleQuery("start transaction;")
       $book = $this->getBookById( $id );
       if($book != null){
         $this->tagService->deleteAllBookTags( $id );
         $this->lectureService->deleteAllBookLectures( $id );
-        $this->conn->delete("DELETE FROM `dril_book` WHERE id = ? LIMIT 1; commit;", $array( $id ));
+        $this->conn->delete("DELETE FROM `dril_book` WHERE id = ? LIMIT 1;", array( $id ));
         return true;
       }
-      $this->conn->simpleQuery("commit;")
       return false;
     }
 
@@ -92,8 +90,8 @@ class BookService
 
     
     public function isBookNameUniqe( $name, $userId, $bookId = null){
-       $sql =  "SELECT count(*) as book_count FROM  `dril_book` "
-               "name = ? AND user_id = ? "
+       $sql =  "SELECT count(*) as book_count FROM  `dril_book` ".
+               "WHERE name = ? AND user_id = ? ";
         if($bookId != null){
             $sql .= " AND id <> ".$bookId;
         }
@@ -105,19 +103,19 @@ class BookService
 
 
 
-    private function validate($book){
-      if(strlen(trim($book) == 0)){
-        throw new  IllegalArgumentException("The Book name can not be empty", 1); 
+    private function validate(&$book){
+      if(strlen(trim($book->name)) == 0){
+        throw new  InvalidArgumentException("The Book name can not be empty", 1); 
       }
-      if(intval($book['question_lang_id']) == 0 ||  
-         intval($book[' answer_lang_id']) == 0){
-        throw new  IllegalArgumentException("Languages are required", 1);  
+      if(intval($book->question_lang_id) == 0 ||  
+         intval($book->answer_lang_id) == 0){
+        throw new  InvalidArgumentException("Languages are required", 1);  
       }
-      if(intval($book['user_id']) == 0){
-        throw new IllegalArgumentException("The Book has not assigned any user", 1);
+      if(intval($book->user_id) == 0){
+        throw new InvalidArgumentException("The Book has not assigned any user", 1);
       }
-      if(intval($boo['level_id'])){
-        throw new IllegalArgumentException("The Level of the Book is required", 1);
+      if(intval($book->level_id) == 0){
+        throw new InvalidArgumentException("The Level of the Book is required", 1);
       }
     }
 
