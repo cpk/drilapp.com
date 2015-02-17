@@ -18,7 +18,7 @@ class BookService
 
     public function create( $book ){
         $this->validate( $book );
-
+        $this->conn->simpleQuery('START TRANSACTION;');  
         if($this->isBookNameUniqe($book->name, $book->user_id)){
             $sql = 
               "INSERT INTO `dril_book` (`name`, `question_lang_id`, `answer_lang_id`, `level_id`, `user_id`) ".
@@ -26,29 +26,37 @@ class BookService
             $this->conn->insert($sql,  array(
                 $book->name, $book->question_lang_id, $book->answer_lang_id, $book->level_id, $book->user_id
               ));
-            return $this->conn->getInsertId();
+            $bookId = $this->conn->getInsertId();
+            $this->tagService->createTags($book->tags, $bookId);
+            $this->conn->simpleQuery('COMMIT;');
+            return $bookId;
         }
+        $this->conn->simpleQuery('ROLLBACK;');
         throw new InvalidArgumentException("The book with given name already exists.", 1);
     }
 
 
-
     public function update( $book ){
         $this->validate( $book );
-        if($this->isBookNameUniqe($book['name'], $book['user_id'], $book['id'])){
+        if($this->isBookNameUniqe($book->name, $book->user_id, $book->id)){
             $sql = 
               "UPDATE `dril_book` SET ".
                 "`name` = ?, ".
                 "`question_lang_id` = ?, ".
                 "`answer_lang_id` = ?, ". 
                 "`level_id` = ?, ".
-                "`user_id` = ? ".
+                "`user_id` = ?, ".
                 "`changed` = CURRENT_TIMESTAMP ".
               "WHERE id = ? LIMIT 1";
             $this->conn->update($sql,  array(
-                $book['name'], $book['question_lang_id'], $book['answer_lang_id'], $book['level_id'], $book['user_id'], $book['id']
-              ));
-            return $this->conn->getInsertId();
+                $book->name, 
+                $book->question_lang_id, 
+                $book->answer_lang_id, 
+                $book->level_id, 
+                $book->user_id, 
+                $book->id
+            ));
+            $this->tagService->createTags($book->tags, $book->id);
         }
         throw new InvalidArgumentException("The book with given name already exists.", 1);
     }

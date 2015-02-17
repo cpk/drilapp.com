@@ -35,7 +35,7 @@ class BookController
     public function update( $id, $data )
     {
         global $bookService;
-        return $bookService->update($id);
+        $bookService->update($data);
     }
 
 
@@ -47,7 +47,7 @@ class BookController
     public function delete( $id  )
     {
         global $bookService;
-        return $bookService->delete($id);
+        $bookService->delete($id);
     }
 
    
