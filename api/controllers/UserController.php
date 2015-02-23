@@ -7,6 +7,7 @@ class UserController
      * Login user
      *
      * @url POST /user/login
+     * @noAuth
      */   
    public function login( $data ){
         global $userService;    
@@ -17,13 +18,20 @@ class UserController
         }
         if(hash_hmac('sha256', $data->password , $user['salt']) == $user['pass']){
             try {
-                //$requestHeaders = apache_request_headers();
-                //$authorizationHeader = $requestHeaders['AUTHORIZATION'];
-                //$token = str_replace('Bearer ', '', $authorizationHeader);    
-                //$decoded_token = JWT::decode($token, base64_decode(strtr($secret, '-_', '+/')) );
-                $token = JWT::sign($data->login , $secret);
-                //print_r($token);
-               return $token;
+                $key = "example_key";
+                $token = array(
+                    "iss" => "http://www.drilapp.com",
+                    "aud" => "http://web.drilapp.com",
+                    "iat" => time(),
+                    "exp" => time() + 3600,
+                    "uid" => $user['id_user']
+                );
+                unset($user['pass']);
+                unset($user['salt']);
+                $result['token'] = JWT::encode($token, $key);
+                $result['user'] = $user;
+               return $result;
+
             } catch(UnexpectedValueException $ex) {
               throw new RestException(401, 'Invalid security token');   
             }    
@@ -33,25 +41,11 @@ class UserController
 
    }
 
-   private function createToken(){
-
-   }
-
-    /**
-     * Gets the user by id 
-     *
-     * @url GET /users/$id
-     */
-    public function getUserById( $id )
-    {
-       
-        //return $userService->getUserById( $id );
-    }
-
     /**
      * Create new book
      *
      * @url POST /users
+     * @noAuth
      */
     public function create( $data )
     {
