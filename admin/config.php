@@ -17,4 +17,6 @@
 	$config['root_dir'] = dirname(__FILE__) ;
 		
 	$config['shop_prefix'] = "shop";			
+
+	$config['JWT_KEY'] = "asdfasdfazxfgsdgsdfg";
 ?>

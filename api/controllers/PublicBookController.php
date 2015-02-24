@@ -1,17 +1,18 @@
 <?php
 
-class BookController
+class PublicBookController
 {
    
     /**
      * Gets the book by id 
      *
      * @url GET /book/$id
+     * @noAuth
      */
     public function getBook( $id )
     {
-        global $bookService;
-        return $bookService->getFetchedBookById($id);
+        global $publicBookService;
+        return $publicBookService->getFetchedBookById($id);
     }
 
     /**
@@ -22,8 +23,8 @@ class BookController
     public function create( $data )
     {
         //print_r($data);exit;
-        global $bookService;
-        return $bookService->create($data);
+        global $publicBookService;
+        return $publicBookService->create($data);
     }
 
 
@@ -34,8 +35,8 @@ class BookController
      */
     public function update( $id, $data )
     {
-        global $bookService;
-        $bookService->update($data);
+        global $publicBookService;
+        $publicBookService->update($data);
     }
 
 
@@ -46,8 +47,8 @@ class BookController
      */
     public function delete( $id  )
     {
-        global $bookService;
-        $bookService->delete($id);
+        global $publicBookService;
+        $publicBookService->delete($id);
     }
 
    

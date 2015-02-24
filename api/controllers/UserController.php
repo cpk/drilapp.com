@@ -11,8 +11,10 @@ class UserController
      */   
    public function login( $data ){
         global $userService;    
-        $secret = "abcd123456";
-        $user = $userService->getUserByLogin( $data->login );
+        if(!isset($data) || !isset($data->username)){
+             throw new RestException(404, 'Credentials are required.');
+        }
+        $user = $userService->getUserByLogin( $data->username );
         if($user == null){
             throw new RestException(404, 'User not found');
         }

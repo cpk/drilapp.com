@@ -127,17 +127,15 @@ class RestServer
 			}
 			
 			$obj->server = $this;
-			
+			$this->setHeaders();
 			try {
 				if (method_exists($obj, 'init')) {
 					$obj->init();
 				}
 				
-				if (!$noAuth && method_exists($obj, 'authorize')) {
-					if (!$obj->authorize()) {
-						$this->sendData($this->unauthorized(true));
-						exit;
-					}
+				if (!$noAuth && $this->authData() == null) {
+					$this->sendData($this->unauthorized(true));
+					exit;
 				}
 				
 				$result = call_user_func_array(array($obj, $method), $params);
@@ -151,6 +149,28 @@ class RestServer
 		
 		} else {
 			$this->handleError(404);
+		}
+
+	}
+
+	private function authData(){
+		global $config;
+		$requestHeaders = apache_request_headers();
+    	$authorizationHeader = $requestHeaders['AUTHORIZATION'];
+    	if($authorizationHeader == null){
+    		return null;
+    	}
+    	$token = str_replace('Bearer ', '', $authorizationHeader);
+	    return JWT::decode($token, $config['JWT_KEY'] );
+	}
+
+	private function setHeaders(){
+		if($this->mode == "debug"){
+	       header('Access-Control-Allow-Origin: http://localhost:9000');
+	       header('Access-Control-Max-Age: 3600');
+	       header('Access-Control-Allow-Methods: GET, POST, PUT, HEAD, DELETE, OPTIONS');
+	       header('Access-Control-Allow-Headers: Overwrite, Destination, Content-Type, Depth, User-Agent, Translate, Range, Content-Range, Timeout, X-File-Size, X-Requested-With, If-Modified-Since, X-File-Name, Cache-Control, Location, Lock-Token, If');
+	       header('Access-Control-Expose-Headers: DAV, content-length, Allow');
 		}
 	}
 
@@ -285,6 +305,8 @@ class RestServer
 		}
 	}
 
+	
+
 	protected function generateMap($class, $basePath)
 	{
 		if (is_object($class)) {
@@ -387,6 +409,7 @@ class RestServer
 			$deserializer = new Zend_Amf_Parse_Amf3_Deserializer($stream);
 			$data = $deserializer->readTypeMarker();
 		} else {
+
 			$data = json_decode($data);
 		}
 		
@@ -396,7 +419,7 @@ class RestServer
 
 	public function sendData($data)
 	{
-		header("Cache-Control: no-cache, must-revalidate");
+		//header("Cache-Control: no-cache, must-revalidate");
 		header("Expires: 0");
 		header('Content-Type: ' . $this->format);
 
