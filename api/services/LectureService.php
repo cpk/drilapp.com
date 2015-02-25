@@ -67,7 +67,9 @@ class LectureService
 
     public function getLectureById( $id ){
         $result = $this->conn->select(
-            "SELECT * FROM `dril_book_has_lecture` WHERE id = ? LIMIT 1", 
+            "SELECT `l`.*, count(`w`) as count_of_words FROM `dril_book_has_lecture` `l` ".
+            "LEFT JOIN dril_lecture_has_word w ON w.dril_lecture_id = `l`.id".
+            "WHERE id = ? LIMIT 1", 
             array($id)
         );
         if(count($result) == 1){
@@ -90,7 +92,10 @@ class LectureService
 
     public function getAllBookLectures( $bookId ){
         return $this->conn->select(
-            "SELECT * FROM `dril_book_has_lecture` WHERE dril_book_id = ?", 
+            "SELECT `l`.*, count(`w`.id) as count_of_words FROM `dril_book_has_lecture` `l` ".
+            "LEFT OUTER JOIN dril_lecture_has_word `w` ON `w`.`dril_lecture_id` = `l`.id ".
+            "WHERE `l`.dril_book_id = ? ".
+            "GROUP BY `l`.id", 
             array($bookId)
         );
     }

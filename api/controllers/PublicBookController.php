@@ -11,8 +11,8 @@ class PublicBookController
      */
     public function getBook( $id )
     {
-        global $publicBookService;
-        return $publicBookService->getFetchedBookById($id);
+        global $bookService;
+        return $bookService->getFetchedBookById($id);
     }
 
     /**
@@ -23,8 +23,8 @@ class PublicBookController
     public function create( $data )
     {
         //print_r($data);exit;
-        global $publicBookService;
-        return $publicBookService->create($data);
+        global $bookService;
+        return $bookService->create($data);
     }
 
 
@@ -35,8 +35,8 @@ class PublicBookController
      */
     public function update( $id, $data )
     {
-        global $publicBookService;
-        $publicBookService->update($data);
+        global $bookService;
+        $bookService->update($data);
     }
 
 
@@ -47,8 +47,18 @@ class PublicBookController
      */
     public function delete( $id  )
     {
-        global $publicBookService;
-        $publicBookService->delete($id);
+        global $bookService;
+        $bookService->delete($id);
+    }
+
+     /**
+     * Retrieve book page
+     *
+     * @url GET /books
+     */
+    public function getBookPage(  ){
+        $data = (array) $data;
+        print_r($data);
     }
 
    

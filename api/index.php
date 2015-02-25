@@ -9,10 +9,10 @@ require_once 'RestServer.php';
 require_once 'services/WordService.php';
 require_once 'services/LectureService.php';
 require_once 'services/TagService.php';
-require_once 'services/PublicBookController.php';
+require_once 'services/BookService.php';
 require_once 'services/UserService.php';
 
-require_once 'controllers/BookController.php';
+require_once 'controllers/PublicBookController.php';
 require_once 'controllers/UserController.php';
 
 require_once '../inc/messageSource.php';
@@ -22,7 +22,7 @@ $userService = new UserService($conn);
 $tagService = new TagService($conn);
 $wordService = new WordService($conn);
 $lectureService = new LectureService($conn, $wordService);
-$publicBookService = new PublicBookController($conn, $tagService, $lectureService);
+$bookService = new BookService($conn, $tagService, $lectureService);
 
 $server = new RestServer('debug');
 $server->addClass('PublicBookController');

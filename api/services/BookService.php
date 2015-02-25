@@ -92,7 +92,11 @@ class BookService
         $book['tags'] = $this->tagService->getAllBookTags($id);
         $book['lectures'] = $this->lectureService->getAllBookLectures($id);
       }
-    	return $book;
+      return $book;
+    }
+
+    public function getFatchedBooks( $params ){
+      return $this->conn->select("SELECT * FROM dril_view LIMIT 20");
     }
 
 
