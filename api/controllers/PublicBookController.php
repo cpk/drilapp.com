@@ -55,10 +55,11 @@ class PublicBookController
      * Retrieve book page
      *
      * @url GET /books
+     * @noAuth
      */
     public function getBookPage(  ){
-        $data = (array) $data;
-        print_r($data);
+        global $bookService;
+        return $bookService->getFatchedBooks( array() );
     }
 
    
