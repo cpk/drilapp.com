@@ -96,7 +96,10 @@ class BookService
     }
 
     public function getFatchedBooks( $params ){
-      return $this->conn->select("SELECT * FROM dril_view LIMIT 20");
+       $count = $this->conn->select("SELECT count(*) FROM dril_view");
+       $result["books"] = $this->conn->select("SELECT * FROM dril_view LIMIT 20");
+       $result["count"] = $count[0]["count(*)"];
+       return $result;
     }
 
 

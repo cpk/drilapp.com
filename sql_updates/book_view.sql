@@ -1,8 +1,11 @@
-CREATE VIEW dril_view AS SELECT `book`.*,
+CREATE VIEW `dril_view`AS SELECT `book`.*, 
+		UNIX_TIMESTAMP(`book`.`changed`) as `changed_timestamp`,
+		UNIX_TIMESTAMP(`book`.`created`) as `created_timestamp`,
 		`lang_question`.`name_en` AS `answer_lang_name`,
-		`lang_answer`.`name_en` AS `aquestion_lang_name`,
+		`lang_answer`.`name_en` AS `question_lang_name`,
 		`l`.`name` AS `level_name`,
-		 count(`word`.`dril_lecture_id`) AS `count_of_words`,
+		 count(`lecture`.`id`) AS `no_of_lectures`,
+         sum(`lecture`.`no_of_words`) AS `no_of_words`,
 		 `u`.`givenname`,
 		 `u`.`surname`,
 		 `u`.`login`
@@ -11,11 +14,10 @@ INNER JOIN `lang` `lang_question` ON `book`.`question_lang_id` = `lang_question`
 INNER JOIN `lang` `lang_answer` ON `book`.`answer_lang_id` = `lang_answer`.`id_lang`
 INNER JOIN `level` `l` ON `book`.`level_id` = `l`.`id_level`
 LEFT JOIN `dril_book_has_lecture` `lecture` ON `book`.id = `lecture`.`dril_book_id`
-LEFT JOIN `dril_lecture_has_word` `word` ON `lecture`.`id` = `word`.`dril_lecture_id`
 LEFT JOIN `user` `u` ON `u`.`id_user`=`book`.`user_id` 
 LEFT OUTER JOIN `user_has_favorite`  f on f.`id_book`=`book`.`id` and f.`id_user`=1
 GROUP BY `book`.`id` 
-ORDER BY `book`.`id` DESC 
+ORDER BY `book`.`id` DESC
 
 
 CREATE VIEW `book_view` AS 
