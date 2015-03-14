@@ -46,8 +46,9 @@ class UserService {
 
     
     public function getById($id){        
-       $data =  $this->conn->select( "SELECT b.name as book_name, b.id_user, b.author, b.level, b.descr, b.descr, b.import_id, b.create, le.name, u.login , b.lang AS lang, b.lang_a AS lang_a, ".
-                                      "lang_answer.name_sk AS lang_answer, lang_question.name_sk AS lang_question, ".
+        global $lang;
+       $data =  $this->conn->select( "SELECT b.name as book_name, b.id_user, b.author, b.level, b.descr, b.descr, b.import_id, b.create, le.name_$lang, u.login , b.lang AS lang, b.lang_a AS lang_a, ".
+                                      "lang_answer.name_$lang AS lang_answer, lang_question.name_$lang AS lang_question, ".
                                       "(SELECT count(w._id) FROM import_word w WHERE w.token=b.import_id ) as count ".
                                       "FROM import_book b ".
                                         "JOIN lang lang_question ON lang_question.id_lang=b.lang ".

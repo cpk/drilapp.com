@@ -66,7 +66,7 @@ class UserPrezenter {
         return "<tr id=\"".$row["_id"]."\">".
                 '<td><a href="?book='.$row["_id"].'">'.$row["name"].'</a></td>'.
                 '<td class="c">'.mb_substr($row["lang_question"], 0, 4, "UTF-8").' / '. mb_substr($row["lang_answer"],0, 4,"UTF-8").'</td>'.
-                '<td class="c">'.substr($row["level_name"], 0, strpos($row["level_name"], ' ', 15)).'</td>'.
+                '<td class="c">'.$row["level_name"].'</td>'.
                 '<td class="c">'.$row["count"].'</td>'.
                 '<td class="c">'.date("d.m.Y" ,strtotime($row["create"])).'</td>'.
                 '<td class="c shared'.$row["shared"].'"><a href="#">'.($row["shared"] == 1 ? $yes : $no).'</a></td>'.

@@ -47,7 +47,7 @@
                 </tr>
                 <tr>
                      <td class="bold">Úroveň náročnosti:</td>
-                    <td class="dataLevel">'.$book[0]['name'].'</td>    
+                    <td class="dataLevel">'.$book[0]["name_$lang"].'</td>    
                 </tr>
                    <tr>
                      <td class="bold">Poznámka autora:</td>

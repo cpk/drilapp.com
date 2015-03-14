@@ -4,6 +4,8 @@ session_start();
 
 require_once 'JWT.php';
 require_once 'conn.php';
+require_once 'fnc.php';
+
 require_once 'RestServer.php';
 
 require_once 'services/WordService.php';

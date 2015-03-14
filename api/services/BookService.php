@@ -7,6 +7,7 @@ class BookService
   private $lectureService;
 
 
+
 	public function __construct(&$conn, &$tagService, &$lectureService)
     {
        $this->conn = $conn;
@@ -96,8 +97,11 @@ class BookService
     }
 
     public function getFatchedBooks( $params ){
-       $count = $this->conn->select("SELECT count(*) FROM dril_view");
-       $result["books"] = $this->conn->select("SELECT * FROM dril_view LIMIT 20");
+       $lang = getLang();
+       $whereClause = $this->where();
+       $count = $this->conn->select("SELECT count(*) FROM dril_view_".$lang." book ".$whereClause);
+       $orderClause = $this->orderBy();
+       $result["books"] = $this->conn->select("SELECT * FROM dril_view_$lang book $whereClause  $orderClause LIMIT 20");
        $result["count"] = $count[0]["count(*)"];
        return $result;
     }
@@ -115,8 +119,58 @@ class BookService
         return $result[0]["book_count"] == 0;
     }
 
+    public function where(){
+        $langAnswer = "langAnswer";
+        $langQuestion = "langQuestion";
+        $level = "level";
+        $queryStr = "query";
+        $where = array();
+      
+        // SOURCE LANGUAGE
+        if(isset($_GET[$langAnswer]) && intval($_GET[$langAnswer]) > 0){
+          $where[] = "(`book`.`answer_lang_id` = ". $_GET[$langAnswer] ." OR ".
+                     " `book`.`question_lang_id` = ". $_GET[$langAnswer] .") ";
+        }
 
+        // TARGET LANGUAGE
+        if(isset($_GET[$langQuestion]) && intval($_GET[$langQuestion]) > 0){
+          $where[] = "(`book`.`answer_lang_id` = ". $_GET[$langQuestion] ." OR ".
+                     " `book`.`question_lang_id` = ". $_GET[$langQuestion] .") ";
+        }
 
+        if(isset($_GET[$level]) && intval($_GET[$level]) > 0){
+          $where[] = " (`book`.`level_id` = ".$_GET[$level].") ";
+        }
+        
+        if(isset($_GET[$queryStr])){
+            $q = $this->conn->clean($_GET[$queryStr]);
+            $where[] = "( `book`.`name` LIKE '%".$q."%' OR `book`.`login` LIKE '%".$q."%' )";
+        }
+
+        return (count($where) > 0 ? " WHERE " : "").implode(" AND ", $where);
+    }
+
+    public function orderBy(){
+      if(!isset($_GET['orderBy'])){
+        return "";
+      }
+      $orderType = "DESC";
+      if(isset($_GET["orderType"]) && intval($_GET["orderType"]) == 0){
+        $orderType = "ASC";
+      }
+      switch ($_GET['orderBy']){
+        case "name" :
+          return " ORDER BY book.`name` $orderType ";
+        case "lang":
+          return " ORDER BY book.".($orderType == "DESC" ? `question_lang_id` : `answer_lang_id`)." $orderType ";
+        case "level":
+          return " ORDER BY book.`level_id` $orderType ";
+        case "date":
+          return " ORDER BY book.`created_timestamp` $orderType ";
+        default :
+          return "";
+        }
+    }
 
     private function validate(&$book){
       if(strlen(trim($book->name)) == 0){

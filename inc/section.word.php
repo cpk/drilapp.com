@@ -50,7 +50,7 @@
                 </tr>
                 <tr>
                      <td class="bold">Úroveň náročnosti:</td>
-                    <td>'.$book[0]['name'].'</td>    
+                    <td>'.$book[0]["name_" + $lang].'</td>    
                 </tr>
                    <tr>
                      <td class="bold">Poznámka autora:</td>
@@ -175,7 +175,7 @@ function getLevelOptions($conn, $strings , $lang){
     $levels = $conn->select("SELECT * FROM `level`");
     $html = '<option value="0">'.$strings[$lang]["chooseLevel"].'</option>';
     foreach ($levels as $val) {
-        $html .= '<option value="'.$val["id_level"].'" '.($val["id_level"] == $_GET["level"] ? 'selected="selected"' : '').'>'.$val["name"].'</option>';
+        $html .= '<option value="'.$val["id_level"].'" '.($val["id_level"] == $_GET["level"] ? 'selected="selected"' : '').'>'.$val["name_$lang"].'</option>';
     }
     return $html;
 }

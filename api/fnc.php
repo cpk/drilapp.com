@@ -1,6 +1,18 @@
 <?php
- 	
-
+  $lang = "en";
+  function setLang(){
+    global $lang;
+    $avaiableLang = array("sk", "en");
+    if(isset($_GET['locale']) && in_array($_GET['locale'], $avaiableLang)){
+      $lang = $_GET['locale'];
+    }
+  }
+ 	setLang();
+  
+  function getLang(){
+    global $lang;
+    return $lang;
+  }
  	function sendEmail($toEmail, $subject, $body){
         $mail = new PHPMailer();
         $mail->From = "info@drilapp.com";
