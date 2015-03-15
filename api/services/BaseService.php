@@ -1,15 +1,12 @@
 <?php
 
-class LanguageService
+class BaseService
 {
-	private $conn;
+	protected $conn;
+
 	public function __construct(&$conn){
 		$this->conn = $conn;
 	}
-
-
-	
 }
-
 
 ?>

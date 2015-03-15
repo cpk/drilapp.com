@@ -1,14 +1,11 @@
 <?php
 
-class TagService
+class TagService extends BaseService
 {
-	private $conn;
-
-
-
+	
 	public function __construct(&$conn)
     {
-       $this->conn = $conn;
+       parent::__construct($conn);
     }
 
 

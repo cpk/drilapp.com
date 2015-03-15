@@ -6,7 +6,7 @@ class PublicBookController
     /**
      * Gets the book by id 
      *
-     * @url GET /book/$id
+     * @url GET /v1/book/$id
      * @noAuth
      */
     public function getBook( $id )
@@ -18,7 +18,7 @@ class PublicBookController
     /**
      * Create new book
      *
-     * @url POST /book
+     * @url POST /v1/book
      */
     public function create( $data )
     {
@@ -31,7 +31,7 @@ class PublicBookController
      /**
      * Update existing book
      *
-     * @url PUT /book/$id
+     * @url PUT /v1/book/$id
      */
     public function update( $id, $data )
     {
@@ -43,7 +43,7 @@ class PublicBookController
     /**
      * DELETE book
      *
-     * @url DELETE /book/$id
+     * @url DELETE /v1/book/$id
      */
     public function delete( $id  )
     {
@@ -54,7 +54,7 @@ class PublicBookController
      /**
      * Retrieve book page
      *
-     * @url GET /books
+     * @url GET /v1/books
      * @noAuth
      */
     public function getBookPage(  ){

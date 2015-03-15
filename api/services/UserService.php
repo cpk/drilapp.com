@@ -1,11 +1,10 @@
 <?php
 
-class UserService
+class UserService extends BaseService
 {
-	private $conn;
 
 	public function __construct(&$conn){
-       $this->conn = $conn;
+       parent::__construct($conn);
     }
 
 

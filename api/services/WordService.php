@@ -1,14 +1,11 @@
 <?php
 
-class WordService
+class WordService extends BaseService
 {
 
-	private $conn;
-
-	public function __construct(&$conn)
-    {
-       $this->conn = $conn;
-    }
+	public function __construct(&$conn){
+    parent::__construct($conn);
+  }
 
     public function create( $word ){
         $this->validate( $word );

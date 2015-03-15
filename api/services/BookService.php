@@ -1,16 +1,13 @@
 <?php
 
-class BookService
+class BookService extends BaseService
 {
-	private $conn;
 	private $tagService;
   private $lectureService;
 
-
-
 	public function __construct(&$conn, &$tagService, &$lectureService)
     {
-       $this->conn = $conn;
+       parent::__construct($conn);
        $this->tagService = $tagService;
        $this->lectureService = $lectureService;
     }
@@ -101,7 +98,7 @@ class BookService
        $whereClause = $this->where();
        $count = $this->conn->select("SELECT count(*) FROM dril_view_".$lang." book ".$whereClause);
        $orderClause = $this->orderBy();
-       $result["books"] = $this->conn->select("SELECT * FROM dril_view_$lang book $whereClause  $orderClause LIMIT 20");
+       $result["books"] = $this->conn->select("SELECT * FROM dril_view_$lang book $whereClause  $orderClause ".$this->getLimit());
        $result["count"] = $count[0]["count(*)"];
        return $result;
     }
@@ -148,6 +145,19 @@ class BookService
         }
 
         return (count($where) > 0 ? " WHERE " : "").implode(" AND ", $where);
+    }
+
+    private function getLimit(){
+      $peerPage =  !isset($_GET["peerPage"]) ? 15 : intval($_GET["peerPage"]);
+      $currentPage = isset($_GET["currentPage"]) ? intval($_GET["currentPage"]) : 1;
+      $currentPage = $currentPage < 1 ? 1 : $currentPage;
+      $offset =  $peerPage * ($currentPage - 1);
+      
+      if($peerPage == 0 || $peerPage > 100){
+        $peerPage = 15;
+        $offset = 0;
+      }
+      return " LIMIT $peerPage OFFSET ".$offset;
     }
 
     public function orderBy(){

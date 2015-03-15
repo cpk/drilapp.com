@@ -6,7 +6,7 @@ class UserController
     /**
      * Login user
      *
-     * @url POST /user/login
+     * @url POST /v1/user/login
      * @noAuth
      */   
    public function login( $data ){
@@ -46,7 +46,7 @@ class UserController
     /**
      * Create new book
      *
-     * @url POST /users
+     * @url POST /v1/users
      * @noAuth
      */
     public function create( $data )
@@ -55,9 +55,5 @@ class UserController
         global $userService;
         return $userService->create($data);
     }
-
-
-    
-
    
 }

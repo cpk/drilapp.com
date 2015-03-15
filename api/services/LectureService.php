@@ -1,13 +1,13 @@
 <?php
 
-class LectureService
+class LectureService extends BaseService
 {
-	private $conn;
+
     private $wordService;
 
 	public function __construct( &$conn, &$wordService )
     {
-       $this->conn = $conn;
+       parent::__construct($conn);
        $this->wordService = $wordService;
     }
 
