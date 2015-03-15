@@ -23,6 +23,14 @@ class CommonService extends BaseService
 		return $this->getItems("level");
 	}
 
+	public function getCategories(){
+		$categories = $this->getCategoryLevel(null);
+        for($i = 0; $i < count($categories); $i++){
+        	$categories[$i]['subCategories'] = $this->getCategoryLevel($categories[$i]['id']);
+        }
+        return $categories;
+	}
+
 
 	private function getItems($table){
 		$lang = getLang();
@@ -30,6 +38,18 @@ class CommonService extends BaseService
             "SELECT id_$table as id, name_$lang as name ".
             "FROM `$table` ".
             "ORDER BY id_$table"
+        );
+	}
+
+	
+
+	private function getCategoryLevel($id){
+		$lang = getLang();
+		return $this->conn->select(
+            "SELECT id , name_$lang as name ".
+            "FROM `dril_category` ".
+            "WHERE parent_id ".($id == null ? " IS NULL " : " = ".$id." ").
+            "ORDER BY ordering"
         );
 	}
 

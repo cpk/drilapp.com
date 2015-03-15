@@ -37,6 +37,7 @@ class BaseController
       global $commonService;
       $data["levels"] = $commonService->getAllLevels();
       $data["languages"] = $commonService->getAllLanguages();
+      $data["categories"] = $commonService->getCategories();
       return $data;
    }
    	

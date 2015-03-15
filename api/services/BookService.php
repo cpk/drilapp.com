@@ -172,7 +172,7 @@ class BookService extends BaseService
         case "name" :
           return " ORDER BY book.`name` $orderType ";
         case "lang":
-          return " ORDER BY book.".($orderType == "DESC" ? `question_lang_id` : `answer_lang_id`)." $orderType ";
+          return " ORDER BY book.".($orderType == "DESC" ? '`question_lang_id`' : '`answer_lang_id`')." $orderType ";
         case "level":
           return " ORDER BY book.`level_id` $orderType ";
         case "date":
