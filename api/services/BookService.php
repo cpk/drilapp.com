@@ -73,7 +73,8 @@ class BookService extends BaseService
 
 
     public function getBookById( $id ){
-      $result = $this->conn->select("SELECT * FROM `dril_book` WHERE id = ? LIMIT 1", 
+      $lang = getLang();
+      $result = $this->conn->select("SELECT * FROM dril_view_$lang book WHERE `book`.id = ? LIMIT 1", 
             array($id)
         );
 
@@ -120,6 +121,7 @@ class BookService extends BaseService
         $langAnswer = "langAnswer";
         $langQuestion = "langQuestion";
         $level = "level";
+        $category = "category";
         $queryStr = "query";
         $where = array();
       
@@ -135,8 +137,14 @@ class BookService extends BaseService
                      " `book`.`question_lang_id` = ". $_GET[$langQuestion] .") ";
         }
 
+        // LEVEL
         if(isset($_GET[$level]) && intval($_GET[$level]) > 0){
           $where[] = " (`book`.`level_id` = ".$_GET[$level].") ";
+        }
+
+        // CATEGORY
+        if(isset($_GET[$category]) && intval($_GET[$category]) > 0){
+          $where[] = " (`book`.`dril_category_id` = ".$_GET[$category].") ";
         }
         
         if(isset($_GET[$queryStr])){

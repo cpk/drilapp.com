@@ -83,8 +83,10 @@
                     <?php echo $nav; ?>
                 </ul>
             </nav>
+            <div id="vote" title="Web Dril 1.0"></div>
     	</div>
-        
+         
+
     </header>
     
     <div id="sliderbox">
