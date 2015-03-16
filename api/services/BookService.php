@@ -74,14 +74,19 @@ class BookService extends BaseService
 
     public function getBookById( $id ){
       $lang = getLang();
-      $result = $this->conn->select("SELECT * FROM dril_view_$lang book WHERE `book`.id = ? LIMIT 1", 
-            array($id)
-        );
-
-        if(count($result) == 1){
-            return $result[0];
-        }
-        return null;
+      
+      $sql = "SELECT `book`.*, `category`.name_$lang as category_name, count(`bisf`.`dril_book_id`) as favorited ".
+             "FROM dril_view_$lang book ".
+             "LEFT JOIN dril_category category ON `category`.`id` = `book`.`dril_category_id` ".
+             "LEFT JOIN `dril_book_is_favorited` bisf ON `bisf`.`dril_book_id` = `book`.`id` ".
+             "WHERE `book`.id = ? ".
+             "LIMIT 1";
+      
+      $result = $this->conn->select($sql , array($id));
+      if(count($result) == 1){
+          return $result[0];
+      }
+      return null;
     }
 
 
