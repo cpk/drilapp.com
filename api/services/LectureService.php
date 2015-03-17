@@ -67,8 +67,10 @@ class LectureService extends BaseService
 
     public function getLectureById( $id ){
         $result = $this->conn->select(
-            "SELECT `l`.*, count(`w`) as count_of_words FROM `dril_book_has_lecture` `l` ".
-            "LEFT JOIN dril_lecture_has_word w ON w.dril_lecture_id = `l`.id".
+             "SELECT `l`.*, ".
+                "UNIX_TIMESTAMP(`l`.`changed`) as `changed_timestamp`, ".
+                "UNIX_TIMESTAMP(`l`.`created`) as `created_timestamp` ".
+            "FROM `dril_book_has_lecture` `l` ".
             "WHERE id = ? LIMIT 1", 
             array($id)
         );
@@ -92,10 +94,11 @@ class LectureService extends BaseService
 
     public function getAllBookLectures( $bookId ){
         return $this->conn->select(
-            "SELECT `l`.*, count(`w`.id) as count_of_words FROM `dril_book_has_lecture` `l` ".
-            "LEFT OUTER JOIN dril_lecture_has_word `w` ON `w`.`dril_lecture_id` = `l`.id ".
-            "WHERE `l`.dril_book_id = ? ".
-            "GROUP BY `l`.id", 
+           "SELECT `l`.*, ".
+                "UNIX_TIMESTAMP(`l`.`changed`) as `changed_timestamp`, ".
+                "UNIX_TIMESTAMP(`l`.`created`) as `created_timestamp` ".
+            "FROM `dril_book_has_lecture` `l` ".
+            "WHERE `l`.dril_book_id = ? ", 
             array($bookId)
         );
     }
