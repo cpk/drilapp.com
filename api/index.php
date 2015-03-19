@@ -29,7 +29,7 @@ $userService = new UserService($conn);
 $tagService = new TagService($conn);
 $wordService = new WordService($conn);
 $lectureService = new LectureService($conn, $wordService);
-$bookService = new BookService($conn, $tagService, $lectureService);
+$bookService = new BookService($conn, $tagService, $lectureService, $wordService);
 $commonService = new CommonService($conn);
 
 $server = new RestServer('debug');

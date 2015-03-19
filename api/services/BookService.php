@@ -5,11 +5,12 @@ class BookService extends BaseService
 	private $tagService;
   private $lectureService;
 
-	public function __construct(&$conn, &$tagService, &$lectureService)
+	public function __construct(&$conn, &$tagService, &$lectureService, &$wordService)
     {
        parent::__construct($conn);
        $this->tagService = $tagService;
        $this->lectureService = $lectureService;
+       $this->wordService = $wordService;
     }
 
 
@@ -95,6 +96,16 @@ class BookService extends BaseService
       if($book != null){
         $book['tags'] = $this->tagService->getAllBookTags($id);
         $book['lectures'] = $this->lectureService->getAllBookLectures($id);
+      }
+      return $book;
+    }
+
+    public function getFetchedLectureId( $bookId, $lectureId ){
+      $book = $this->getBookById($bookId);
+      if($book != null){
+        $book['tags'] = $this->tagService->getAllBookTags($bookId);
+        $book['lecture'] = $this->lectureService->getLectureById($lectureId);
+        $book['lecture']['words'] = $this->wordService->getAllWordByLectureId($lectureId);
       }
       return $book;
     }

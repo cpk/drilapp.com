@@ -16,6 +16,17 @@ class PublicBookController
     }
 
     /**
+     * Gets fetched lecture
+     *
+     * @url GET /v1/book/$bookId/lecture/$lectureId
+     * @noAuth
+     */
+    public function getFetchedLecture($bookId, $lectureId){
+        global $bookService;
+        return $bookService->getFetchedLectureId( $bookId, $lectureId );
+    }
+
+    /**
      * Create new book
      *
      * @url POST /v1/book

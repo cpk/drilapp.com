@@ -19,8 +19,11 @@ class WordService extends BaseService
 
 
     public function getAllWordByLectureId( $id ){
-    	$sql = "SELECT * FROM `dril_lecture_has_word` WHERE dril_lecture_id = ? ";
-        return $this->conn->select( $sql, array($id) );
+      $sql = "SELECT `id`, `question`, `answer` ".
+             "FROM `dril_lecture_has_word` ".
+             "WHERE dril_lecture_id = ? ".
+             "ORDER BY id DESC ";
+      return $this->conn->select( $sql, array($id) );
     }
 
 
