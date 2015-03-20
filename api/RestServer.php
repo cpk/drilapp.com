@@ -166,11 +166,11 @@ class RestServer
 
 	private function setHeaders(){
 		if($this->mode == "debug"){
-	       header('Access-Control-Allow-Origin: http://localhost:9000');
-	       header('Access-Control-Max-Age: 3600');
-	       header('Access-Control-Allow-Methods: GET, POST, PUT, HEAD, DELETE, OPTIONS');
-	       header('Access-Control-Allow-Headers: Overwrite, Destination, Content-Type, Depth, User-Agent, Translate, Range, Content-Range, Timeout, X-File-Size, X-Requested-With, If-Modified-Since, X-File-Name, Cache-Control, Location, Lock-Token, If');
-	       header('Access-Control-Expose-Headers: DAV, content-length, Allow');
+	       header('Access-Control-Allow-Origin: *');
+	      /// header('Access-Control-Max-Age: 3600');
+	      // header('Access-Control-Allow-Methods: GET, POST, PUT, HEAD, DELETE, OPTIONS');
+	      // header('Access-Control-Allow-Headers: Overwrite, Destination, Content-Type, Depth, User-Agent, Translate, Range, Content-Range, Timeout, X-File-Size, X-Requested-With, If-Modified-Since, X-File-Name, Cache-Control, Location, Lock-Token, If');
+	      // header('Access-Control-Expose-Headers: DAV, content-length, Allow');
 		}
 	}
 

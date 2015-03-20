@@ -12,18 +12,18 @@ class UserController
    public function login( $data ){
         global $userService;    
         if(!isset($data) || !isset($data->username)){
-             throw new RestException(404, 'Credentials are required.');
+             throw new RestException(401, 'Credentials are required.');
         }
         $user = $userService->getUserByLogin( $data->username );
         if($user == null){
-            throw new RestException(404, 'User not found');
+            throw new RestException(401, 'User not found');
         }
         if(hash_hmac('sha256', $data->password , $user['salt']) == $user['pass']){
             try {
                 $key = "example_key";
                 $token = array(
-                    "iss" => "http://www.drilapp.com",
-                    "aud" => "http://web.drilapp.com",
+                   // "iss" => "http://www.drilapp.com",
+                   // "aud" => "http://web.drilapp.com",
                     "iat" => time(),
                     "exp" => time() + 3600,
                     "uid" => $user['id_user']
