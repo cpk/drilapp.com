@@ -8,3 +8,34 @@
 15:46:39.095 DEBUG UserController : User was not found for usename test 
 15:47:05.674 DEBUG 20 UserController : User was not found for usename test 
 15:47:19.364 DEBUG UserController line 20 : User was not found for usename test 
+17:00:23.312 DEBUG UserController line 20: User was not found for usename asdfasdf 
+17:01:40.092 DEBUG UserController line 20: User was not found for usename sadfasdfasdf 
+17:02:15.326 DEBUG UserController line 20: User was not found for usename sadfasdfasdf 
+17:02:21.405 DEBUG UserController line 20: User was not found for usename asdfasdfasdf 
+17:02:48.942 DEBUG UserController line 20: User was not found for usename asdfasdfasdf 
+17:02:55.676 DEBUG UserController line 20: User was not found for usename asdfasdfasdfsdf 
+17:04:19.577 DEBUG UserController line 20: User was not found for usename 123456 
+17:06:46.903 DEBUG UserController line 20: User was not found for usename $scope.isLoading 
+17:06:48.158 DEBUG UserController line 20: User was not found for usename $scope.isLoading 
+17:06:48.322 DEBUG UserController line 20: User was not found for usename $scope.isLoading 
+17:06:48.498 DEBUG UserController line 20: User was not found for usename $scope.isLoading 
+17:06:48.679 DEBUG UserController line 20: User was not found for usename $scope.isLoading 
+17:06:48.847 DEBUG UserController line 20: User was not found for usename $scope.isLoading 
+17:06:49.024 DEBUG UserController line 20: User was not found for usename $scope.isLoading 
+17:06:49.300 DEBUG UserController line 20: User was not found for usename $scope.isLoading 
+17:06:49.471 DEBUG UserController line 20: User was not found for usename $scope.isLoading 
+17:06:49.649 DEBUG UserController line 20: User was not found for usename $scope.isLoading 
+20:28:58.676 WARN  RestServer line 148: API error: Credentials are required. [ip=127.0.0.1] 
+20:31:16.506 WARN  RestServer line 148: API error: User was not found for usename loasdf [ip=127.0.0.1] 
+20:34:25.614 WARN  RestServer line 148: API error: User not found [ip=127.0.0.1] 
+20:36:01.484 ERROR RestServer line 151: MySQL error: SQL preparing failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'question_lang.code as question_lang_code, answer_lang.code as answer_lang_code F' at line 1 [ip=127.0.0.1] exception 'MysqlException' with message 'SQL preparing failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'question_lang.code as question_lang_code, answer_lang.code as answer_lang_code F' at line 1' in /opt/lampp/htdocs/drilapp.com/admin/inc/class.Database.php:84
+Stack trace:
+#0 /opt/lampp/htdocs/drilapp.com/admin/inc/class.Database.php(114): Database->query('SELECT w.`id`, ...', Array)
+#1 /opt/lampp/htdocs/drilapp.com/api/services/WordService.php(40): Database->select('SELECT w.`id`, ...', Array)
+#2 /opt/lampp/htdocs/drilapp.com/api/controllers/UserController.php(37): WordService->getAllUserActivatedWords(1)
+#3 [internal function]: UserController->login(Object(stdClass))
+#4 /opt/lampp/htdocs/drilapp.com/api/RestServer.php(142): call_user_func_array(Array, Array)
+#5 /opt/lampp/htdocs/drilapp.com/api/index.php(39): RestServer->handle()
+#6 {main}
+
+20:37:35.908 INFO  UserController line 39: User [id=1] was successfully logged in. [ip=127.0.0.1] 

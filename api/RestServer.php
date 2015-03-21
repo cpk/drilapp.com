@@ -128,6 +128,7 @@ class RestServer
 			
 			$obj->server = $this;
 			$this->setHeaders();
+			$logger = Logger::getLogger('api');
 			try {
 				if (method_exists($obj, 'init')) {
 					$obj->init();
@@ -143,8 +144,15 @@ class RestServer
 				if ($result !== null) {
 					$this->sendData($result);
 				}
-			} catch (RestException $e) {
+			}catch (RestException $e) {
+                $logger->warn("API error: ".$e->getMessage()." [ip=" .$_SERVER['SERVER_ADDR']."]");
 				$this->handleError($e->getCode(), $e->getMessage());
+			}catch (MysqlException $e) {
+                $logger->error("MySQL error: ".$e->getMessage()." [ip=" .$_SERVER['SERVER_ADDR']."]", $e);
+				$this->handleError(500, "Unexpected error has occurred.");
+			}catch (Exception $e) {
+                $logger->error("Error: [ip=" .$_SERVER['SERVER_ADDR']."]", $e);
+				$this->handleError(500, "Unexpected error has occurred.");
 			}			
 		
 		} else {

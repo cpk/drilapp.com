@@ -11,14 +11,14 @@ class UserController
      */   
    public function login( $data ){
         global $userService;    
+        global $wordService;
         if(!isset($data) || !isset($data->username)){
             throw new RestException(401, 'Credentials are required.');
         }
-        $logger = Logger::getLogger('api');
+        
         $user = $userService->getUserByLogin( $data->username );
         if($user == null){
-            $logger->debug("User was not found for usename " .$data->username );
-            throw new RestException(401, 'User not found');
+            throw new RestException(401, 'User [username='.$data->username.'] was not found');
         }
         if(hash_hmac('sha256', $data->password , $user['salt']) == $user['pass']){
             try {
@@ -34,15 +34,16 @@ class UserController
                 unset($user['salt']);
                 $result['token'] = JWT::encode($token, $key);
                 $result['user'] = $user;
+                $result['actiavtedWords'] = $wordService->getAllUserActivatedWords($user['id_user']);
+                $logger = Logger::getLogger('api');
+                $logger->info("User [id=" .$user['id_user']."] was successfully logged in. [ip=" .$_SERVER['SERVER_ADDR']."]");
                return $result;
 
-            } catch(UnexpectedValueException $ex) {
-              $logger->warn("Invalid security token " .$ex->getMessage() );  
-              throw new RestException(401, 'Invalid security token');   
+            } catch(UnexpectedValueException $ex) { 
+              throw new RestException(401, "Invalid security token " .$data->username);   
             }    
         }else{
-            $logger->warn("Bad username or password " .$data->username );  
-            throw new RestException(401, 'Bad username or password');   
+            throw new RestException(401, "Bad username or password " .$data->username);   
         }
 
    }
