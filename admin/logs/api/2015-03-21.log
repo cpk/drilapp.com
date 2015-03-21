@@ -1,0 +1,10 @@
+2015-03-21 15:31:49.968 DEBUG [4460] api: User was not found for usename test
+2015-03-21 15:31:49.968 DEBUG [4460] api: User was not found for usename test
+15:36:00.414  DEBUG [4456] api: User was not found for usename test
+15:44:26.113 DEBUG  DEBUG [7327] api: User was not found for usename test 
+ 15:45:03.818 DEBUG : User was not found for usename test 
+ 15:45:20.413 DEBUG : User was not found for usename test 
+15:46:05.474 DEBUG /opt/lampp/htdocs/drilapp.com/api/controllers/UserController.phpUserController.login(/opt/lampp/htdocs/drilapp.com/api/controllers/UserController.php:20) : User was not found for usename test 
+15:46:39.095 DEBUG UserController : User was not found for usename test 
+15:47:05.674 DEBUG 20 UserController : User was not found for usename test 
+15:47:19.364 DEBUG UserController line 20 : User was not found for usename test 

@@ -1,7 +1,6 @@
 <?php
-session_start();
-
-
+require_once 'log4php/Logger.php';
+require_once 'config/log4php.php';
 require_once 'JWT.php';
 require_once 'conn.php';
 require_once 'fnc.php';

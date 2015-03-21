@@ -1,0 +1,20 @@
+<configuration xmlns="http://logging.apache.org/log4php/">
+        
+    <appender name="apiAppender" class="LoggerAppenderDailyFile" >
+        <layout class="LoggerLayoutPattern" >
+            <param name="conversionPattern" value="%d{H:i:s.u} %-5level %C{length} line %L: %m %ex%n" />    
+        </layout>
+        <param name="file" value="../admin/logs/api/%s.log" />
+        <param name="datePattern" value="Y-m-d" />
+        <param name="append" value="true" />
+    </appender>
+     <!--    
+    <root>
+      <appender_ref ref="apiAppender" />
+    </root>
+    -->
+    <logger name="api">
+        <appender_ref ref="apiAppender" />
+    </logger>
+
+</configuration>

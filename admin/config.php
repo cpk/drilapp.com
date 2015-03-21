@@ -19,4 +19,7 @@
 	$config['shop_prefix'] = "shop";			
 
 	$config['JWT_KEY'] = "asdfasdfazxfgsdgsdfg";
+
+
+	
 ?>
