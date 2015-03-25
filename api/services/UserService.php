@@ -23,7 +23,7 @@ class UserService extends BaseService
 
     public function getUserByLogin( $login ){
         
-        $sql = "SELECT * ".
+        $sql = "SELECT `id_user` as id, `login`, `email`, `givenname` as `firstName`, `surname` as `lastName`, `pass`, `salt` ".
                "FROM `user` ".
                "WHERE `login`=? AND `active`=1 LIMIT 1";
 

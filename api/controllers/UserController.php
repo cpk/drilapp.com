@@ -28,15 +28,15 @@ class UserController
                    // "aud" => "http://web.drilapp.com",
                     "iat" => time(),
                     "exp" => time() + 7200,
-                    "uid" => $user['id_user']
+                    "uid" => $user['id']
                 );
                 unset($user['pass']);
                 unset($user['salt']);
                 $result['token'] = JWT::encode($token, $key);
                 $result['user'] = $user;
-                $result['actiavtedWords'] = $wordService->getAllUserActivatedWords($user['id_user']);
+                $result['actiavtedWords'] = $wordService->getAllUserActivatedWords($user['id']);
                 $logger = Logger::getLogger('api');
-                $logger->info("User [id=" .$user['id_user']."] was successfully logged in. [ip=" .$_SERVER['SERVER_ADDR']."]");
+                $logger->info("User [id=" .$user['id']."] was successfully logged in. [ip=" .$_SERVER['SERVER_ADDR']."]");
                return $result;
 
             } catch(UnexpectedValueException $ex) { 
