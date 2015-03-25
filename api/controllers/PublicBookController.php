@@ -9,10 +9,12 @@ class PublicBookController
      * @url GET /v1/book/$id
      * @noAuth
      */
-    public function getBook( $id )
+    public function getBook( $id , $uid)
     {
         global $bookService;
-        return $bookService->getFetchedBookById($id);
+        $book =  $bookService->getFetchedBookById($id);
+        $this->checkBookPermision($book, $uid);
+        return $book;
     }
 
     /**
@@ -21,9 +23,11 @@ class PublicBookController
      * @url GET /v1/book/$bookId/lecture/$lectureId
      * @noAuth
      */
-    public function getFetchedLecture($bookId, $lectureId){
+    public function getFetchedLecture($bookId, $lectureId, $uid){
         global $bookService;
-        return $bookService->getFetchedLectureId( $bookId, $lectureId );
+        $book = $bookService->getFetchedLectureId( $bookId, $lectureId );
+        $this->checkBookPermision($book, $uid);
+        return $book;
     }
 
     /**
@@ -70,7 +74,26 @@ class PublicBookController
      */
     public function getBookPage(  ){
         global $bookService;
-        return $bookService->getFatchedBooks( array() );
+        $_GET['sharedOnly'] = true;
+        return $bookService->getFatchedBooks();
+    }
+
+      /**
+     * Retrieve user book page
+     *
+     * @url GET /v1/user/books
+     */
+    public function getUserBookPage( $uid ){
+        global $bookService;
+        $_GET['userId'] = $uid;
+        return $bookService->getFatchedBooks();
+    }
+
+
+    private function checkBookPermision($book, $uid){
+        if($book != null && $book['is_shared'] == 0 && !isset($uid) || $book['user_id'] != $uid){
+            throw new RestException(401, 'User has not permission to book [id='.$book['id'].']');
+        }
     }
 
    

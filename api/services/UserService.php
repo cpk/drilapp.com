@@ -10,9 +10,9 @@ class UserService extends BaseService
 
     public function getUserById($uid){
         
-        $sql = "SELECT * ".
+        $sql = "SELECT `id_user` as id, `login`, `email`, `givenname` as `firstName`, `surname` as `lastName`, `pass`, `salt` ".
                "FROM `user` ".
-               "WHERE `id_user`=? AND `active`=1 LIMIT 1";
+               "WHERE `id_user`=? AND `active`=1 AND `blocked`=0";
 
         $data = $this->conn->select( $sql , array(intval($uid))); 
         if(count($data) > 0){

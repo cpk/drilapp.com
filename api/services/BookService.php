@@ -110,7 +110,7 @@ class BookService extends BaseService
       return $book;
     }
 
-    public function getFatchedBooks( $params ){
+    public function getFatchedBooks( ){
        $lang = getLang();
        $whereClause = $this->where();
        $count = $this->conn->select("SELECT count(*) FROM dril_view_".$lang." book ".$whereClause);
@@ -141,6 +141,15 @@ class BookService extends BaseService
         $queryStr = "query";
         $where = array();
       
+
+        if(isset($_GET['sharedOnly'])){
+          $where[] = "`book`.`is_shared` = 1 ";
+        }
+
+        if(isset($_GET['userId']) && intval($_GET['userId']) > 0){
+          $where[] = "`book`.`user_id` = ". $_GET['userId']; 
+        }
+
         // SOURCE LANGUAGE
         if(isset($_GET[$langAnswer]) && intval($_GET[$langAnswer]) > 0){
           $where[] = "(`book`.`answer_lang_id` = ". $_GET[$langAnswer] ." OR ".

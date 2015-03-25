@@ -96,11 +96,8 @@ class RestServer
 		$this->cached = false;
 	}
 	
-	public function unauthorized($ask = false)
+	public function unauthorized()
 	{
-		if ($ask) {
-			header("WWW-Authenticate: Basic realm=\"$this->realm\"");
-		}
 		throw new RestException(401, "You are not authorized to access this resource.");
 	}
 	
@@ -113,6 +110,11 @@ class RestServer
 		
 		if ($this->method == 'PUT' || $this->method == 'POST') {
 			$this->data = $this->getData();
+		}
+		if($this->method == 'OPTIONS'){
+			$this->setHeaders();
+			throw new RestException(200, "OK");
+			exit;
 		}
 		
 		list($obj, $method, $params, $this->params, $noAuth) = $this->findUrl();
@@ -134,9 +136,13 @@ class RestServer
 					$obj->init();
 				}
 				
-				if (!$noAuth && $this->authData() == null) {
-					$this->sendData($this->unauthorized(true));
-					exit;
+				$authData = $this->authData();
+				if (!$noAuth && $authData == null) {
+					$this->sendData($this->unauthorized());
+					exit;					
+				}
+				if($authData != null){
+					$params['uid'] = $authData->uid;
 				}
 				
 				$result = call_user_func_array(array($obj, $method), $params);
@@ -163,22 +169,29 @@ class RestServer
 
 	private function authData(){
 		global $config;
+		$logger = Logger::getLogger('api');
 		$requestHeaders = apache_request_headers();
-    	$authorizationHeader = $requestHeaders['AUTHORIZATION'];
+		if(!isset($requestHeaders['Authorization'])){
+			$logger->debug("Empty authorization header");
+			return null;
+		}
+    	$authorizationHeader = $requestHeaders['Authorization'];
     	if($authorizationHeader == null){
+    		$logger->debug("Authorization header was null.");
     		return null;
     	}
     	$token = str_replace('Bearer ', '', $authorizationHeader);
-	    return JWT::decode($token, $config['JWT_KEY'] );
+	    return JWT::decode($token, "example_key" );
 	}
 
 	private function setHeaders(){
 		if($this->mode == "debug"){
-	       header('Access-Control-Allow-Origin: *');
-	      /// header('Access-Control-Max-Age: 3600');
-	      // header('Access-Control-Allow-Methods: GET, POST, PUT, HEAD, DELETE, OPTIONS');
-	      // header('Access-Control-Allow-Headers: Overwrite, Destination, Content-Type, Depth, User-Agent, Translate, Range, Content-Range, Timeout, X-File-Size, X-Requested-With, If-Modified-Since, X-File-Name, Cache-Control, Location, Lock-Token, If');
-	      // header('Access-Control-Expose-Headers: DAV, content-length, Allow');
+			header('Access-Control-Allow-Origin: http://localhost:9000');		
+			header('Access-Control-Allow-Methods: POST, OPTIONS, DELETE, GET, PUT');
+			header('Access-Control-Allow-Credentials: true');
+			header('Access-Control-Allow-Headers: Authorization, X-Requested-With, CONTENT-TYPE, token');
+			header('P3P: CP="NON DSP LAW CUR ADM DEV TAI PSA PSD HIS OUR DEL IND UNI PUR COM NAV INT DEM CNT STA POL HEA PRE LOC IVD SAM IVA OTC"');
+			header('Access-Control-Max-Age: 1');
 		}
 	}
 

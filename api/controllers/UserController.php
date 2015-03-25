@@ -27,7 +27,7 @@ class UserController
                    // "iss" => "http://www.drilapp.com",
                    // "aud" => "http://web.drilapp.com",
                     "iat" => time(),
-                    "exp" => time() + 3600,
+                    "exp" => time() + 7200,
                     "uid" => $user['id_user']
                 );
                 unset($user['pass']);

@@ -15,7 +15,6 @@ INNER JOIN `lang` `lang_answer` ON `book`.`answer_lang_id` = `lang_answer`.`id_l
 INNER JOIN `level` `l` ON `book`.`level_id` = `l`.`id_level`
 LEFT JOIN `dril_book_has_lecture` `lecture` ON `book`.`id` = `lecture`.`dril_book_id`
 LEFT JOIN `user` `u` ON `u`.`id_user`=`book`.`user_id` 
-WHERE `book`.`is_shared`= 1 
 GROUP BY `book`.`id` 
 ORDER BY `book`.`id` DESC;
 
@@ -37,7 +36,6 @@ INNER JOIN `lang` `lang_answer` ON `book`.`answer_lang_id` = `lang_answer`.`id_l
 INNER JOIN `level` `l` ON `book`.`level_id` = `l`.`id_level`
 LEFT JOIN `dril_book_has_lecture` `lecture` ON `book`.id = `lecture`.`dril_book_id`
 LEFT JOIN `user` `u` ON `u`.`id_user`=`book`.`user_id` 
-LEFT OUTER JOIN `user_has_favorite`  f on f.`id_book`=`book`.`id` and f.`id_user`=1
 GROUP BY `book`.`id` 
 ORDER BY `book`.`id` DESC;
 
