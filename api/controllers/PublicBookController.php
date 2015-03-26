@@ -9,7 +9,7 @@ class PublicBookController
      * @url GET /v1/book/$id
      * @noAuth
      */
-    public function getBook( $id , $uid)
+    public function getBook( $id , $uid = null)
     {
         global $bookService;
         $book =  $bookService->getFetchedBookById($id);
@@ -23,7 +23,7 @@ class PublicBookController
      * @url GET /v1/book/$bookId/lecture/$lectureId
      * @noAuth
      */
-    public function getFetchedLecture($bookId, $lectureId, $uid){
+    public function getFetchedLecture($bookId, $lectureId, $uid = null){
         global $bookService;
         $book = $bookService->getFetchedLectureId( $bookId, $lectureId );
         $this->checkBookPermision($book, $uid);
@@ -47,6 +47,7 @@ class PublicBookController
      * Update existing book
      *
      * @url PUT /v1/book/$id
+     * @noAuth
      */
     public function update( $id, $data )
     {

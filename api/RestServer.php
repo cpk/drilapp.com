@@ -153,6 +153,9 @@ class RestServer
 			}catch (RestException $e) {
                 $logger->warn("API error: ".$e->getMessage()." [ip=" .$_SERVER['SERVER_ADDR']."]");
 				$this->handleError($e->getCode(), $e->getMessage());
+			}catch (InvalidArgumentException $e) {
+                $logger->info("Validation error: ".$e->getMessage()." [ip=" .$_SERVER['SERVER_ADDR']."]");
+				$this->handleError(400, $e->getMessage());
 			}catch (MysqlException $e) {
                 $logger->error("MySQL error: ".$e->getMessage()." [ip=" .$_SERVER['SERVER_ADDR']."]", $e);
 				$this->handleError(500, "Unexpected error has occurred.");

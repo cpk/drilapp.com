@@ -45,6 +45,12 @@ class BookService extends BaseService
                 "`answer_lang_id` = ?, ". 
                 "`level_id` = ?, ".
                 "`user_id` = ?, ".
+                "`is_shared` = ?, ".
+                "`question_lang_id` = ?, ".
+                "`answer_lang_id` = ?, ".
+                "`level_id` = ?, ".
+                "`dril_category_id` = ?, ".
+                "`description` = ?, ".
                 "`changed` = CURRENT_TIMESTAMP ".
               "WHERE id = ? LIMIT 1";
             $this->conn->update($sql,  array(
@@ -52,12 +58,19 @@ class BookService extends BaseService
                 $book->question_lang_id, 
                 $book->answer_lang_id, 
                 $book->level_id, 
-                $book->user_id, 
+                $book->user_id,
+                $book->is_shared, 
+                $book->question_lang_id,
+                $book->answer_lang_id,
+                $book->level_id,
+                $book->dril_category_id,
+                $book->description,
                 $book->id
             ));
-            $this->tagService->createTags($book->tags, $book->id);
+           // $this->tagService->createTags($book->tags, $book->id);
+        }else{
+          throw new InvalidArgumentException("The book with given name already exists.", 1);
         }
-        throw new InvalidArgumentException("The book with given name already exists.", 1);
     }
 
 
