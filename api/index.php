@@ -1,11 +1,11 @@
 <?php
 require_once 'log4php/Logger.php';
 require_once 'config/log4php.php';
-require_once 'JWT.php';
-require_once 'conn.php';
-require_once 'fnc.php';
+require_once 'inc/JWT.php';
+require_once 'inc/conn.php';
+require_once 'inc/fnc.php';
 
-require_once 'RestServer.php';
+require_once 'inc/RestServer.php';
 
 require_once 'services/BaseService.php';
 require_once 'services/WordService.php';
@@ -21,7 +21,7 @@ require_once 'controllers/PublicBookController.php';
 require_once 'controllers/UserController.php';
 
 
-require_once '../inc/messageSource.php';
+require_once 'inc/messageSource.php';
 
 
 $userService = new UserService($conn);

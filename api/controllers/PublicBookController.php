@@ -17,6 +17,20 @@ class PublicBookController
         return $book;
     }
 
+
+    /**
+     * Gets the book by id 
+     *
+     * @url GET /v1/user/book/$id
+     */
+    public function getUserBook( $id , $uid)
+    {
+        global $bookService;
+        $book =  $bookService->getFetchedBookById($id);
+        $this->checkBookPermision($book, $uid);
+        return $book;
+    }
+
     /**
      * Gets fetched lecture
      *
@@ -24,6 +38,19 @@ class PublicBookController
      * @noAuth
      */
     public function getFetchedLecture($bookId, $lectureId, $uid = null){
+        global $bookService;
+        $book = $bookService->getFetchedLectureId( $bookId, $lectureId );
+        $this->checkBookPermision($book, $uid);
+        return $book;
+    }
+
+    /**
+     * Gets fetched lecture
+     *
+     * @url GET /v1/user/book/$bookId/lecture/$lectureId
+     * 
+     */
+    public function getUserFetchedLecture($bookId, $lectureId, $uid){
         global $bookService;
         $book = $bookService->getFetchedLectureId( $bookId, $lectureId );
         $this->checkBookPermision($book, $uid);
