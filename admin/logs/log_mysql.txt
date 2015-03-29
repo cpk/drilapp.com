@@ -67,3 +67,4 @@
 [2015-03_25 21:18:43] Code: 1054 - Message: SQL preparing failed: Unknown column 'book.shared' in 'where clause' SQL: SELECT count(*) FROM dril_view_en book  WHERE `book`.`shared` = 1 
 [2015-03_25 21:56:14] Code: 1054 - Message: SQL preparing failed: Unknown column 'book.id_user' in 'where clause' SQL: SELECT count(*) FROM dril_view_en book  WHERE `book`.`id_user` = 1
 [2015-03_25 21:56:34] Code: 1054 - Message: SQL preparing failed: Unknown column 'book.id_user' in 'where clause' SQL: SELECT count(*) FROM dril_view_en book  WHERE `book`.`id_user` = 1
+[2015-03_30 00:15:32] Code: 1048 - Message: SQL execution failed: Column 'name' cannot be null SQL: INSERT INTO `dril_book_has_lecture` (`name`,`dril_book_id`) VALUES (?, ?)

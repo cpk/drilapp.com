@@ -107,7 +107,7 @@ class RestServer
 		$this->url = $this->getPath();
 		$this->method = $this->getMethod();
 		$this->format = $this->getFormat();
-		
+
 		if ($this->method == 'PUT' || $this->method == 'POST') {
 			$this->data = $this->getData();
 		}
@@ -226,7 +226,8 @@ class RestServer
 	}
 	
 	public function handleError($statusCode, $errorMessage = null)
-	{
+	{	
+
 		$method = "handle$statusCode";
 		foreach ($this->errorClasses as $class) {
 			if (is_object($class)) {
@@ -243,8 +244,11 @@ class RestServer
 			}
 		}
 		
-		$message = $this->codes[$statusCode] . ($errorMessage && $this->mode == 'debug' ? ': ' . $errorMessage : '');
-		
+		if($statusCode == 400){
+			$message = $errorMessage;
+		}else{
+			$message = $this->codes[$statusCode] . ($errorMessage && $this->mode == 'debug' ? ': ' . $errorMessage : '');
+		}
 		$this->setStatus($statusCode);
 		$this->sendData(array('error' => array('code' => $statusCode, 'message' => $message)));
 	}
@@ -425,18 +429,7 @@ class RestServer
 	public function getData()
 	{
 		$data = file_get_contents('php://input');
-		
-		if ($this->format == RestFormat::AMF) {
-			require_once 'Zend/Amf/Parse/InputStream.php';
-			require_once 'Zend/Amf/Parse/Amf3/Deserializer.php';
-			$stream = new Zend_Amf_Parse_InputStream($data);
-			$deserializer = new Zend_Amf_Parse_Amf3_Deserializer($stream);
-			$data = $deserializer->readTypeMarker();
-		} else {
-
-			$data = json_decode($data);
-		}
-		
+		$data = json_decode($data);
 		return $data;
 	}
 	
@@ -611,7 +604,7 @@ class RestServer
 		'304' => 'Not Modified',
 		'305' => 'Use Proxy',
 		'307' => 'Temporary Redirect',
-		'400' => 'Bad Request',
+		'400' => '',
 		'401' => 'Unauthorized',
 		'402' => 'Payment Required',
 		'403' => 'Forbidden',

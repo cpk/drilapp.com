@@ -49,5 +49,13 @@
     }
   }
 
+
+   function checkBookPermision($book, $uid){
+      if($book != null){
+          if($book['is_shared'] == 0 && !isset($uid) || $book['is_shared'] == 0 && $book['user_id'] != $uid){
+              throw new RestException(401, 'User has not permission to book [id='.$book['id'].']');
+          }
+      }
+    }
    
 ?>

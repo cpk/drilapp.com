@@ -1,6 +1,6 @@
 <?php
 
-class PublicBookController
+class BookController
 {
    
     /**
@@ -13,7 +13,7 @@ class PublicBookController
     {
         global $bookService;
         $book =  $bookService->getFetchedBookById($id);
-        $this->checkBookPermision($book, $uid);
+        checkBookPermision($book, $uid);
         return $book;
     }
 
@@ -27,7 +27,7 @@ class PublicBookController
     {
         global $bookService;
         $book =  $bookService->getFetchedBookById($id);
-        $this->checkBookPermision($book, $uid);
+        checkBookPermision($book, $uid);
         return $book;
     }
 
@@ -40,7 +40,7 @@ class PublicBookController
     public function getFetchedLecture($bookId, $lectureId, $uid = null){
         global $bookService;
         $book = $bookService->getFetchedLectureId( $bookId, $lectureId );
-        $this->checkBookPermision($book, $uid);
+        checkBookPermision($book, $uid);
         return $book;
     }
 
@@ -53,7 +53,7 @@ class PublicBookController
     public function getUserFetchedLecture($bookId, $lectureId, $uid){
         global $bookService;
         $book = $bookService->getFetchedLectureId( $bookId, $lectureId );
-        $this->checkBookPermision($book, $uid);
+        checkBookPermision($book, $uid);
         return $book;
     }
 
@@ -80,7 +80,7 @@ class PublicBookController
         global $bookService;
         $book = $bookService->getBookById( $id );
         if($book != null){
-            $this->checkBookPermision($book, $uid);
+            checkBookPermision($book, $uid);
             $bookService->update($data);
             return $bookService->getFetchedBookById($id);
         }
@@ -97,7 +97,7 @@ class PublicBookController
         global $bookService;
         $book = $bookService->getBookById( $id );
         if($book != null){
-            $this->checkBookPermision($book, $uid);
+            checkBookPermision($book, $uid);
             $bookService->delete($id);
         }
     }
@@ -126,13 +126,6 @@ class PublicBookController
     }
 
 
-    private function checkBookPermision($book, $uid){
-        if($book != null){
-            if($book['is_shared'] == 0 && !isset($uid) || $book['is_shared'] == 0 && $book['user_id'] != $uid){
-                throw new RestException(401, 'User has not permission to book [id='.$book['id'].']');
-            }
-        }
-    }
-
+    
    
 }

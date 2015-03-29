@@ -20,15 +20,11 @@ class LectureService extends BaseService
     *                [dril_book_id] - is of the book in witch given lecture should be assigned   
     */
     public function create( $lecture ){
-        $name = trim($lecture['name']);
-        $bookId = intval($lecture['dril_book_id']);
-        if($this->isLectureNameUniqe($name, $bookId)){
-            $sql = "INSERT INTO `dril_book_has_lecture` (`name`,`dril_book_id`) ".
-                "VALUES (?, ?)";
-            $this->conn->insert($sql,  array($name, $bookId) );
-            return $this->conn->getInsertId();
-        }
-        throw new IllegalAgumentException("The Lecture with given name already exists.", 1);
+        $this->validate($lecture);
+        $sql = "INSERT INTO `dril_book_has_lecture` (`name`,`dril_book_id`) ".
+            "VALUES (?, ?)";
+        $this->conn->insert($sql,  array($lecture->name, $lecture->dril_book_id) );
+        return $this->getLectureById($this->conn->getInsertId());
     }
 
 
@@ -116,6 +112,27 @@ class LectureService extends BaseService
         return $result[0]["lecture_count"] == 0;
     }
 
+   
+    private function validate(&$lecture){
+      if(!isset($lecture)){
+        throw new InvalidArgumentException("Invalid data", 1); 
+      }
+      $lecture->name = trim($lecture->name);
+      if(strlen($lecture->name) < 1){
+        throw new InvalidArgumentException(getMessage("errLectureShortName"), 1); 
+      }
+      if(strlen($lecture->name) > 150){
+        throw new InvalidArgumentException(getMessage("errLectureLongName"), 1); 
+      }
+      $lectureId = isset($lecture->id) ? $lecture->id : null;
+      if(!$this->isLectureNameUniqe($lecture->name, $lecture->dril_book_id, $lectureId )){
+        throw new InvalidArgumentException(getMessage("errLectureUniqeName", $lecture->name), 1); 
+      }
+      if(intval($lecture->dril_book_id) == 0 ){
+        throw new InvalidArgumentException(getMessage("errLectureBookId"), 1);  
+      }
+     
+    }
    
 
 }

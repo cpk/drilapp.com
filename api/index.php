@@ -17,7 +17,8 @@ require_once 'services/CommonService.php';
 
 
 require_once 'controllers/BaseController.php';
-require_once 'controllers/PublicBookController.php';
+require_once 'controllers/BookController.php';
+require_once 'controllers/LectureController.php';
 require_once 'controllers/UserController.php';
 
 
@@ -32,7 +33,8 @@ $bookService = new BookService($conn, $tagService, $lectureService, $wordService
 $commonService = new CommonService($conn);
 
 $server = new RestServer('debug');
-$server->addClass('PublicBookController');
+$server->addClass('LectureController');
+$server->addClass('BookController');
 $server->addClass('UserController');
 $server->addClass('BaseController');
 

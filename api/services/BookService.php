@@ -229,18 +229,28 @@ class BookService extends BaseService
     }
 
     private function validate(&$book){
-      if(strlen(trim($book->name)) == 0){
-        throw new  InvalidArgumentException("The Book name can not be empty", 1); 
+      $book->name = trim($book->name);
+      if(strlen($book->name) < 8){
+        throw new InvalidArgumentException(getMessage("errBookShortName"), 1); 
       }
-      if(intval($book->question_lang_id) == 0 ||  
-         intval($book->answer_lang_id) == 0){
-        throw new  InvalidArgumentException("Languages are required", 1);  
+      if(strlen($book->name) > 200){
+        throw new InvalidArgumentException(getMessage("errBookLongName"), 1); 
       }
-      if(intval($book->user_id) == 0){
-        throw new InvalidArgumentException("The Book has not assigned any user", 1);
+      $bookId = isset($book->id) ? $book->id : null;
+      if(!$this->isBookNameUniqe($book->name, $book->user_id, $bookId )){
+        throw new InvalidArgumentException(getMessage("errBookUniqeName", $book->name), 1); 
+      }
+      if(intval($book->question_lang_id) == 0 || intval($book->answer_lang_id) == 0){
+        throw new InvalidArgumentException(getMessage("errBookLangs"), 1);  
       }
       if(intval($book->level_id) == 0){
-        throw new InvalidArgumentException("The Level of the Book is required", 1);
+        throw new InvalidArgumentException(getMessage("errBookLevel"), 1);
+      }
+       if(isset($book->description) && strlen($book->description) > 250){
+        throw new InvalidArgumentException(getMessage("errBookDescr"), 1);
+      }
+      if(intval($book->user_id) == 0){
+        throw new InvalidArgumentException(getMessage("errUnexpected"), 1);
       }
     }
 
