@@ -74,12 +74,16 @@ class PublicBookController
      * Update existing book
      *
      * @url PUT /v1/book/$id
-     * @noAuth
      */
-    public function update( $id, $data )
+    public function update( $id, $data, $uid )
     {
         global $bookService;
-        $bookService->update($data);
+        $book = $bookService->getBookById( $id );
+        if($book != null){
+            $this->checkBookPermision($book, $uid);
+            $bookService->update($data);
+            return $bookService->getFetchedBookById($id);
+        }
     }
 
 
@@ -91,7 +95,11 @@ class PublicBookController
     public function delete( $id  )
     {
         global $bookService;
-        $bookService->delete($id);
+        $book = $bookService->getBookById( $id );
+        if($book != null){
+            $this->checkBookPermision($book, $uid);
+            $bookService->delete($id);
+        }
     }
 
      /**
