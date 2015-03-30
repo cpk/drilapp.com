@@ -151,16 +151,16 @@ class RestServer
 					$this->sendData($result);
 				}
 			}catch (RestException $e) {
-                $logger->warn("API error: ".$e->getMessage()." [ip=" .$_SERVER['SERVER_ADDR']."]");
+                $logger->warn("API error: ".$e->getMessage()." [ip=" .$_SERVER['REMOTE_ADDR']."]");
 				$this->handleError($e->getCode(), $e->getMessage());
 			}catch (InvalidArgumentException $e) {
-                $logger->info("Validation error: ".$e->getMessage()." [ip=" .$_SERVER['SERVER_ADDR']."]");
+                $logger->info("Validation error: ".$e->getMessage()." [ip=" .$_SERVER['REMOTE_ADDR']."]");
 				$this->handleError(400, $e->getMessage());
 			}catch (MysqlException $e) {
-                $logger->error("MySQL error: ".$e->getMessage()." [ip=" .$_SERVER['SERVER_ADDR']."]", $e);
+                $logger->error("MySQL error: ".$e->getMessage()." [ip=" .$_SERVER['REMOTE_ADDR']."]", $e);
 				$this->handleError(500, "Unexpected error has occurred.");
 			}catch (Exception $e) {
-                $logger->error("Error: [ip=" .$_SERVER['SERVER_ADDR']."]", $e);
+                $logger->error("Error: [ip=" .$_SERVER['REMOTE_ADDR']."]", $e);
 				$this->handleError(500, "Unexpected error has occurred.");
 			}			
 		

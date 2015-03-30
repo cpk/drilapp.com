@@ -51,10 +51,12 @@
 
 
    function checkBookPermision($book, $uid){
-      if($book != null){
+      if(isset($book) && $book != null){
           if($book['is_shared'] == 0 && !isset($uid) || $book['is_shared'] == 0 && $book['user_id'] != $uid){
               throw new RestException(401, 'User has not permission to book [id='.$book['id'].']');
           }
+      }else{
+        throw new RestException(404, 'The book was not found');
       }
     }
    

@@ -21,8 +21,8 @@ class LectureService extends BaseService
     */
     public function create( $lecture ){
         $this->validate($lecture);
-        $sql = "INSERT INTO `dril_book_has_lecture` (`name`,`dril_book_id`) ".
-            "VALUES (?, ?)";
+        $sql = "INSERT INTO `dril_book_has_lecture` (`name`,`dril_book_id`,`changed`,`created`) ".
+            "VALUES (?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
         $this->conn->insert($sql,  array($lecture->name, $lecture->dril_book_id) );
         return $this->getLectureById($this->conn->getInsertId());
     }
@@ -48,8 +48,8 @@ class LectureService extends BaseService
 
 
     public function delete( $id ){
-        $this->conn->delete("DELETE FROM `dril_lecture_has_word` WHERE dril_lecture_id = ?", $array( $id ));
-        $this->conn->delete("DELETE FROM `dril_book_has_lecture` WHERE id = ? LIMIT 1", $array( $id ));
+        $this->conn->delete("DELETE FROM `dril_lecture_has_word` WHERE dril_lecture_id = ?", array( $id ));
+        $this->conn->delete("DELETE FROM `dril_book_has_lecture` WHERE id = ?", array( $id ));
     }
 
 

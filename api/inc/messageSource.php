@@ -28,10 +28,10 @@
 		$key = $args[0];
 		$msg = "";
 		if(!array_key_exists($key, $messages[$lang])){
-			if(!array_key_exists($key, $messages["sk"])){
+			if(!array_key_exists($key, $messages["en"])){
 				return "";
 			}
-			$msg = $messages["sk"][$key];
+			$msg = $messages["en"][$key];
 		}else{
 			$msg = $messages[$lang][$key];
 		}

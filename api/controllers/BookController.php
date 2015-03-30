@@ -79,11 +79,10 @@ class BookController
     {
         global $bookService;
         $book = $bookService->getBookById( $id );
-        if($book != null){
-            checkBookPermision($book, $uid);
-            $bookService->update($data);
-            return $bookService->getFetchedBookById($id);
-        }
+        checkBookPermision($book, $uid);
+        $bookService->update($data);
+        return $bookService->getFetchedBookById($id);
+        
     }
 
 
@@ -92,14 +91,15 @@ class BookController
      *
      * @url DELETE /v1/book/$id
      */
-    public function delete( $id  )
+    public function delete( $id , $uid )
     {
         global $bookService;
         $book = $bookService->getBookById( $id );
-        if($book != null){
-            checkBookPermision($book, $uid);
-            $bookService->delete($id);
-        }
+        checkBookPermision($book, $uid);
+        $bookService->delete($id);
+        $logger = Logger::getLogger('api');
+        $logger->warn("User [id=$uid] deleted book [id=$id] from ". $_SERVER['REMOTE_ADDR'] );
+
     }
 
      /**

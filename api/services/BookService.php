@@ -94,6 +94,7 @@ class BookService extends BaseService
              "LEFT JOIN dril_category category ON `category`.`id` = `book`.`dril_category_id` ".
              "LEFT JOIN `dril_book_is_favorited` bisf ON `bisf`.`dril_book_id` = `book`.`id` ".
              "WHERE `book`.id = ? ".
+             "GROUP BY `book`.id ".
              "LIMIT 1";
       
       $result = $this->conn->select($sql , array($id));
