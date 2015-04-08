@@ -20,6 +20,7 @@ require_once 'controllers/BaseController.php';
 require_once 'controllers/BookController.php';
 require_once 'controllers/LectureController.php';
 require_once 'controllers/UserController.php';
+require_once 'controllers/WordController.php';
 
 
 require_once 'inc/messageSource.php';
@@ -37,5 +38,6 @@ $server->addClass('LectureController');
 $server->addClass('BookController');
 $server->addClass('UserController');
 $server->addClass('BaseController');
+$server->addClass('WordController');
 
 $server->handle();

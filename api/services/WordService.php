@@ -18,6 +18,19 @@ class WordService extends BaseService
     }
 
 
+    public function update( $word ){
+
+        $this->validate( $word );
+        $sql = "UPDATE `dril_lecture_has_word` ".
+               "SET `question`=?, `answer`=?  ".
+               "WHERE id = ?";
+        $this->conn->insert($sql,  array(
+            $word->question, $word->answer, $word->id
+        ));
+        return $word;
+    }
+
+
     public function getAllWordByLectureId( $id ){
       $sql = "SELECT `id`, `question`, `answer` ".
              "FROM `dril_lecture_has_word` ".
@@ -42,13 +55,24 @@ class WordService extends BaseService
     }
 
     private function validate($word){
-      if(strlen(trim($book['answer']) == 0) || 
-         strlen(trim($book['question']) == 0)){
-        throw new  IllegalArgumentException("The Question and the answer is required", 1); 
+      if(strlen(trim($word->answer)) == 0 || strlen(trim($word->question)) == 0){
+        throw new  InvalidArgumentException("The Question and the answer is required", 1); 
       }
-      if(intval($boo['dril_lecture_id']) == 0){
-        throw new IllegalArgumentException("The Lecture is not selected", 1);
+    
+    }
+
+
+    public function getBookByWordId( $wordId ){
+      $sql =  "SELECT b.* ".
+              "FROM `dril_lecture_has_word` w ".
+              "INNER JOIN dril_book_has_lecture bhl ON bhl.id = w.`dril_lecture_id` ".
+              "INNER JOIN dril_book b ON b.id = bhl.`dril_book_id` ".
+              "WHERE w.id = ? ";
+      $result =  $this->conn->select( $sql, array($wordId) ); 
+       if(count($result) == 1){
+          return $result[0];
       }
+      return null;
     }
 }
 
