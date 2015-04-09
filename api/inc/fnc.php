@@ -59,5 +59,28 @@
         throw new RestException(404, 'The book was not found');
       }
     }
+
+    function getConf($conn, $type = "dril"){
+      $sql = "SELECT `key`, `val` FROM `config`";
+      switch($type){
+        case "basic":
+          $sql .= " WHERE `key` LIKE 'c_%'";
+        break; 
+        case "dril":
+          $sql .= " WHERE `key` LIKE 'dril_%'";
+        break; 
+        case "shop":
+          $sql .= " WHERE `key` LIKE 's_%'";
+        break;
+        case "full":
+        default:  
+      }
+      $array = $conn->select($sql);
+      $result = array();
+      for($i = 0; $i < count($array); $i++){
+          $result[ $array[$i]["key"]] = htmlspecialchars($array[$i]["val"]) ; 
+      }
+      return $result;
+  }
    
 ?>

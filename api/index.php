@@ -7,6 +7,7 @@ require_once 'inc/fnc.php';
 
 require_once 'inc/RestServer.php';
 
+require_once 'services/BingTranslator.php';
 require_once 'services/BaseService.php';
 require_once 'services/WordService.php';
 require_once 'services/LectureService.php';
@@ -32,6 +33,8 @@ $wordService = new WordService($conn);
 $lectureService = new LectureService($conn, $wordService);
 $bookService = new BookService($conn, $tagService, $lectureService, $wordService);
 $commonService = new CommonService($conn);
+
+$drilConf = getConf($conn);
 
 $server = new RestServer('debug');
 $server->addClass('LectureController');

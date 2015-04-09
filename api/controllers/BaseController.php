@@ -3,7 +3,6 @@
 class BaseController
 {
 
-
   /**
   * Get all languages
   *
@@ -40,6 +39,24 @@ class BaseController
       $data["categories"] = $commonService->getCategories();
       return $data;
    }
+
+    /**
+  * Get all languages
+  *
+  * @url GET /v1/translate
+  * @noAuth
+  */
+   public function translate(){
+      global $drilConf;
+      $bingTranslate = new BingTranslator($drilConf["dril_bing_client_id"], $drilConf["dril_bing_secret"]);
+      $translation = $bingTranslate->getTranslation('en', 'de', 'What time does the hotel close in the evening?');
+      return array("result" => $translation);
+   }
+
+
+
+
+
    	
 }
 
