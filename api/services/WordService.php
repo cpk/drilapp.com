@@ -12,9 +12,11 @@ class WordService extends BaseService
         $sql = "INSERT INTO `dril_lecture_has_word` (`question`, `answer`, `dril_lecture_id`) ".
                "VALUES (?, ?, ? )";
         $this->conn->insert($sql,  array(
-            $book['question'], $book['answer'], $book['dril_lecture_id']
+            $word->question, $word->answer, $word->dril_lecture_id
         ));
-        return $this->conn->getInsertId();
+        $id = $this->conn->getInsertId();
+        $word->id = $id;
+        return $word;
     }
 
 
@@ -35,7 +37,7 @@ class WordService extends BaseService
       $sql = "SELECT `id`, `question`, `answer` ".
              "FROM `dril_lecture_has_word` ".
              "WHERE dril_lecture_id = ? ".
-             "ORDER BY id DESC ";
+             "ORDER BY id";
       return $this->conn->select( $sql, array($id) );
     }
 

@@ -48,9 +48,12 @@ class BaseController
   */
    public function translate(){
       global $drilConf;
-      $bingTranslate = new BingTranslator($drilConf["dril_bing_client_id"], $drilConf["dril_bing_secret"]);
-      $translation = $bingTranslate->getTranslation('en', 'de', 'What time does the hotel close in the evening?');
-      return array("result" => $translation);
+      if(isset($_GET['from']) && isset($_GET['to']) && $_GET['text']){
+        $bingTranslate = new BingTranslator($drilConf["dril_bing_client_id"], $drilConf["dril_bing_secret"]);
+        $translation = $bingTranslate->getTranslation($_GET['from'], $_GET['to'], $_GET['text']);
+        return array("result" => $translation);
+      }
+      return array("result" => '');
    }
 
 
