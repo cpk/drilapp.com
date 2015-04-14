@@ -16,7 +16,36 @@ class WordService extends BaseService
         ));
         $id = $this->conn->getInsertId();
         $word->id = $id;
+        $this->updateCountOfWordsByLectureId( $word->dril_lecture_id );
         return $word;
+    }
+
+
+    public function activateWord($id){
+        $this->updateWordActivity($id, 1);
+        $sql = "SELECT w.`id`, w.`question`, w.`answer`, w.`last_rating` as lastRating, w.`viewed`,".
+             "  UNIX_TIMESTAMP(w.`last_viewd`) as lastViewed, ".
+             "  UNIX_TIMESTAMP(w.`changed`) as `changed_timestamp`, w.`is_learned`,".
+             "  question_lang.code as langQuestion, answer_lang.code as langAnswer ".
+             "FROM `dril_lecture_has_word` w".
+             "  INNER JOIN dril_book_has_lecture lhw ON lhw.id = w.dril_lecture_id ".
+             "  INNER JOIN dril_book b ON b.id = lhw.dril_book_id ".
+             "  INNER JOIN lang question_lang ON question_lang.id_lang = b.question_lang_id ".
+             "  INNER JOIN lang answer_lang ON answer_lang.id_lang = b.answer_lang_id ".
+             "WHERE w.id= ? ";
+      $result = $this->conn->select( $sql, array($id) );
+      if(count($result) > 0){
+        return $result[0];
+      }
+      return null;
+    }
+
+
+    private function updateWordActivity( $id, $status ){
+        $sql = "UPDATE `dril_lecture_has_word` ".
+               "SET `is_activated`=? ".
+               "WHERE id = ? ";
+        $this->conn->update($sql,  array( $status, $id ));
     }
 
 
@@ -33,8 +62,8 @@ class WordService extends BaseService
     }
 
 
-    public function getAllWordByLectureId( $id ){
-      $sql = "SELECT `id`, `question`, `answer` ".
+    public function getAllWordByLectureId( $id, $uid ){
+      $sql = "SELECT `id`, `question`, `answer` ".( $uid == null ? '' : ", `is_activated` " ).
              "FROM `dril_lecture_has_word` ".
              "WHERE dril_lecture_id = ? ".
              "ORDER BY id";
@@ -75,6 +104,33 @@ class WordService extends BaseService
           return $result[0];
       }
       return null;
+    }
+
+    public function delete( $id ){
+      $lectureId = $this->getLecturIdByWordId( $id );
+      $this->conn->delete("DELETE FROM `dril_lecture_has_word` WHERE id = ?;", array( $id ));
+      if($lectureId == null){
+        $logger = Logger::getLogger('api');
+        $logger->error("Culdnt not update count of words.[wordId=$id][ip=" .$_SERVER['REMOTE_ADDR']."]", $e);
+      }else{
+        $this->updateCountOfWordsByLectureId( $lectureId  );
+      }
+    }
+
+    private function getLecturIdByWordId( $wordId ){
+      $result = $this->conn->select( "SELECT dril_lecture_id as id FROM dril_lecture_has_word WHERE id = ? LIMIT 1", array( $wordId ));
+      if($result != null){
+        return $result[0]['id'];
+      }
+      return null;
+    }
+
+
+    private function updateCountOfWordsByLectureId( $lectureId ){
+      $sql = "UPDATE `dril_book_has_lecture` " .
+             "SET `no_of_words`= (SELECT count(*) FROM dril_lecture_has_word WHERE dril_lecture_id = $lectureId) ".
+             "WHERE id = $lectureId";
+      $this->conn->select( $sql );    
     }
 }
 

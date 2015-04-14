@@ -32,4 +32,34 @@ class WordController{
         return $wordService->create($data);
         
     }
+
+
+    /**
+     * DELETE user word
+     *
+     * @url DELETE /v1/user/words/$id
+     * 
+     */
+    public function delete( $id, $uid )
+    {
+        global $wordService;
+        $book = $wordService->getBookByWordId( $id );
+        checkBookPermision($book, $uid);
+        return $wordService->delete( $id );
+        
+    }
+
+
+    /**
+     * Activate user word
+     *
+     * @url POST /v1/user/words/$id/activate
+     * 
+     */
+    public function activateWord( $id, $uid ){
+        global $wordService;
+        $book = $wordService->getBookByWordId( $id );
+        checkBookPermision($book, $uid);
+        return $wordService->activateWord( $id );
+    }
 }

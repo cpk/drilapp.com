@@ -39,7 +39,7 @@ class BookController
      */
     public function getFetchedLecture($bookId, $lectureId, $uid = null){
         global $bookService;
-        $book = $bookService->getFetchedLectureId( $bookId, $lectureId );
+        $book = $bookService->getFetchedLectureId( $bookId, $lectureId , $uid);
         checkBookPermision($book, $uid);
         return $book;
     }
@@ -52,7 +52,7 @@ class BookController
      */
     public function getUserFetchedLecture($bookId, $lectureId, $uid){
         global $bookService;
-        $book = $bookService->getFetchedLectureId( $bookId, $lectureId );
+        $book = $bookService->getFetchedLectureId( $bookId, $lectureId, $uid );
         checkBookPermision($book, $uid);
         return $book;
     }

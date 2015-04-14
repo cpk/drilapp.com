@@ -109,12 +109,12 @@ class BookService extends BaseService
       return $book;
     }
 
-    public function getFetchedLectureId( $bookId, $lectureId ){
+    public function getFetchedLectureId( $bookId, $lectureId, $uid ){
       $book = $this->getBookById($bookId);
       if($book != null){
         $book['tags'] = $this->tagService->getAllBookTags($bookId);
         $book['lecture'] = $this->lectureService->getLectureById($lectureId);
-        $book['lecture']['words'] = $this->wordService->getAllWordByLectureId($lectureId);
+        $book['lecture']['words'] = $this->wordService->getAllWordByLectureId($lectureId, $uid );
       }
       return $book;
     }
