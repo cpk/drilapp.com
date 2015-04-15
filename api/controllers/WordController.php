@@ -56,10 +56,10 @@ class WordController{
      * @url POST /v1/user/words/$id/activate
      * 
      */
-    public function activateWord( $id, $uid ){
+    public function updateActivationOfWord( $data, $id, $uid ){
         global $wordService;
         $book = $wordService->getBookByWordId( $id );
         checkBookPermision($book, $uid);
-        return $wordService->activateWord( $id );
+        return $wordService->activateWord( $data, $id );
     }
 }
