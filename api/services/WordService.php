@@ -25,8 +25,9 @@ class WordService extends BaseService
         if($data->activate){
           $this->updateWordActivity($id, 1);
           $sql = "SELECT w.`id`, w.`question`, w.`answer`, w.`last_rating` as lastRating, w.`viewed`,".
+               "  false as isLearned, ".
                "  UNIX_TIMESTAMP(w.`last_viewd`) as lastViewed, ".
-               "  UNIX_TIMESTAMP(w.`changed`) as `changed_timestamp`, w.`is_learned`,".
+               "  UNIX_TIMESTAMP(w.`changed`) as `changed_timestamp`,".
                "  question_lang.code as langQuestion, answer_lang.code as langAnswer ".
                "FROM `dril_lecture_has_word` w".
                "  INNER JOIN dril_book_has_lecture lhw ON lhw.id = w.dril_lecture_id ".
@@ -82,8 +83,9 @@ class WordService extends BaseService
 
     public function getAllUserActivatedWords( $userId ){
      $sql = "SELECT w.`id`, w.`question`, w.`answer`, w.`last_rating` as lastRating, w.`viewed`,".
+             "  false as isLearned, ".
              "  UNIX_TIMESTAMP(w.`last_viewd`) as lastViewed, ".
-             "  UNIX_TIMESTAMP(w.`changed`) as `changed_timestamp`, w.`is_learned`,".
+             "  UNIX_TIMESTAMP(w.`changed`) as `changed_timestamp`,".
              "  question_lang.code as langQuestion, answer_lang.code as langAnswer ".
              "FROM `dril_lecture_has_word` w".
              "  INNER JOIN dril_book_has_lecture lhw ON lhw.id = w.dril_lecture_id ".

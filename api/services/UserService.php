@@ -56,6 +56,38 @@ class UserService extends BaseService
     }
 
 
+    public function rateWord($uid, $word){
+         $sql = "UPDATE `dril_lecture_has_word` ".
+                "SET `viewed`=`viewed`+1, `last_viewd`=NOW(), `is_activated`=?  ")
+                "WHERE `id`=? LIMIT 1";
+        $data = $this->conn->UPDATE( $sql , array(!$word->isLearned, $word->id) ); 
+    }
+
+    public function getDrilSession($uid){
+        $sql = "SELECT * FROM `dril_session` ".
+               "WHERE `user_id`= ? AND `date`= CURDATE() LIMIT 1";
+        $data = $this->conn->select( $sql , array($uid) ); 
+        if(count($data) > 0){
+            return $data[0];
+        }
+        $this->createDrilSession($uid);
+        return $this->getDrilSession($uid);
+    }
+
+    public function createDrilSession($uid){
+        $sql = "INSERT INTO `dril_session` (`user_id`, `date`)  VALUES (?, CURDATE()) ";
+        $data = $this->conn->insert( $sql , array($uid) ); 
+    }
+
+
+    public function updateDrilSession($uid, $word){
+        $session = $this->getDrilSession($uid);
+        $sql =  "UPDATE `dril_session` ".
+                "SET `hits`= `hits` +1 ".($word->isLearned ? ", `learned_cards`=1+`learned_cards` ")
+                "WHERE `id`=? LIMIT 1";
+        $data = $this->conn->UPDATE( $sql , array($session['id']) ); 
+    }
+
     private function validate($user){
         if(loginExists($this->conn, $user->email)){
             throw new InvalidArgumentException(getMessage("errLoginUniqe", $user->email));

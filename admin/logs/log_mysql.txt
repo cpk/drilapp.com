@@ -70,3 +70,5 @@
 [2015-03_30 00:15:32] Code: 1048 - Message: SQL execution failed: Column 'name' cannot be null SQL: INSERT INTO `dril_book_has_lecture` (`name`,`dril_book_id`) VALUES (?, ?)
 [2015-04_15 23:18:07] Code: 1054 - Message: SQL preparing failed: Unknown column 'is_activated as isActivated' in 'field list' SQL: SELECT `id`, `question`, `answer` , `is_activated as isActivated` FROM `dril_lecture_has_word` WHERE dril_lecture_id = ? ORDER BY id
 [2015-04_15 23:18:33] Code: 1054 - Message: SQL preparing failed: Unknown column 'is_activated as isActivated' in 'field list' SQL: SELECT `id`, `question`, `answer` , `is_activated as isActivated` FROM `dril_lecture_has_word` WHERE dril_lecture_id = ? ORDER BY id
+[2015-04_16 22:32:12] Code: 1054 - Message: SQL preparing failed: Unknown column 'id_user' in 'where clause' SQL: SELECT * FROM `dril_settings` WHERE `id_user`=?
+[2015-04_16 22:32:31] Code: 1054 - Message: SQL preparing failed: Unknown column 'id_user' in 'where clause' SQL: SELECT * FROM `dril_settings` WHERE `id_user`=?

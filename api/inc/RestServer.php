@@ -171,7 +171,7 @@ class RestServer
 	}
 
 	private function authData(){
-		global $config;
+		global $drilConf;
 		$logger = Logger::getLogger('api');
 		$requestHeaders = apache_request_headers();
 		if(!isset($requestHeaders['Authorization'])){
@@ -184,7 +184,7 @@ class RestServer
     		return null;
     	}
     	$token = str_replace('Bearer ', '', $authorizationHeader);
-	    return JWT::decode($token, "example_key" );
+	    return JWT::decode($token, $drilConf['dril_auth'] );
 	}
 
 	private function setHeaders(){
