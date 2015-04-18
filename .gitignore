@@ -1,3 +1,6 @@
 admin/config.php
 admin/logs/
 *.log
+api/logs/
+api/config/config.php
+api/tts-files/
