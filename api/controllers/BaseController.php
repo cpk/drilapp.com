@@ -3,6 +3,9 @@
 class BaseController
 {
 
+  private $commonService;
+  private $userService;
+
   /**
   * Get all languages
   *
@@ -10,8 +13,7 @@ class BaseController
   * @noAuth
   */
    public function getAllLanguages(){
-        global $commonService;
-        return $commonService->getAllLanguages();
+      return $this->commonService->getAllLanguages();
    }
 
 
@@ -22,8 +24,7 @@ class BaseController
   * @noAuth
   */
    public function getAllLang(){
-        global $commonService;
-        return $commonService->getAllLevels();
+      return $this->commonService->getAllLevels();
    }
 
    /**
@@ -33,14 +34,13 @@ class BaseController
   * @noAuth
   */
    public function getFormContols(){
-      global $commonService;
-      $data["levels"] = $commonService->getAllLevels();
-      $data["languages"] = $commonService->getAllLanguages();
-      $data["categories"] = $commonService->getCategories();
+      $data["levels"] = $this->commonService->getAllLevels();
+      $data["languages"] = $this->commonService->getAllLanguages();
+      $data["categories"] = $this->commonService->getCategories();
       return $data;
    }
 
-    /**
+  /**
   * Get all languages
   *
   * @url GET /v1/translate
@@ -56,8 +56,38 @@ class BaseController
       return array("result" => '');
    }
 
+   /**
+  * Check if is given field uniqe
+  *
+  * @url POST /v1/check
+  * @noAuth
+  */
+   public function checkValidity($data){
+      $isUnique = false;
+      $message = "Invalid value";
+      if(isset($data->field) && isset($data->value)){
+        switch ($data->field) {
+          case 'email':
+              $message = getMessage("errUserEmailUniqe");
+            break;
+          case 'login':
+              $message = getMessage("errUserLoginUniqe");
+            break;
+          default:
+            throw new RestException(400, $message);
+        }
+        $isUnique = $this->userService->isValueUniqe($data->field, $data->value);    
+      }
+
+      return array('isUnique' => $isUnique, 'errorMessage' => $isUnique ? "" : $message );
+   }
 
 
+   public function init(){
+      global $conn;
+      $this->commonService = new CommonService($conn);
+      $this->userService = new UserService($conn);
+   }
 
 
    	

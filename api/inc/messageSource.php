@@ -22,6 +22,9 @@
 			"errLectureLongName" => "Name of the lecture is too long. (max 150 characters)",
 			"errLectureBookId" => "The book ID is missing.",
 
+			"errUserEmailUniqe" => "Given e-mail has already been taken",
+			"errUserLoginUniqe" => "Login has already been taken",
+
 			"errUnexpected" => "An unexpected error has occurred."
 		);
 

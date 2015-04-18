@@ -33,7 +33,7 @@ $tagService = new TagService($conn);
 $wordService = new WordService($conn);
 $lectureService = new LectureService($conn, $wordService);
 $bookService = new BookService($conn, $tagService, $lectureService, $wordService);
-$commonService = new CommonService($conn);
+
 
 $drilConf = getConf($conn);
 

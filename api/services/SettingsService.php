@@ -8,7 +8,7 @@ class SettingsService extends BaseService
     }
 
     public function getUserSettings($uid){
-        $sql = "SELECT 	dril_stategy as drilStrategy, locale".
+        $sql = "SELECT 	dril_stategy as drilStrategy, locale ".
                "FROM `dril_settings` ".
                "WHERE `user_id`=?";
 

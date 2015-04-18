@@ -90,6 +90,16 @@ class UserService extends BaseService
         $data = $this->conn->UPDATE( $sql  ); 
     }
 
+    public function isValueUniqe($field, $value, $uid = null){
+         $sql = "SELECT count(*) ".
+               "FROM `user` ".
+               "WHERE `$field`=? ".($uid != null ? "AND `user_id`<>".$uid : "");
+
+        $data = $this->conn->select( $sql , array($value) ); 
+        return $data[0]["count(*)"] == 0;   
+    }
+
+
     private function validate($user){
         if(loginExists($this->conn, $user->email)){
             throw new InvalidArgumentException(getMessage("errLoginUniqe", $user->email));
