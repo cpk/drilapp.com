@@ -2,6 +2,9 @@
 
 class WordController{
 
+    private $wordService;
+    private $userService;
+
 	/**
      * Update given word
      *
@@ -10,10 +13,9 @@ class WordController{
      */
     public function update( $data, $uid )
     {
-        global $wordService;
-        $book = $wordService->getBookByWordId( $data->id );
+        $book = $this->wordService->getBookByWordId( $data->id );
         checkBookPermision($book, $uid);
-        return $wordService->update($data);
+        return $this->wordService->update($data);
         
     }
 
@@ -26,10 +28,9 @@ class WordController{
      */
     public function create( $data, $uid )
     {
-        global $wordService;
-        $book = $wordService->getBookByWordId( $data->dril_lecture_id );
+        $book = $this->wordService->getBookByWordId( $data->dril_lecture_id );
         checkBookPermision($book, $uid);
-        return $wordService->create($data);
+        return $this->wordService->create($data);
         
     }
 
@@ -42,10 +43,9 @@ class WordController{
      */
     public function delete( $id, $uid )
     {
-        global $wordService;
-        $book = $wordService->getBookByWordId( $id );
+        $book = $this->wordService->getBookByWordId( $id );
         checkBookPermision($book, $uid);
-        return $wordService->delete( $id );
+        return $this->wordService->delete( $id );
         
     }
 
@@ -56,10 +56,25 @@ class WordController{
      * @url POST /v1/user/words/$id/activate
      * 
      */
-    public function updateActivationOfWord( $data, $id, $uid ){
-        global $wordService;
-        $book = $wordService->getBookByWordId( $id );
+    public function toggleWordActivation( $data, $id, $uid ){
+        $book = $this->wordService->getBookByWordId( $id );
         checkBookPermision($book, $uid);
-        return $wordService->activateWord( $data, $id );
+        return $this->wordService->activateWord( $data, $id );
+    }
+
+    /**
+     * Activate user word
+     *
+     * @url POST /v1/user/rateWord
+     * 
+     */
+    public function rateWord($data, $uid){
+        $this->userService->rateWord($uid, $data);
+    }
+
+    public function init(){
+        global $conn;
+        $this->wordService = new WordService($conn);
+        $this->userService = new userService($conn);
     }
 }

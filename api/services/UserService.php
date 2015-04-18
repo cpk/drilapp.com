@@ -58,17 +58,19 @@ class UserService extends BaseService
 
     public function rateWord($uid, $word){
          $sql = "UPDATE `dril_lecture_has_word` ".
-                "SET `viewed`=`viewed`+1, `last_viewd`=NOW(), `is_activated`=?  ")
+                "SET `viewed`=`viewed`+1,`last_viewd`=NOW(), `is_activated`=?, ".
+                "`avg_rating`= (`avg_rating` * `viewed` + ?) / (`viewed`+1) ".
                 "WHERE `id`=? LIMIT 1";
-        $data = $this->conn->UPDATE( $sql , array(!$word->isLearned, $word->id) ); 
+        $data = $this->conn->update( $sql , array(!$word->isLearned, $word->lastRating, $word->id) ); 
+        $this->updateDrilSession($uid, $word);
     }
 
     public function getDrilSession($uid){
-        $sql = "SELECT * FROM `dril_session` ".
+        $sql = "SELECT id FROM `dril_session` ".
                "WHERE `user_id`= ? AND `date`= CURDATE() LIMIT 1";
         $data = $this->conn->select( $sql , array($uid) ); 
         if(count($data) > 0){
-            return $data[0];
+            return $data[0]['id'];
         }
         $this->createDrilSession($uid);
         return $this->getDrilSession($uid);
@@ -81,11 +83,11 @@ class UserService extends BaseService
 
 
     public function updateDrilSession($uid, $word){
-        $session = $this->getDrilSession($uid);
+        $sessionId = $this->getDrilSession($uid);
         $sql =  "UPDATE `dril_session` ".
-                "SET `hits`= `hits` +1 ".($word->isLearned ? ", `learned_cards`=1+`learned_cards` ")
-                "WHERE `id`=? LIMIT 1";
-        $data = $this->conn->UPDATE( $sql , array($session['id']) ); 
+                "SET `hits`= `hits` +1 ".($word->isLearned ? ", `learned_cards`=1+`learned_cards` " : "").
+                "WHERE `id`=$sessionId LIMIT 1";
+        $data = $this->conn->UPDATE( $sql  ); 
     }
 
     private function validate($user){

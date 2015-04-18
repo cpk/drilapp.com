@@ -72,3 +72,4 @@
 [2015-04_15 23:18:33] Code: 1054 - Message: SQL preparing failed: Unknown column 'is_activated as isActivated' in 'field list' SQL: SELECT `id`, `question`, `answer` , `is_activated as isActivated` FROM `dril_lecture_has_word` WHERE dril_lecture_id = ? ORDER BY id
 [2015-04_16 22:32:12] Code: 1054 - Message: SQL preparing failed: Unknown column 'id_user' in 'where clause' SQL: SELECT * FROM `dril_settings` WHERE `id_user`=?
 [2015-04_16 22:32:31] Code: 1054 - Message: SQL preparing failed: Unknown column 'id_user' in 'where clause' SQL: SELECT * FROM `dril_settings` WHERE `id_user`=?
+[2015-04_18 14:12:44] Code: 0 - Message: SQL execution failed:  SQL: UPDATE `dril_lecture_has_word` SET `viewed`=`viewed`+1,`last_viewd`=NOW(), `is_activated`=?, `avg_rating`= (`avg_rating` * `viewed` + ?) / (`viewed`+1) WHERE `id`=? LIMIT 1
