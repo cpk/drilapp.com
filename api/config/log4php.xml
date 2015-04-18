@@ -4,7 +4,7 @@
         <layout class="LoggerLayoutPattern" >
             <param name="conversionPattern" value="%d{H:i:s.u} %-5level %C{length} line %L: %m %ex%n" />    
         </layout>
-        <param name="file" value="../admin/logs/api/%s.log" />
+        <param name="file" value="logs/%s.log" />
         <param name="datePattern" value="Y-m-d" />
         <param name="append" value="true" />
     </appender>
@@ -14,7 +14,12 @@
     </root>
     -->
     <logger name="api">
-        <level value="trace" />
+        <level value="warn" />
+        <appender_ref ref="apiAppender" />
+    </logger>
+
+    <logger name="database">
+        <level value="error" />
         <appender_ref ref="apiAppender" />
     </logger>
 

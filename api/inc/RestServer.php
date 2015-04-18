@@ -157,7 +157,6 @@ class RestServer
                 $logger->info("Validation error: ".$e->getMessage()." [ip=" .$_SERVER['REMOTE_ADDR']."]");
 				$this->handleError(400, $e->getMessage());
 			}catch (MysqlException $e) {
-                $logger->error("MySQL error: ".$e->getMessage()." [ip=" .$_SERVER['REMOTE_ADDR']."]", $e);
 				$this->handleError(500, "Unexpected error has occurred.");
 			}catch (Exception $e) {
                 $logger->error("Error: [ip=" .$_SERVER['REMOTE_ADDR']."]", $e);
