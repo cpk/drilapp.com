@@ -14,12 +14,17 @@
     </root>
     -->
     <logger name="api">
-        <level value="warn" />
+        <level value="info" />
         <appender_ref ref="apiAppender" />
     </logger>
 
     <logger name="database">
         <level value="error" />
+        <appender_ref ref="apiAppender" />
+    </logger>
+
+     <logger name="email">
+        <level value="info" />
         <appender_ref ref="apiAppender" />
     </logger>
 

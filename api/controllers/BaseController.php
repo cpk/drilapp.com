@@ -27,7 +27,7 @@ class BaseController
       return $this->commonService->getAllLevels();
    }
 
-   /**
+  /**
   * Get all languages
   *
   * @url GET /v1/filter
@@ -39,6 +39,8 @@ class BaseController
       $data["categories"] = $this->commonService->getCategories();
       return $data;
    }
+
+  
 
   /**
   * Get all languages

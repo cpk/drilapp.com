@@ -35,7 +35,7 @@ class CommonService extends BaseService
 	private function getItems($table){
 		$lang = getLang();
 		return $this->conn->select(
-            "SELECT id_$table as id, name_$lang as name ".
+            "SELECT id_$table as id, name_$lang as name ".($table == "lang" ? ", `code` " : "").
             "FROM `$table` ".
             "ORDER BY id_$table"
         );

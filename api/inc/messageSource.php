@@ -22,10 +22,20 @@
 			"errLectureLongName" => "Name of the lecture is too long. (max 150 characters)",
 			"errLectureBookId" => "The book ID is missing.",
 
-			"errUserEmailUniqe" => "Given e-mail has already been taken",
-			"errUserLoginUniqe" => "Login has already been taken",
+			"errUserEmailUniqe" => "The e-mail has already been taken",
+			"errUserEmailLength" => "Alloved e-mail length is 45 characters",
+			"errUserEmailInvalid" => "Invalid e-mail address",
+			"errUserLoginUniqe" => "Login '{0}' has already been taken",
+			"errUserLoginLength" => "Alloved login length is between 5 and 20 characters",
+			"errUserFirstNameLength" => "Alloved fisrt name length is 30 characters",
+			"errUserLastNameLength" => "Alloved fisrt name length is 30 characters",
+			"errUserPasswordLength" => "The password is too short. It has to be at least 6 characters",
+			"errUserPasswordMatch" => "The confirmation password does not match the password",
+			"errUserLocaleEmpty" => "The user locale is required.",
 
+			"errUserUnactivated" => "Your account has not been activated yet. Check your e-mail address.",	
 			"errUnexpected" => "An unexpected error has occurred."
+
 		);
 
 		$key = $args[0];

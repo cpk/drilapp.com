@@ -21,5 +21,10 @@
 	$config['JWT_KEY'] = "asdfasdfazxfgsdgsdfg";
 
 
+	$config['mailHost'] = "mail.drilapp.com";
+	$config['mailUsername'] = "info@drilapp.com";
+	$config['mailPass'] = "Uauv3Uh5Hcym38G";
+	$config['mailFromEmail'] = "info@drilapp.com";
+	$config['mailFromLabel'] = "Dril - web.drilapp.com";
 	
 ?>

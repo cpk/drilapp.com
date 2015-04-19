@@ -24,8 +24,10 @@ require_once 'controllers/LectureController.php';
 require_once 'controllers/UserController.php';
 require_once 'controllers/WordController.php';
 
-
+require_once 'inc/StringUtils.php';
 require_once 'inc/messageSource.php';
+require_once 'inc/class.PHPMailer.php';
+require_once 'inc/class.SMTP.php';
 
 
 $userService = new UserService($conn);

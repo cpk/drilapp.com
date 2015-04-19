@@ -3,16 +3,16 @@
 class UserService extends BaseService
 {
 
-	public function __construct(&$conn){
+	public function conn(&$__construct){
        parent::__construct($conn);
     }
 
 
-    public function getUserById($uid){
+    public function getUserById($uid, $full = false){
         
-        $sql = "SELECT `id_user` as id, `login`, `email`, `givenname` as `firstName`, `surname` as `lastName`, `pass`, `salt` ".
+        $sql = "SELECT ".($full ? "* " : " `id_user` as id, `login`, `email`, `givenname` as `firstName`, `surname` as `lastName`, `pass`, `salt` " ).
                "FROM `user` ".
-               "WHERE `id_user`=? AND `active`=1 AND `blocked`=0";
+               "WHERE `id_user`=? ".($full ? "" : "AND `active`=1 AND `blocked`=0") ;
 
         $data = $this->conn->select( $sql , array(intval($uid))); 
         if(count($data) > 0){
@@ -25,7 +25,7 @@ class UserService extends BaseService
         
         $sql = "SELECT `id_user` as id, `login`, `email`, `givenname` as `firstName`, `surname` as `lastName`, `pass`, `salt` ".
                "FROM `user` ".
-               "WHERE `login`=? AND `active`=1 LIMIT 1";
+               "WHERE `login`=? LIMIT 1";
 
         $data = $this->conn->select( $sql , array($login) ); 
         if(count($data) > 0){
@@ -36,23 +36,26 @@ class UserService extends BaseService
    
     public function create($user){
         $this->validate($user);
-        $salt = "zex*mur"; 
-        $sql = "INSERT INTO `user` (`id_user_type`, `login`, `pass`, `salt`, `active`, ".
-                            "`blocked`, `reg_time`, `email`, `givenname`, `surname`) VALUES (?,?,?,?,?,?,?,?,?,?)";
+        $salt = StringUtils::getRandomString(6);
+        $token = StringUtils::getRandomString(); 
+        $sql = "INSERT INTO `user` (`id_user_type`, `login`, `pass`, `salt`, `active`, `blocked`, ".
+                            "`reg_time`, `email`, `givenname`, `surname`, `token`, `token_created`) ".
+                            " VALUES (?,?,?,?,?,?,?,?,?,?,?, NOW())";
         $this->conn->insert( $sql , 
                 array(  1, 
-                        $user->email, 
+                        $user->login, 
                         hash_hmac('sha256', $user->password, $salt), 
                         $salt, 
-                        1, 
+                        0, 
                         0,
                         time(), 
                         $user->email, 
-                        $user->givenname,
-                        $user->surname) 
+                        $user->firstName,
+                        $user->lastName,
+                        $token) 
                 );
         
-       return $this->conn-getInsertId();
+       return $this->getUserById( $this->conn->getInsertId(), true );
     }
 
 
@@ -100,16 +103,53 @@ class UserService extends BaseService
     }
 
 
-    private function validate($user){
-        if(loginExists($this->conn, $user->email)){
-            throw new InvalidArgumentException(getMessage("errLoginUniqe", $user->email));
-        }elseif(!isEmail($user->email)){
-            throw new InvalidArgumentException(getMessage("errEmailInvalid"));
-        }elseif(checkUserEmail($this->conn, $user->email)){
-            throw new InvalidArgumentException(getMessage("errEmailUniqe", $user->email));
-        }elseif(strlen($user->password) < 6){
-            throw new InvalidArgumentException(getMessage("errPassLen"));
+    public function sendRegistrationEmail($user){
+        $logger = Logger::getLogger('email');
+        $mail = PHPMailer::createInstance();
+        
+
+        // Set who the email is sending to
+        $mail->AddAddress('email@peterjurkovic.com');
+
+        // Set the subject
+        $mail->Subject = 'Your account information';
+
+        //Set the message
+        $mail->MsgHTML("test");
+        //$mail->AltBody(strip_tags("test"));
+
+        // Send the email
+        if(!$mail->Send()) {
+            $logger->error("Snding registratin email to User [id=" .$user['id']."] failed. Error [".$mail->ErrorInfo."] [ip=" .$_SERVER['SERVER_ADDR']."]");
+        }else{
+            $logger->info("Registration email sent successfully to User [id=" .$user['id']."]. [ip=" .$_SERVER['SERVER_ADDR']."]");
         }
+    }
+
+
+    private function validate($user){
+        if(!isset($user->login) || strlen($user->login) < 4 || strlen($user->login) > 20){
+            throw new InvalidArgumentException(getMessage("errUserLoginLength"));
+        }else if(!$this->isValueUniqe("login", $user->login)){
+            throw new InvalidArgumentException(getMessage("errUserLoginUniqe", $user->login));
+        }elseif(!isEmail($user->email)){
+            throw new InvalidArgumentException(getMessage("errUserEmailInvalid"));
+        }elseif(strlen($user->email) > 45){
+            throw new InvalidArgumentException(getMessage("errUserLoginLength"));
+        }else if(!$this->isValueUniqe("email", $user->email)){
+            throw new InvalidArgumentException(getMessage("errUserEmailUniqe", $user->email));
+        }else if(strlen($user->firstName) == 0 || strlen($user->firstName) > 30){
+            throw new InvalidArgumentException(getMessage("errUserFirstNameLength"));
+        }else if(strlen($user->lastName) == 0 || strlen($user->lastName) > 30){
+            throw new InvalidArgumentException(getMessage("errUserLastNameLength"));
+        }else if(!isset($user->password) || strlen($user->password) < 6){
+            throw new InvalidArgumentException(getMessage("errUserPasswordLength"));
+        }else if(!isset($user->password2) || $user->password != $user->password2){
+            throw new InvalidArgumentException(getMessage("errUserPasswordMatch"));
+        }else if(!isset($user->locale)){
+            throw new InvalidArgumentException(getMessage("errUserLocaleEmpty"));
+        }
+
     }
 
 }

@@ -28,9 +28,15 @@ class SettingsService extends BaseService
     }
 
 
-    public function createUserSettings($uid){
-    	$sql = "INSERT INTO `dril_settings` (`user_id`) VALUES (?)";
-        $this->conn->insert( $sql ,  array(  $uid ) );
+    public function createUserSettings($uid, $locale = null){
+        $params =  array(  $uid );
+        if($locale != null){
+            $sql = "INSERT INTO `dril_settings` (`user_id`,`locale`) VALUES (?, ?)";
+            $params[] = $locale;
+        }else{
+            $sql = "INSERT INTO `dril_settings` (`user_id`) VALUES (?)";
+        }
+        $this->conn->insert( $sql, $params );
         return $this->getUserSettings($uid);
     }
 

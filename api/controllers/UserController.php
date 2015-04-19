@@ -22,6 +22,8 @@ class UserController
         $user = $this->userService->getUserByLogin( $data->username );
         if($user == null){
             throw new RestException(401, 'User [username='.$data->username.'] was not found');
+        }else if($user['active'] == 0){
+            throw new InvalidArgumentException(getMessage("errUserUnactivated"));
         }
         if(hash_hmac('sha256', $data->password , $user['salt']) == $user['pass']){
             try {
@@ -59,7 +61,10 @@ class UserController
      * @noAuth
      */
     public function create( $data ) {
-        return $this->userService->create($data);
+        $this->userService->sendRegistrationEmail(null);
+        //$user = $this->userService->create($data);
+        //$this->settingsService->createUserSettings($user['id'], $data->locale);
+
     }
    
     public function init(){

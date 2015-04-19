@@ -37,6 +37,8 @@ ALTER TABLE `lang` MODIFY `id_lang` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREME
 ALTER TABLE `user` ADD `token` VARCHAR(50) NULL AFTER `edit`;
 ALTER TABLE `user` ADD `token_created` DATETIME NULL AFTER `token`;
 ALTER TABLE `user` ADD `donated` BOOLEAN NOT NULL DEFAULT FALSE AFTER `token_created`;
-
+ALTER TABLE `user` CHANGE `login` `login` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `user` CHANGE `givenname` `givenname` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ALTER TABLE `user` CHANGE `surname` `surname` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 
 
