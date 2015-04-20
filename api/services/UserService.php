@@ -23,7 +23,7 @@ class UserService extends BaseService
 
     public function getUserByLogin( $login ){
         
-        $sql = "SELECT `id_user` as id, `login`, `email`, `givenname` as `firstName`, `surname` as `lastName`, `pass`, `salt` ".
+        $sql = "SELECT `id_user` as id, `login`, `email`, `active`, `givenname` as `firstName`, `surname` as `lastName`, `pass`, `salt` ".
                "FROM `user` ".
                "WHERE `login`=? LIMIT 1";
 
@@ -54,8 +54,8 @@ class UserService extends BaseService
                         $user->lastName,
                         $token) 
                 );
-        
-       return $this->getUserById( $this->conn->getInsertId(), true );
+        $uid = $this->conn->getInsertId();
+       return $this->getUserById( $uid , true );
     }
 
 
@@ -106,23 +106,23 @@ class UserService extends BaseService
     public function sendRegistrationEmail($user){
         $logger = Logger::getLogger('email');
         $mail = PHPMailer::createInstance();
-        
+        $model = array(
+            "head" => getMessage("emailReg_head"),
+            "description" => getMessage("emailReg_descr"),
+            "activate" => getMessage("emailReg_activate"),
+            "activationUrl" => "http://" . $_SERVER['SERVER_NAME']."?token=".$user['token'],
+            "copyUrl" =>  getMessage("emailReg_ccopyUrl")
+        );
 
-        // Set who the email is sending to
-        $mail->AddAddress('email@peterjurkovic.com');
+        $message = PHPMailer::getTemplate('registration.html', $model);
+        $mail->AddAddress($user['email']);
+        $mail->Subject = getMessage("emailReg_head");
+        $mail->MsgHTML($message);
 
-        // Set the subject
-        $mail->Subject = 'Your account information';
-
-        //Set the message
-        $mail->MsgHTML("test");
-        //$mail->AltBody(strip_tags("test"));
-
-        // Send the email
         if(!$mail->Send()) {
-            $logger->error("Snding registratin email to User [id=" .$user['id']."] failed. Error [".$mail->ErrorInfo."] [ip=" .$_SERVER['SERVER_ADDR']."]");
+            $logger->error("Snding registratin email to User [id=" .$user['id_user']."] failed. Error [".$mail->ErrorInfo."] [ip=" .$_SERVER['SERVER_ADDR']."]");
         }else{
-            $logger->info("Registration email sent successfully to User [id=" .$user['id']."]. [ip=" .$_SERVER['SERVER_ADDR']."]");
+            $logger->info("Registration email sent successfully to User [id=" .$user['id_user']."]. [ip=" .$_SERVER['SERVER_ADDR']."]");
         }
     }
 

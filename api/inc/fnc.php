@@ -1,10 +1,16 @@
 <?php
   $lang = "en";
-  function setLang(){
+  function setLang($locale = false){
     global $lang;
     $avaiableLang = array("sk", "en");
-    if(isset($_GET['locale']) && in_array($_GET['locale'], $avaiableLang)){
-      $lang = $_GET['locale'];
+    if($locale){
+      if(in_array($locale, $avaiableLang)){
+        $lang = $locale;
+      }
+    }else{
+      if(isset($_GET['locale']) && in_array($_GET['locale'], $avaiableLang)){
+        $lang = $_GET['locale'];
+      }
     }
   }
  	setLang();
@@ -86,5 +92,7 @@
   function isEmail($email){
     return (preg_match ("/^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$/i" ,$email) == 1);
   }
+
+  
    
 ?>

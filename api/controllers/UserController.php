@@ -61,10 +61,9 @@ class UserController
      * @noAuth
      */
     public function create( $data ) {
-        $this->userService->sendRegistrationEmail(null);
-        //$user = $this->userService->create($data);
-        //$this->settingsService->createUserSettings($user['id'], $data->locale);
-
+        $user = $this->userService->create($data);
+        $this->settingsService->createUserSettings($user['id_user'], $data->locale);
+        $this->userService->sendRegistrationEmail($user);
     }
    
     public function init(){

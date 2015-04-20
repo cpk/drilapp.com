@@ -610,6 +610,19 @@ class PHPMailer
         return $mail;
     }
 
+    public static function loadTemplate($name){
+        $basePath = dirname(dirname(__FILE__));
+        return file_get_contents($basePath."/templates/".$name);
+    }
+
+    public static function getTemplate($name, $model){
+        $message = PHPMailer::loadTemplate($name);
+        foreach ($model as $key => $value) {
+            $message = str_replace('${'.$key.'}', $value, $message);
+        }
+        return $message;
+    }
+
     /**
      * Call mail() in a safe_mode-aware fashion.
      * Also, unless sendmail_path points to sendmail (or something that
@@ -1216,6 +1229,8 @@ class PHPMailer
         }
         return $this->smtp;
     }
+
+
 
     /**
      * Send mail via SMTP.
