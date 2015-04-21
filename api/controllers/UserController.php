@@ -65,7 +65,19 @@ class UserController
         $this->settingsService->createUserSettings($user['id_user'], $data->locale);
         $this->userService->sendRegistrationEmail($user);
     }
-   
+    
+    /**
+     * Activate user account
+     *
+     * @url POST /v1/users/activate
+     * @noAuth
+     */
+    public function activateAccount($data){
+        return $user = $this->userService->activateAccount($data->token);
+    }
+
+
+
     public function init(){
         global $conn;
         $this->userService = new UserService($conn);

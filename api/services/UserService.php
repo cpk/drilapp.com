@@ -33,6 +33,24 @@ class UserService extends BaseService
         }
         return null;       
     }
+
+    public function getUserByToken( $token , $tokenValidity = null){
+        if($tokenValidity == null){
+            $date = new DateTime();
+            $date->sub(new DateInterval('P2D'));
+            $tokenValidity = $date->format('Y-m-d H:i:s');
+        }
+
+        $sql = "SELECT * ".
+               "FROM `user` ".
+               "WHERE `token`=? AND `token_created` > '$tokenValidity' LIMIT 1";
+
+        $data = $this->conn->select( $sql , array($token) ); 
+        if(count($data) > 0){
+            return $data[0];
+        }
+        return null;       
+    }
    
     public function create($user){
         $this->validate($user);
@@ -106,11 +124,16 @@ class UserService extends BaseService
     public function sendRegistrationEmail($user){
         $logger = Logger::getLogger('email');
         $mail = PHPMailer::createInstance();
+        if($_SERVER['REMOTE_ADDR'] == '127.0.0.1'){
+            $url = 'http://localhost:9000/#/login#'.$user['token'];
+        }else{
+            $url = 'http://web.drilapp.com/#/login#'.$user['token'];
+        }
         $model = array(
             "head" => getMessage("emailReg_head"),
             "description" => getMessage("emailReg_descr"),
             "activate" => getMessage("emailReg_activate"),
-            "activationUrl" => "http://" . $_SERVER['SERVER_NAME']."?token=".$user['token'],
+            "activationUrl" => $url,
             "copyUrl" =>  getMessage("emailReg_ccopyUrl")
         );
 
@@ -126,6 +149,19 @@ class UserService extends BaseService
         }
     }
 
+    public function activateAccount($token){
+        $user = $this->getUserByToken($token);
+        if($user != null && $user['active'] == 0){
+            $sql = "UPDATE `user` ".
+                "SET `active`=1,`changed`=NOW() ".
+                "WHERE `id_user`=? LIMIT 1";
+            $this->conn->update( $sql , array( $user['id_user'] ) ); 
+            return array('success' => true, "message" => getMessage("activated"));
+        }
+        $logger = Logger::getLogger('api');
+        $logger->warn("User [id=" .$user['id_user']."] tried to activated expired [token=$token]. [ip=" .$_SERVER['SERVER_ADDR']."]");
+        return array('success' => false);
+    }
 
     private function validate($user){
         if(!isset($user->login) || strlen($user->login) < 4 || strlen($user->login) > 20){

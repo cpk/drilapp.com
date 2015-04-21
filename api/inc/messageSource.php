@@ -36,6 +36,7 @@
 			"errUserUnactivated" => "Your account has not been activated yet. Check your e-mail address.",	
 			"errUnexpected" => "An unexpected error has occurred.",
 
+			"activated" => "Your account has been activated",
 
 			"emailReg_head" => "Complete your registration",
 			"emailReg_descr" => "Your account has been successfully created. Activate your account by clicking on following button",
