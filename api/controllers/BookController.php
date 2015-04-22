@@ -60,13 +60,14 @@ class BookController
     /**
      * Create new book
      *
-     * @url POST /v1/book
+     * @url POST /v1/books
      */
-    public function create( $data )
+    public function create( $data , $uid)
     {
-        //print_r($data);exit;
         global $bookService;
-        return $bookService->create($data);
+        $data->user_id = $uid;
+        $id =  $bookService->create($data);
+        return array("id" => $id);
     }
 
 

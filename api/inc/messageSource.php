@@ -41,7 +41,7 @@
 			"emailReg_head" => "Complete your registration",
 			"emailReg_descr" => "Your account has been successfully created. Activate your account by clicking on following button",
 			"emailReg_activate" => "Activate account", 
-			"emailReg_ccopyUrl" => "Or copy following url into your browser" 
+			"emailReg_ccopyUrl" => "Or copy following url and paste it into your browser" 
 
 		);
 

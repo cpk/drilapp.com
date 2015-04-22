@@ -20,13 +20,23 @@ class BookService extends BaseService
         $this->conn->simpleQuery('START TRANSACTION;');  
         if($this->isBookNameUniqe($book->name, $book->user_id)){
             $sql = 
-              "INSERT INTO `dril_book` (`name`, `question_lang_id`, `answer_lang_id`, `level_id`, `user_id`) ".
-              "VALUES (?, ?, ?, ?, ? )";
+              "INSERT INTO `dril_book` ( ".
+                "`name`, ".
+                "`question_lang_id`, ".
+                "`answer_lang_id`, ".
+                "`level_id`, ".
+                "`dril_category_id`, ".
+                "`is_shared`, ".
+                "`user_id`, ".
+                "`changed`) ".
+              "VALUES (?,?,?,?,?,?,?, NOW())";
             $this->conn->insert($sql,  array(
-                $book->name, $book->question_lang_id, $book->answer_lang_id, $book->level_id, $book->user_id
+                $book->name, $book->question_lang_id, $book->answer_lang_id, $book->level_id, $book->category_id,$book->isShared, $book->user_id
               ));
             $bookId = $this->conn->getInsertId();
-            $this->tagService->createTags($book->tags, $bookId);
+            if(isset($book->tags)){
+              $this->tagService->createTags($book->tags, $bookId);
+            }
             $this->conn->simpleQuery('COMMIT;');
             return $bookId;
         }

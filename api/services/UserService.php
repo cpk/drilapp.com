@@ -54,7 +54,7 @@ class UserService extends BaseService
    
     public function create($user){
         $this->validate($user);
-        $salt = StringUtils::getRandomString(6);
+        $salt = StringUtils::getRandomString(5);
         $token = StringUtils::getRandomString(); 
         $sql = "INSERT INTO `user` (`id_user_type`, `login`, `pass`, `salt`, `active`, `blocked`, ".
                             "`reg_time`, `email`, `givenname`, `surname`, `token`, `token_created`) ".
