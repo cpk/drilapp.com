@@ -24,14 +24,12 @@ class WordController{
      * Create a new word
      *
      * @url PUT /v1/user/words
-     * 
      */
     public function create( $data, $uid )
     {
-        $book = $this->wordService->getBookByWordId( $data->dril_lecture_id );
+        $book = $this->wordService->getBookByLectureId( $data->dril_lecture_id );
         checkBookPermision($book, $uid);
         return $this->wordService->create($data);
-        
     }
 
 

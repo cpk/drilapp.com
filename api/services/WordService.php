@@ -118,6 +118,19 @@ class WordService extends BaseService
       return null;
     }
 
+
+    public function getBookByLectureId( $lectureId ){
+      $sql =  "SELECT b.* ".
+              "FROM `dril_book` b ".
+              "INNER JOIN dril_book_has_lecture bhl ON bhl.dril_book_id = b.`id` ".
+              "WHERE bhl.id = ? LIMIT 1";
+      $result =  $this->conn->select( $sql, array($lectureId) ); 
+       if(count($result) == 1){
+          return $result[0];
+      }
+      return null;
+    }
+
     public function delete( $id ){
       $lectureId = $this->getLecturIdByWordId( $id );
       $this->conn->delete("DELETE FROM `dril_lecture_has_word` WHERE id = ?;", array( $id ));

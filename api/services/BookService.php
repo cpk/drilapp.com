@@ -28,10 +28,14 @@ class BookService extends BaseService
                 "`dril_category_id`, ".
                 "`is_shared`, ".
                 "`user_id`, ".
-                "`changed`) ".
-              "VALUES (?,?,?,?,?,?,?, NOW())";
+                "`description`, ".
+                "`changed`, ".
+                "`created`) ".
+              "VALUES (?,?,?,?,?,?,?,?, NOW(), NOW())";
             $this->conn->insert($sql,  array(
-                $book->name, $book->question_lang_id, $book->answer_lang_id, $book->level_id, $book->category_id,$book->isShared, $book->user_id
+                $book->name, $book->question_lang_id, $book->answer_lang_id, 
+                $book->level_id, $book->category_id,$book->isShared, 
+                $book->user_id, $book->description
               ));
             $bookId = $this->conn->getInsertId();
             if(isset($book->tags)){
@@ -258,6 +262,7 @@ class BookService extends BaseService
       if(intval($book->user_id) == 0){
         throw new InvalidArgumentException(getMessage("errUnexpected"), 1);
       }
+      
     }
 
 }

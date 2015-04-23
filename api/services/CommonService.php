@@ -24,6 +24,17 @@ class CommonService extends BaseService
 	}
 
 	public function getCategories(){
+		$lang = getLang();
+		return $this->conn->select(
+            "SELECT c.id, c2.name_$lang as catName, c.name_$lang as name ".
+			"FROM `dril_category` c ".
+			"INNER JOIN  `dril_category` c2 ON c2.id = c.parent_id ".
+			"WHERE c.parent_id IS NOT NULL ".
+			"ORDER BY c.ordering "
+        );
+	}
+
+	public function getTreeCategories(){
 		$categories = $this->getCategoryLevel(null);
         for($i = 0; $i < count($categories); $i++){
         	$categories[$i]['subCategories'] = $this->getCategoryLevel($categories[$i]['id']);
