@@ -8,8 +8,9 @@ class SettingsService extends BaseService
     }
 
     public function getUserSettings($uid){
-        $sql = "SELECT 	dril_stategy as drilStrategy, locale ".
-               "FROM `dril_settings` ".
+        $sql = "SELECT 	s.`dril_stategy` as drilStrategy, s.`locale_id`, l.`code` ".
+               "FROM `dril_settings` s ".
+               "INNER JOIN `lang` l ON l.`id_lang` = s.`locale_id` ".
                "WHERE `user_id`=?";
 
         $data = $this->conn->select( $sql , array(intval($uid))); 
@@ -31,7 +32,7 @@ class SettingsService extends BaseService
     public function createUserSettings($uid, $locale = null){
         $params =  array(  $uid );
         if($locale != null){
-            $sql = "INSERT INTO `dril_settings` (`user_id`,`locale`) VALUES (?, ?)";
+            $sql = "INSERT INTO `dril_settings` (`user_id`,`locale_id`) VALUES (?, ?)";
             $params[] = $locale;
         }else{
             $sql = "INSERT INTO `dril_settings` (`user_id`) VALUES (?)";

@@ -40,7 +40,7 @@ class UserController
                 $result['token'] = JWT::encode($token, $drilConf['dril_auth']);
                 $result['user'] = $user;
                 $result['actiavtedWords'] = $this->wordService->getAllUserActivatedWords($user['id']);
-                $result['settings'] = $this->settingsService->getOrCreateUserSettings($user['id']);
+                $result['user']['settings'] = $this->settingsService->getOrCreateUserSettings($user['id']);
                 $logger = Logger::getLogger('api');
                 $logger->info("User [id=" .$user['id']."] was successfully logged in. [ip=" .$_SERVER['SERVER_ADDR']."]");
                return $result;
@@ -62,7 +62,7 @@ class UserController
      */
     public function create( $data ) {
         $user = $this->userService->create($data);
-        $this->settingsService->createUserSettings($user['id_user'], $data->locale);
+        $this->settingsService->createUserSettings($user['id_user'], $data->locale_id);
         $this->userService->sendRegistrationEmail($user);
     }
     
@@ -84,4 +84,4 @@ class UserController
         $this->wordService = new WordService($conn);
         $this->settingsService = new SettingsService($conn);
     }
-}
+}   

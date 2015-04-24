@@ -182,7 +182,7 @@ class UserService extends BaseService
             throw new InvalidArgumentException(getMessage("errUserPasswordLength"));
         }else if(!isset($user->password2) || $user->password != $user->password2){
             throw new InvalidArgumentException(getMessage("errUserPasswordMatch"));
-        }else if(!isset($user->locale)){
+        }else if(!isset($user->locale_id)){
             throw new InvalidArgumentException(getMessage("errUserLocaleEmpty"));
         }
 
