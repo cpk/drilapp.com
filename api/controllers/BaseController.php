@@ -92,9 +92,10 @@ class BaseController
   * @noAuth
   */
    public function tts(){
-      if(isset($_GET['text']) && isset($_GET['lang']) && isset($_GET['id'])){
+      if(isset($_GET['text']) && isset($_GET['lang'])){
         $tts = new Text2Speach();
-        $filePath = $tts->getFilePath($_GET['text'], $_GET['lang'], $_GET['id']);
+        $id = isset($_GET['id']) ? $_GET['id'] : time();
+        $filePath = $tts->getFilePath($_GET['text'], $_GET['lang'], $id );
         return array( "path" => $filePath);
       }
       throw new InvalidArgumentException('Nothing to speek');
