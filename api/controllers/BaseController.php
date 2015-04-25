@@ -85,11 +85,27 @@ class BaseController
    }
 
 
+  /**
+  * Return generated file path
+  *
+  * @url GET /v1/tts
+  * @noAuth
+  */
+   public function tts(){
+      if(isset($_GET['text']) && isset($_GET['lang']) && isset($_GET['id'])){
+        $tts = new Text2Speach();
+        $filePath = $tts->getFilePath($_GET['text'], $_GET['lang'], $_GET['id']);
+        return array( "path" => $filePath);
+      }
+      throw new InvalidArgumentException('Nothing to speek');
+   }
+
    public function init(){
       global $conn;
       $this->commonService = new CommonService($conn);
       $this->userService = new UserService($conn);
    }
+
 
 
    	

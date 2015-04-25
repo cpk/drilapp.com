@@ -28,6 +28,8 @@ require_once 'inc/StringUtils.php';
 require_once 'inc/messageSource.php';
 require_once 'inc/class.PHPMailer.php';
 require_once 'inc/class.SMTP.php';
+require_once 'inc/Text2Speach.php';
+	
 
 
 $userService = new UserService($conn);

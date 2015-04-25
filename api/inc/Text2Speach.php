@@ -45,7 +45,7 @@ class Text2Speach {
     var $contents = NULL; 
 
     function __construct() {
-        $this->audioDir = dirname(dirname(__FILE__))."/tts-files/";
+        $this->audioDir = "/tts-files/";
     }
      
     /** Function make request to Google translate, download file and returns audio file path 
@@ -54,7 +54,7 @@ class Text2Speach {
      * @return     String     - mp3 file path 
      * @link https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
      */ 
-    function speak($text, $lang, $wordId) { 
+    public function getFilePath($text, $lang, $wordId) { 
          
        
         if (!isset($lang) || !isset($wordId)) { 
@@ -62,18 +62,18 @@ class Text2Speach {
         } 
 
         // Create dir if not exists 
-        if (!is_dir($this->audioDir)) { 
-            mkdir($this->audioDir, 0755) or die('Could not create audio dir: ' . $this->audioDir); 
+        if (!is_dir($this->getAbsoluteFileDir())) { 
+            mkdir($this->getAbsoluteFileDir(), 0755) or die('Could not create audio dir: ' . $this->getAbsoluteFileDir()); 
         } 
          
         // Try to set writing permissions for audio dir. 
-        if (!is_writable($this->audioDir)) {  
-            chmod($this->audioDir, 0755) or die('Could not set appropriate permissions for audio dir: ' . $this->audioDir); 
+        if (!is_writable($this->getAbsoluteFileDir())) {  
+            chmod($this->getAbsoluteFileDir(), 0755) or die('Could not set appropriate permissions for audio dir: ' . $this->getAbsoluteFileDir()); 
         } 
          
      
-        // Generate unique mp3 file name 
-        $file = sprintf($this->mp3File, $this->audioDir . $wordId."-".$lang); 
+        // Generate unique mp3 file name
+        $file = sprintf($this->mp3File, $this->getAbsoluteFileDir() . $wordId."-".$lang); 
 
         if (!file_exists($file)) { 
             // Text lenght 
@@ -91,14 +91,18 @@ class Text2Speach {
         
          
         // Returns mp3 file path 
-        return $file; 
+        return "http://drilapp.dev/api". sprintf( $this->mp3File, $this->audioDir . $wordId."-".$lang); 
     } 
+
+    private function getAbsoluteFileDir(){
+        return dirname(dirname(__FILE__)). $this->audioDir;
+    }
      
     /** Function to find the beginning of the mp3 file 
      * @param     String     $contents        - File contents 
      * @return     Integer 
      */  
-    function getStart($contents) { 
+    private function getStart($contents) { 
         for($i=0; $i < strlen($contents); $i++){ 
             if(ord(substr($contents, $i, 1)) == 255){ 
                 return $i; 
@@ -110,7 +114,7 @@ class Text2Speach {
      * @param     String     $contents        - File contents 
      * @return     Integer 
      */  
-    function getEnd($contents) { 
+    private function getEnd($contents) { 
         $c = substr($contents, (strlen($contents) - 128)); 
         if(strtoupper(substr($c, 0, 3)) == 'TAG'){ 
             return $c; 
@@ -123,7 +127,7 @@ class Text2Speach {
      * @param     String     $contents        - File contents
      * @return     String
      */
-    function stripTags($contents) {
+    private function stripTags($contents) {
         // Remove start
         $start = $this->getStart($contents);
         if ($start === FALSE) { 
@@ -141,7 +145,7 @@ class Text2Speach {
      * @param     String     $url        - URL 
      * @param     String     $path         - Local path 
      */
-    function download($url, $path) {  
+    private function download($url, $path) {  
         // Is curl installed? 
         if (!function_exists('curl_init')){ // use file get contents  
             $output = file_get_contents($url);
