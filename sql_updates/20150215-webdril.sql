@@ -41,4 +41,8 @@ ALTER TABLE `user` CHANGE `login` `login` VARCHAR(20) CHARACTER SET utf8 COLLATE
 ALTER TABLE `user` CHANGE `givenname` `givenname` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 ALTER TABLE `user` CHANGE `surname` `surname` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 
-
+--INSERT INTO `db_drilapp_com`.`dril_lecture_has_word`
+-- ( `question`, `answer`, `last_rating`, `viewed`, `last_viewd`, `avg_rating`, `is_activated`, `changed`, `created`, `dril_lecture_id`)
+--SELECT 
+-- `question`, `answer`, 0,   0,  0,  0, 0, `create`, `changed`, 5
+--FROM `import_word` where token = 2481385

@@ -37,7 +37,6 @@
             $words = $bookPrezenter->getBooksWords($book[0]['import_id']);
             echo '<h1>'.$bookName.'</h1>';
             echo '<div id="bc"><a href="'.linker(1, 1, $lang).'" >Home</a> &raquo; '.makeLinkByArticleId(9).' &raquo; <span>'.$bookName.'</span></div>';
-            
            $count = count($words);
            $html =  '<table id="book">
                 <tr>
@@ -50,7 +49,7 @@
                 </tr>
                 <tr>
                      <td class="bold">Úroveň náročnosti:</td>
-                    <td>'.$book[0]["name_" + $lang].'</td>    
+                    <td>'.$book[0]["level_name"].'</td>    
                 </tr>
                    <tr>
                      <td class="bold">Poznámka autora:</td>

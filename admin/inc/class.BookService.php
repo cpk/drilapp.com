@@ -68,13 +68,14 @@ class BookService {
 
     
     public function getById($id){        
-       $data =  $this->conn->select( "SELECT b.name as book_name, b._id, b.author, b.descr, b.level, b.import_id, b.create, u.login,  b.id_user, le.name, b.lang AS lang, b.lang_a AS lang_a, ".
+        global $lang;
+       $data =  $this->conn->select( "SELECT b.name as book_name, b._id, b.author, b.descr, b.level, b.import_id, b.create, u.login,  b.id_user, le.name_$lang as level_name, b.lang AS lang, b.lang_a AS lang_a, ".
                                       "lang_answer.name_sk AS lang_answer, lang_question.name_sk AS lang_question, ".
                                       "(SELECT count(w._id) FROM import_word w WHERE w.token=b.import_id ) as count ".
                                       "FROM import_book b ".
                                         "JOIN lang lang_question ON lang_question.id_lang=b.lang ".
                                         "JOIN lang lang_answer ON lang_answer.id_lang=b.lang_a ".
-                                        "JOIN level le ON le.id_level=b.level ".
+                                        "INNER JOIN level le ON le.id_level=b.level ".
                                         "LEFT JOIN user u ON u.id_user=b.id_user ".
                                       "WHERE b.level = le.id_level AND b._id=? ".
                                       "LIMIT 1", array($id));
