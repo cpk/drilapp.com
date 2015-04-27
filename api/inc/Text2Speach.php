@@ -1,4 +1,31 @@
 <?php
+/******************************************************************
+Projectname:   PHP Text 2 Speech Class
+Version:       1.0
+Author:        Radovan Janjic <hi@radovanjanjic.com>
+Link:          https://github.com/uzi88/PHP_Text2Speech
+Last modified: 11 06 2013
+Copyright (C): 2012 IT-radionica.com, All Rights Reserved
+* GNU General Public License (Version 2, June 1991)
+*
+* This program is free software; you can redistribute
+* it and/or modify it under the terms of the GNU
+* General Public License as published by the Free
+* Software Foundation; either version 2 of the License,
+* or (at your option) any later version.
+*
+* This program is distributed in the hope that it will
+* be useful, but WITHOUT ANY WARRANTY; without even the
+* implied warranty of MERCHANTABILITY or FITNESS FOR A
+* PARTICULAR PURPOSE. See the GNU General Public License
+* for more details.
+Description:
+PHP Text 2 Speech Class
+This class converts text to speech using Google text to 
+speech API to transform text to mp3 file which will be 
+downloaded and later used as eg. embed file. 
+
+******************************************************************/
 class Text2Speach { 
      
 
@@ -17,12 +44,6 @@ class Text2Speach {
      * @var    Integer  
      */ 
     var $wordCount = 0; 
-     
-    /** Language of text (ISO 639-1) 
-     * @var    String  
-     * @link https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes 
-     */ 
-    var $lang = 'en'; 
      
     /** Text to speak 
      * @var    String  
@@ -45,7 +66,7 @@ class Text2Speach {
     var $contents = NULL; 
 
     function __construct() {
-        $this->audioDir = "/tts-files/";
+        $this->audioDir = "/tts-cache/";
     }
      
     /** Function make request to Google translate, download file and returns audio file path 
@@ -54,26 +75,31 @@ class Text2Speach {
      * @return     String     - mp3 file path 
      * @link https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
      */ 
-    public function getFilePath($text, $lang, $wordId) { 
+    public function getFilePath($text, $lang) { 
          
        
-        if (!isset($lang) || !isset($wordId)) { 
-            throw new InvalidArgumentException("Lang or word id is missing..");
+        if (!isset($lang)) { 
+            throw new InvalidArgumentException("Lang code is missing..");
         } 
 
         // Create dir if not exists 
         if (!is_dir($this->getAbsoluteFileDir())) { 
-            mkdir($this->getAbsoluteFileDir(), 0755) or die('Could not create audio dir: ' . $this->getAbsoluteFileDir()); 
+             if(!mkdir($this->getAbsoluteFileDir(), 0755)){
+                throw new Exception('Could not create audio dir: ' . $this->getAbsoluteFileDir());
+             }
         } 
          
         // Try to set writing permissions for audio dir. 
         if (!is_writable($this->getAbsoluteFileDir())) {  
-            chmod($this->getAbsoluteFileDir(), 0755) or die('Could not set appropriate permissions for audio dir: ' . $this->getAbsoluteFileDir()); 
+            if(!chmod($this->getAbsoluteFileDir(), 0755)){
+                throw new Exception('Could not set appropriate permissions for audio dir: ' . $this->getAbsoluteFileDir());
+            }
+            
         } 
-         
+        $filename = md5($lang.$text); 
      
         // Generate unique mp3 file name
-        $file = sprintf($this->mp3File, $this->getAbsoluteFileDir() . $wordId."-".$lang); 
+        $file = sprintf($this->mp3File, $this->getAbsoluteFileDir() . $filename); 
 
         if (!file_exists($file)) { 
             // Text lenght 
@@ -91,7 +117,7 @@ class Text2Speach {
         
          
         // Returns mp3 file path 
-        return "http://drilapp.dev/api". sprintf( $this->mp3File, $this->audioDir . $wordId."-".$lang); 
+        return sprintf( $this->mp3File, $this->audioDir . $filename); 
     } 
 
     private function getAbsoluteFileDir(){

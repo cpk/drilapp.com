@@ -60,6 +60,18 @@ class WordController{
         return $this->wordService->activateWord( $data, $id );
     }
 
+
+    /**
+     * Activate user word
+     *
+     * @url GET /v1/words
+     * @noAuth
+     * 
+     */
+    public function getRandomWords(){
+        return $this->wordService->getRandomWords( );
+    }
+
     /**
      * Activate user word
      *

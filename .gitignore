@@ -4,3 +4,4 @@ admin/logs/
 api/logs/
 api/config/config.php
 api/tts-files/
+api/tts-cache/
