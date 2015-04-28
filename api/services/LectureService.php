@@ -5,10 +5,15 @@ class LectureService extends BaseService
 
     private $wordService;
 
-	public function __construct( &$conn, &$wordService )
+	public function __construct( &$conn, &$wordService = null )
     {
        parent::__construct($conn);
-       $this->wordService = $wordService;
+       
+       if($wordService == null){
+        $this->wordService = new WordService($conn);
+       }else{
+        $this->wordService = $wordService;
+       }
     }
 
 

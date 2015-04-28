@@ -5,12 +5,28 @@ class BookService extends BaseService
 	private $tagService;
   private $lectureService;
 
-	public function __construct(&$conn, &$tagService, &$lectureService, &$wordService)
+	public function __construct(&$conn, &$lectureService  = null, &$wordService  = null, &$tagService = null)
     {
        parent::__construct($conn);
-       $this->tagService = $tagService;
-       $this->lectureService = $lectureService;
-       $this->wordService = $wordService;
+       
+       if($tagService == null){
+         $this->tagService = new tagService($conn);
+       }else{
+        $this->tagService = $tagService;
+       }
+       
+       if($wordService == null){
+        $this->wordService = new WordService($conn);
+       }else{
+        $this->wordService = $wordService;
+       }
+
+       if($lectureService == null){
+        $this->lectureService = new LectureService($conn, $this->wordService);
+       }else{
+        $this->lectureService = $lectureService;
+       }
+              
     }
 
 

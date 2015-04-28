@@ -2,7 +2,9 @@
 
 class BookController
 {
-   
+    
+    private $bookService;
+
     /**
      * Gets the book by id 
      *
@@ -11,8 +13,8 @@ class BookController
      */
     public function getBook( $id , $uid = null)
     {
-        global $bookService;
-        $book =  $bookService->getFetchedBookById($id);
+
+        $book =  $this->bookService->getFetchedBookById($id);
         checkBookPermision($book, $uid);
         return $book;
     }
@@ -25,8 +27,8 @@ class BookController
      */
     public function getUserBook( $id , $uid)
     {
-        global $bookService;
-        $book =  $bookService->getFetchedBookById($id);
+
+        $book =  $this->bookService->getFetchedBookById($id);
         checkBookPermision($book, $uid);
         return $book;
     }
@@ -38,8 +40,8 @@ class BookController
      * @noAuth
      */
     public function getFetchedLecture($bookId, $lectureId, $uid = null){
-        global $bookService;
-        $book = $bookService->getFetchedLectureId( $bookId, $lectureId , $uid);
+
+        $book = $this->bookService->getFetchedLectureId( $bookId, $lectureId , $uid);
         checkBookPermision($book, $uid);
         return $book;
     }
@@ -51,8 +53,8 @@ class BookController
      * 
      */
     public function getUserFetchedLecture($bookId, $lectureId, $uid){
-        global $bookService;
-        $book = $bookService->getFetchedLectureId( $bookId, $lectureId, $uid );
+
+        $book = $this->bookService->getFetchedLectureId( $bookId, $lectureId, $uid );
         checkBookPermision($book, $uid);
         return $book;
     }
@@ -64,9 +66,9 @@ class BookController
      */
     public function create( $data , $uid)
     {
-        global $bookService;
+
         $data->user_id = $uid;
-        $id =  $bookService->create($data);
+        $id =  $this->bookService->create($data);
         return array("id" => $id);
     }
 
@@ -78,11 +80,11 @@ class BookController
      */
     public function update( $id, $data, $uid )
     {
-        global $bookService;
-        $book = $bookService->getBookById( $id );
+
+        $book = $this->bookService->getBookById( $id );
         checkBookPermision($book, $uid);
-        $bookService->update($data);
-        return $bookService->getFetchedBookById($id);
+        $this->bookService->update($data);
+        return $this->bookService->getFetchedBookById($id);
         
     }
 
@@ -94,10 +96,10 @@ class BookController
      */
     public function delete( $id , $uid )
     {
-        global $bookService;
-        $book = $bookService->getBookById( $id );
+
+        $book = $this->bookService->getBookById( $id );
         checkBookPermision($book, $uid);
-        $bookService->delete($id);
+        $this->bookService->delete($id);
         $logger = Logger::getLogger('api');
         $logger->warn("User [id=$uid] deleted book [id=$id] from ". $_SERVER['REMOTE_ADDR'] );
 
@@ -110,9 +112,9 @@ class BookController
      * @noAuth
      */
     public function getBookPage(  ){
-        global $bookService;
+
         $_GET['sharedOnly'] = true;
-        return $bookService->getFatchedBooks();
+        return $this->bookService->getFatchedBooks();
     }
 
       /**
@@ -121,12 +123,15 @@ class BookController
      * @url GET /v1/user/books
      */
     public function getUserBookPage( $uid ){
-        global $bookService;
+
         $_GET['userId'] = $uid;
-        return $bookService->getFatchedBooks();
+        return $this->bookService->getFatchedBooks();
     }
 
 
-    
+     public function init(){
+        global $conn;
+        $this->bookService = new BookService($conn);
+    }
    
 }

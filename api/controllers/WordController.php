@@ -68,8 +68,13 @@ class WordController{
      * @noAuth
      * 
      */
-    public function getRandomWords(){
-        return $this->wordService->getRandomWords( );
+    public function getWords( $uid ){
+        if($uid == null){
+            return $this->wordService->getRandomWords( );
+        }else{
+            return $this->wordService->getAllUserActivatedWords( $uid );
+        }
+        
     }
 
     /**
@@ -87,4 +92,7 @@ class WordController{
         $this->wordService = new WordService($conn);
         $this->userService = new userService($conn);
     }
+
+
+    
 }

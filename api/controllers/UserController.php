@@ -39,7 +39,6 @@ class UserController
                 unset($user['salt']);
                 $result['token'] = JWT::encode($token, $drilConf['dril_auth']);
                 $result['user'] = $user;
-                $result['actiavtedWords'] = $this->wordService->getAllUserActivatedWords($user['id']);
                 $result['user']['settings'] = $this->settingsService->getOrCreateUserSettings($user['id']);
                 $logger = Logger::getLogger('api');
                 $logger->info("User [id=" .$user['id']."] was successfully logged in. [ip=" .$_SERVER['SERVER_ADDR']."]");

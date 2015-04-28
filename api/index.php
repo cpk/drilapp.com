@@ -32,11 +32,11 @@ require_once 'inc/Text2Speach.php';
 	
 
 
-$userService = new UserService($conn);
-$tagService = new TagService($conn);
-$wordService = new WordService($conn);
-$lectureService = new LectureService($conn, $wordService);
-$bookService = new BookService($conn, $tagService, $lectureService, $wordService);
+//$userService = new UserService($conn);
+//$tagService = new TagService($conn);
+//$wordService = new WordService($conn);
+//$lectureService = new LectureService($conn, $wordService);
+//$bookService = new BookService($conn, $tagService, $lectureService, $wordService);
 
 
 $drilConf = getConf($conn);
