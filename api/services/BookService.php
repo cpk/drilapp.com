@@ -145,6 +145,18 @@ class BookService extends BaseService
         $book['tags'] = $this->tagService->getAllBookTags($bookId);
         $book['lecture'] = $this->lectureService->getLectureById($lectureId);
         $book['lecture']['words'] = $this->wordService->getAllWordByLectureId($lectureId, $uid );
+        if($uid != null){
+            return $this->setLanguages($book);
+        }
+      }
+      return $book;
+    }
+
+    private function setLanguages($book){
+      $count = count($book['lecture']['words']);
+      for($i =0; $i < $count; $i++){
+        $book['lecture']['words'][$i]['langQuestion'] = $book['question_lang_code'];
+        $book['lecture']['words'][$i]['langAnswer'] = $book['answer_lang_code'];
       }
       return $book;
     }

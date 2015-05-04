@@ -14,10 +14,9 @@ class WordService extends BaseService
         $this->conn->insert($sql,  array(
             $word->question, $word->answer, $word->dril_lecture_id
         ));
-        $id = $this->conn->getInsertId();
-        $word->id = $id;
+        $id = $this->conn->getInsertId();    
         $this->updateCountOfWordsByLectureId( $word->dril_lecture_id );
-        return $word;
+        return $this->getWordById( $id );
     }
 
 
@@ -79,6 +78,25 @@ class WordService extends BaseService
         }
       }
       return $result;
+    }
+
+    public function getWordById( $id ){
+     $sql = "SELECT w.`id`, w.`question`, w.`answer`, w.`last_rating` as lastRating, w.`viewed`,".
+             "  false as isLearned, ".
+             "  UNIX_TIMESTAMP(w.`last_viewd`) as lastViewed, ".
+             "  UNIX_TIMESTAMP(w.`changed`) as `changed_timestamp`,".
+             "  question_lang.code as langQuestion, answer_lang.code as langAnswer ".
+             "FROM `dril_lecture_has_word` w".
+             "  INNER JOIN dril_book_has_lecture lhw ON lhw.id = w.dril_lecture_id ".
+             "  INNER JOIN dril_book b ON b.id = lhw.dril_book_id ".
+             "  INNER JOIN lang question_lang ON question_lang.id_lang = b.question_lang_id ".
+             "  INNER JOIN lang answer_lang ON answer_lang.id_lang = b.answer_lang_id ".
+             "WHERE w.id = ? ";
+      $word = $this->conn->select( $sql, array($id) ); 
+      if(count($word) == 1){
+        return $word[0];
+      }
+      return null;
     }
 
     public function getAllUserActivatedWords( $userId ){
