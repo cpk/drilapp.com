@@ -66,7 +66,7 @@ class Text2Speach {
     var $contents = NULL; 
 
     function __construct() {
-        $this->audioDir = "/tts-cache/";
+        $this->audioDir = "/tts-files/";
     }
      
     /** Function make request to Google translate, download file and returns audio file path 
@@ -101,7 +101,12 @@ class Text2Speach {
         // Generate unique mp3 file name
         $file = sprintf($this->mp3File, $this->getAbsoluteFileDir() . $filename); 
 
-        if (!file_exists($file)) { 
+        if (!file_exists($file) || filesize($file) == 0) { 
+
+            if(file_exists($file)){
+                unlink($file);
+            }
+
             // Text lenght 
             $this->textLen = strlen($text); 
              

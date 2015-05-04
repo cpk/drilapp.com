@@ -10,7 +10,7 @@ class UserController
     /**
      * Login user
      *
-     * @url POST /v1/user/login
+     * @url PUT /v1/user/login
      * @noAuth
      */   
    public function login( $data ){
@@ -21,7 +21,7 @@ class UserController
         
         $user = $this->userService->getUserByLogin( $data->username );
         if($user == null){
-            throw new RestException(401, 'User [username='.$data->username.'] was not found');
+            throw new RestException(401, 'Credentials are required.');
         }else if($user['active'] == 0){
             throw new InvalidArgumentException(getMessage("errUserUnactivated"));
         }

@@ -94,12 +94,23 @@ class BaseController
    public function tts(){
       if(isset($_GET['text']) && isset($_GET['lang'])){
         $tts = new Text2Speach();
-        $id = isset($_GET['id']) ? $_GET['id'] : time();
-        $filePath = $tts->getFilePath($_GET['text'], $_GET['lang'], $id );
-        return array( "path" => $filePath);
+        $filePath = $tts->getFilePath($_GET['text'], $_GET['lang'] );
+        return array( "path" => getDomain().$filePath);
       }
       throw new InvalidArgumentException('Nothing to speek');
    }
+
+
+  /**
+  * Log JS error
+  *
+  * @url POST /v1/errors
+  * @noAuth
+  */
+  public function logError($data){
+      $this->commonService->logError($data);
+  }
+
 
    public function init(){
       global $conn;

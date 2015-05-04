@@ -64,6 +64,23 @@ class CommonService extends BaseService
         );
 	}
 
+
+	public function logError($data){
+		return $this->conn->insert(
+            "INSERT INTO `dril_error`(`user_agent`, `cause`, `error_message`, `error_url`, `stack_trace`, `user_id`, `version`) ".
+            " VALUES (?, ?, ?, ? ,? ,?, ?)",
+            array(
+            	$_SERVER['HTTP_USER_AGENT'], 
+            	$data->cause, 
+            	$data->errorMessage, 
+            	$data->errorUrl, 
+            	$data->stackTrace,
+            	$data->userId,
+            	$data->version,
+            	)
+            );	
+	}
+
 }
 
 

@@ -93,6 +93,15 @@
     return (preg_match ("/^[_a-z0-9-]+(.[_a-z0-9-]+)*@[a-z0-9-]+(.[a-z0-9-]+)*(.[a-z]{2,4})$/i" ,$email) == 1);
   }
 
+
+  function getDomain(){
+  return (
+      $_SERVER['REMOTE_ADDR'] == '127.0.0.1' ?
+      'http://drilapp.dev/api' : 'http://api.drilapp.com'
+      );
+
+  }
+
   
    
 ?>

@@ -104,6 +104,7 @@ class RestServer
 	
 	public function handle()
 	{
+		$this->setHeaders();
 		$this->url = $this->getPath();
 		$this->method = $this->getMethod();
 		$this->format = $this->getFormat();
@@ -112,7 +113,6 @@ class RestServer
 			$this->data = $this->getData();
 		}
 		if($this->method == 'OPTIONS'){
-			$this->setHeaders();
 			throw new RestException(200, "OK");
 			exit;
 		}
@@ -120,6 +120,8 @@ class RestServer
 		list($obj, $method, $params, $this->params, $noAuth) = $this->findUrl();
 		
 		if ($obj) {
+			$logger = Logger::getLogger('api');
+			$logger->trace("Handling " .$this->method. " ".$this->url );
 			if (is_string($obj)) {
 				if (class_exists($obj)) {
 					$obj = new $obj();
@@ -129,8 +131,7 @@ class RestServer
 			}
 			
 			$obj->server = $this;
-			$this->setHeaders();
-			$logger = Logger::getLogger('api');
+			
 			try {
 				if (method_exists($obj, 'init')) {
 					$obj->init();
@@ -189,11 +190,11 @@ class RestServer
 	private function setHeaders(){
 		if($this->mode == "debug"){
 			header('Access-Control-Allow-Origin: http://localhost:9000');		
-			header('Access-Control-Allow-Methods: POST, OPTIONS, DELETE, GET, PUT');
+			header('Access-Control-Allow-Methods: OPTIONS, POST, DELETE, GET, PUT');
 			header('Access-Control-Allow-Credentials: true');
 			header('Access-Control-Allow-Headers: Authorization, X-Requested-With, CONTENT-TYPE, token');
-			header('P3P: CP="NON DSP LAW CUR ADM DEV TAI PSA PSD HIS OUR DEL IND UNI PUR COM NAV INT DEM CNT STA POL HEA PRE LOC IVD SAM IVA OTC"');
-			header('Access-Control-Max-Age: 1');
+			//header('P3P: CP="NON DSP LAW CUR ADM DEV TAI PSA PSD HIS OUR DEL IND UNI PUR COM NAV INT DEM CNT STA POL HEA PRE LOC IVD SAM IVA OTC"');
+			//header('Access-Control-Max-Age: 1');
 		}
 	}
 
@@ -435,7 +436,7 @@ class RestServer
 
 	public function sendData($data)
 	{
-		//header("Cache-Control: no-cache, must-revalidate");
+		header("Cache-Control: no-cache, must-revalidate");
 		header("Expires: 0");
 		header('Content-Type: ' . $this->format);
 
