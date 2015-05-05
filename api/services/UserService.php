@@ -9,9 +9,14 @@ class UserService extends BaseService
 
 
     public function getUserById($uid, $full = false){
+        $cols = " u.`id_user` as id, u.`login`, u.`email`, u.`givenname` as `firstName`, ".
+                " u.`locale_id` as localeId, u.`target_locale_id` as targetLocaleId, ".
+                " u.`surname` as `lastName`, u.`pass`, u.`salt`, l.`code` as localeCode, l2.`code` as targetLocaleCode ";
         
-        $sql = "SELECT ".($full ? "* " : " `id_user` as id, `login`, `email`, `givenname` as `firstName`, `surname` as `lastName`, `pass`, `salt` " ).
-               "FROM `user` ".
+        $sql = "SELECT ".($full ? "u.*, l.`code` as localeCode, l2.`code` as targetLocaleCode  " : $cols ).
+               "FROM `user` u ".
+               "INNER JOIN `lang` l ON l.`id_lang` = u.`locale_id` ".
+               "LEFT JOIN `lang` l2 ON l2.`id_lang` = u.`target_locale_id` ".
                "WHERE `id_user`=? ".($full ? "" : "AND `active`=1 AND `blocked`=0") ;
 
         $data = $this->conn->select( $sql , array(intval($uid))); 
@@ -22,9 +27,15 @@ class UserService extends BaseService
     }
 
     public function getUserByLogin( $login ){
+
+         $cols = " u.`id_user` as id, u.`login`, u.`email`, u.`givenname` as `firstName`, u.`active`, u.`blocked`, ".
+                " u.`locale_id` as localeId, u.`target_locale_id` as targetLocaleId, ".
+                " u.`surname` as `lastName`, u.`pass`, u.`salt`, l.`code` as localeCode, l2.`code` as targetLocaleCode ";
         
-        $sql = "SELECT `id_user` as id, `login`, `email`, `active`, `givenname` as `firstName`, `surname` as `lastName`, `pass`, `salt` ".
-               "FROM `user` ".
+        $sql = "SELECT $cols ".
+               "FROM `user` u ".
+               "INNER JOIN `lang` l ON l.`id_lang` = u.`locale_id` ".
+               "LEFT JOIN `lang` l2 ON l2.`id_lang` = u.`target_locale_id` ".
                "WHERE `login`=? LIMIT 1";
 
         $data = $this->conn->select( $sql , array($login) ); 
@@ -57,8 +68,9 @@ class UserService extends BaseService
         $salt = StringUtils::getRandomString(5);
         $token = StringUtils::getRandomString(); 
         $sql = "INSERT INTO `user` (`id_user_type`, `login`, `pass`, `salt`, `active`, `blocked`, ".
-                            "`reg_time`, `email`, `givenname`, `surname`, `token`, `token_created`) ".
-                            " VALUES (?,?,?,?,?,?,?,?,?,?,?, NOW())";
+                            "`reg_time`, `email`, `givenname`, `surname`, `token`, `token_created`, ".
+                            " `locale_id`, `target_locale_id` ) ".
+                            " VALUES (?,?,?,?,?,?,?,?,?,?,?,NOW(),?,?)";
         $this->conn->insert( $sql , 
                 array(  1, 
                         $user->login, 
@@ -70,7 +82,9 @@ class UserService extends BaseService
                         $user->email, 
                         $user->firstName,
                         $user->lastName,
-                        $token) 
+                        $token, 
+                        $user->localeId,
+                        $user->targetLocaleId) 
                 );
         $uid = $this->conn->getInsertId();
        return $this->getUserById( $uid , true );
@@ -182,7 +196,7 @@ class UserService extends BaseService
             throw new InvalidArgumentException(getMessage("errUserPasswordLength"));
         }else if(!isset($user->password2) || $user->password != $user->password2){
             throw new InvalidArgumentException(getMessage("errUserPasswordMatch"));
-        }else if(!isset($user->locale_id)){
+        }else if(!isset($user->localeId)){
             throw new InvalidArgumentException(getMessage("errUserLocaleEmpty"));
         }
 

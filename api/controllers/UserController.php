@@ -39,7 +39,6 @@ class UserController
                 unset($user['salt']);
                 $result['token'] = JWT::encode($token, $drilConf['dril_auth']);
                 $result['user'] = $user;
-                $result['user']['settings'] = $this->settingsService->getOrCreateUserSettings($user['id']);
                 $logger = Logger::getLogger('api');
                 $logger->info("User [id=" .$user['id']."] was successfully logged in. [ip=" .$_SERVER['SERVER_ADDR']."]");
                return $result;
@@ -54,14 +53,13 @@ class UserController
    }
 
     /**
-     * Create new book
+     * Create a new user
      *
      * @url POST /v1/users
      * @noAuth
      */
     public function create( $data ) {
         $user = $this->userService->create($data);
-        $this->settingsService->createUserSettings($user['id_user'], $data->locale_id);
         $this->userService->sendRegistrationEmail($user);
     }
     
@@ -81,6 +79,5 @@ class UserController
         global $conn;
         $this->userService = new UserService($conn);
         $this->wordService = new WordService($conn);
-        $this->settingsService = new SettingsService($conn);
     }
 }   

@@ -40,6 +40,8 @@ ALTER TABLE `user` ADD `donated` BOOLEAN NOT NULL DEFAULT FALSE AFTER `token_cre
 ALTER TABLE `user` CHANGE `login` `login` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
 ALTER TABLE `user` CHANGE `givenname` `givenname` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 ALTER TABLE `user` CHANGE `surname` `surname` VARCHAR(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+ALTER TABLE `user` ADD `locale_id` SMALLINT UNSIGNED NOT NULL DEFAULT '1' AFTER `id_user`, ADD `target_lang_id` SMALLINT UNSIGNED NULL AFTER `locale_id`;
+ALTER TABLE `user` CHANGE `target_lang_id` `target_locale_id` SMALLINT(5) UNSIGNED NULL DEFAULT NULL;
 
 --INSERT INTO `db_drilapp_com`.`dril_lecture_has_word`
 -- ( `question`, `answer`, `last_rating`, `viewed`, `last_viewd`, `avg_rating`, `is_activated`, `changed`, `created`, `dril_lecture_id`)
