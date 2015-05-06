@@ -90,6 +90,20 @@ class UserService extends BaseService
        return $this->getUserById( $uid , true );
     }
 
+    public function update($user){
+        $this->baseValidation($user);
+        $sql = "UPDATE `user` SET givenname = ?, surname = ?, `locale_id`= ? , `target_locale_id`= ?,  changed = NOW() ".
+               "WHERE id_user = ? ";
+       $this->conn->update( $sql , 
+            array(  $user->firstName,
+                    $user->lastName,
+                    $user->localeId,
+                    $user->targetLocaleId,
+                    $user->id 
+                ) 
+        );
+    }
+
 
     public function rateWord($uid, $word){
          $sql = "UPDATE `dril_lecture_has_word` ".
@@ -188,18 +202,22 @@ class UserService extends BaseService
             throw new InvalidArgumentException(getMessage("errUserLoginLength"));
         }else if(!$this->isValueUniqe("email", $user->email)){
             throw new InvalidArgumentException(getMessage("errUserEmailUniqe", $user->email));
-        }else if(strlen($user->firstName) == 0 || strlen($user->firstName) > 30){
-            throw new InvalidArgumentException(getMessage("errUserFirstNameLength"));
-        }else if(strlen($user->lastName) == 0 || strlen($user->lastName) > 30){
-            throw new InvalidArgumentException(getMessage("errUserLastNameLength"));
         }else if(!isset($user->password) || strlen($user->password) < 6){
             throw new InvalidArgumentException(getMessage("errUserPasswordLength"));
         }else if(!isset($user->password2) || $user->password != $user->password2){
             throw new InvalidArgumentException(getMessage("errUserPasswordMatch"));
+        }
+        $this->baseValidation($user);
+    }
+
+    private function baseValidation($user){
+        if(strlen($user->firstName) == 0 || strlen($user->firstName) > 30){
+            throw new InvalidArgumentException(getMessage("errUserFirstNameLength"));
+        }else if(strlen($user->lastName) == 0 || strlen($user->lastName) > 30){
+            throw new InvalidArgumentException(getMessage("errUserLastNameLength"));
         }else if(!isset($user->localeId)){
             throw new InvalidArgumentException(getMessage("errUserLocaleEmpty"));
         }
-
     }
 
 }

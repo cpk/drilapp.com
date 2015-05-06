@@ -15,7 +15,7 @@ require_once 'services/TagService.php';
 require_once 'services/BookService.php';
 require_once 'services/UserService.php';
 require_once 'services/CommonService.php';
-require_once 'services/SettingsService.php';
+require_once 'services/StatisticService.php';
 
 
 require_once 'controllers/BaseController.php';

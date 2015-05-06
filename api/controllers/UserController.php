@@ -62,6 +62,16 @@ class UserController
         $user = $this->userService->create($data);
         $this->userService->sendRegistrationEmail($user);
     }
+
+
+    /**
+     * Update user
+     *
+     * @url PUT /v1/users
+     */
+    public function update( $data ) {
+        $this->userService->update( $data );
+    }
     
     /**
      * Activate user account
@@ -73,6 +83,18 @@ class UserController
         return $user = $this->userService->activateAccount($data->token);
     }
 
+    /**
+     * Gets user statistics
+     *
+     * @url GET /v1/users/$id/stats
+     */
+    public function getUserStatistics($id, $uid){
+        global $conn;
+        $statisticService = new StatisticService($conn);
+        $res['statistics'] = $statisticService->getUserStatistics($uid);
+        $res['sessions'] = $statisticService->getUserSessions($uid);
+        return $res;
+    }
 
 
     public function init(){
