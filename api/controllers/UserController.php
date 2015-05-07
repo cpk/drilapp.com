@@ -86,9 +86,9 @@ class UserController
     /**
      * Gets user statistics
      *
-     * @url GET /v1/users/$id/stats
+     * @url GET /v1/stats
      */
-    public function getUserStatistics($id, $uid){
+    public function getUserStatistics($uid){
         global $conn;
         $statisticService = new StatisticService($conn);
         $res['statistics'] = $statisticService->getUserStatistics($uid);
