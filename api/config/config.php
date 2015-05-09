@@ -25,5 +25,8 @@
 	$config['mailPass'] = "Uauv3Uh5Hcym38G";
 	$config['mailFromEmail'] = "info@drilapp.com";
 	$config['mailFromLabel'] = "Dril";
+
+	define("LECTURE_WORD_LIMIT", 300);
+
 	
 ?>

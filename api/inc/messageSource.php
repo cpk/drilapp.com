@@ -38,6 +38,8 @@
 
 			"activated" => "Your account has been activated",
 
+			"errXlsFile" => "Invalid file. Alloved are only XLS, XLSX files.",	
+
 			"emailReg_head" => "Complete your registration",
 			"emailReg_descr" => "Your account has been successfully created. Activate your account by clicking on following button",
 			"emailReg_activate" => "Activate account", 

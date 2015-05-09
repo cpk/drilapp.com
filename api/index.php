@@ -16,6 +16,7 @@ require_once 'services/BookService.php';
 require_once 'services/UserService.php';
 require_once 'services/CommonService.php';
 require_once 'services/StatisticService.php';
+require_once 'services/IOService.php';
 
 
 require_once 'controllers/BaseController.php';
@@ -30,13 +31,6 @@ require_once 'inc/class.PHPMailer.php';
 require_once 'inc/class.SMTP.php';
 require_once 'inc/Text2Speach.php';
 	
-
-
-//$userService = new UserService($conn);
-//$tagService = new TagService($conn);
-//$wordService = new WordService($conn);
-//$lectureService = new LectureService($conn, $wordService);
-//$bookService = new BookService($conn, $tagService, $lectureService, $wordService);
 
 
 $drilConf = getConf($conn);
