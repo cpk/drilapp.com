@@ -56,6 +56,7 @@ class WordService extends BaseService
     }
 
 
+
     private function updateWordActivity( $id, $status ){
         $sql = "UPDATE `dril_lecture_has_word` ".
                "SET `is_activated`=? ".

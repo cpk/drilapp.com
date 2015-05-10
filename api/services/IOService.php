@@ -61,7 +61,7 @@ class IOService extends BaseService
 	}
 
 	private function validateFile(){
-		if(!isset($_FILES['errXlsFileEmpty'])){
+		if(!isset($_FILES['file'])){
 			throw new InvalidArgumentException(getMessage("errXlsFile"));
 		}
 		$filename = basename($_FILES['file']['name']);
@@ -77,7 +77,7 @@ class IOService extends BaseService
 		    	"application/x-xls"
 		);
 		if (($ext != "xls" && $ext != "xlsx") || 
-			!in_array($_FILES["xlsFile"]["type"], $mimes) ) {
+			!in_array($_FILES["file"]["type"], $mimes) ) {
 			throw new InvalidArgumentException(getMessage("errXlsFile"));
 		}
 	}

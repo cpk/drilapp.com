@@ -58,6 +58,11 @@ class LectureService extends BaseService
     }
 
 
+    public function deleteWordsOnly($lectureId){
+      $this->conn->delete("DELETE FROM `dril_lecture_has_word` WHERE dril_lecture_id = ?", array( $lectureId ));
+    }
+
+
     public function deleteAllBookLectures( $bookId ){
         $list = $this->getAllBookLectures( $bookId );
         foreach ($list as $key => $lecture) {

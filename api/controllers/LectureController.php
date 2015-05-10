@@ -14,11 +14,23 @@ class LectureController{
     public function update( $data, $uid )
     {
         $book = $this->bookService->getBookById( $data->dril_book_id );
-        if($book != null){
-            checkBookPermision($book, $uid);
-            return $this->lectureService->create($data);
-        }
+        checkBookPermision($book, $uid);
+        return $this->lectureService->create($data);
+    }
 
+
+    /**
+     * Activate user word
+     *
+     * @url DELETE /v1/user/lectures/$id
+     * 
+     */
+    public function deleteLecture($id, $uid){
+        global $conn;
+        $wordService = new WordService($conn);
+        $book = $wordService->getBookByLectureId( $id );
+        checkBookPermision($book, $uid);
+        $this->lectureService->deleteWordsOnly( $id );
     }
 
     
