@@ -10,7 +10,7 @@ class BookService extends BaseService
        parent::__construct($conn);
        
        if($tagService == null){
-         $this->tagService = new tagService($conn);
+         $this->tagService = new TagService($conn);
        }else{
         $this->tagService = $tagService;
        }

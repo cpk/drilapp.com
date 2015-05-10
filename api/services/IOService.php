@@ -14,12 +14,17 @@ class IOService extends BaseService
 		$this->saveFile($file, $fileName );
 		$xlsObj = $this->loadExcelFile( $fileName );
 		$rows = $this->reedExcelFile( $xlsObj );
-		print_r($rows);
+		$this->removeFile($fileName);
+		return $rows;
 	}
 
 
 	private function saveFile($file, $fileName ){
 		move_uploaded_file($file["tmp_name"], $this->getSaveDir(). $fileName);
+	}
+
+	private function removeFile($fileName){
+		unlink($this->getSaveDir(). $fileName);	
 	}
 
 	private function loadExcelFile($fileName){
@@ -35,11 +40,7 @@ class IOService extends BaseService
 		$highestColumn = $sheet->getHighestColumn();
 		$rows = array();
 		for ($row = 0; $row <= $highestRow; $row++){ 
-			    //  Read a row of data into an array
-			    $rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
-			                                    NULL,
-			                                    TRUE,
-			                                    FALSE);
+			$rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row, NULL, TRUE, FALSE);
 		    if(!empty($rowData[0][0]) && !empty($rowData[0][1])){
 		    	$rows[] = array( "question" => $rowData[0][0], "answer" => $rowData[0][1] );
 		    }

@@ -77,6 +77,29 @@ class WordController{
         
     }
 
+
+    /**
+    * Import xls/xlsx file
+    *
+    * @url POST /v1/user/words/import
+    */
+    public function importFile( $data, $uid ){
+        $lectureId = intval($_POST['lectureId']);
+        $book = $this->wordService->getBookByLectureId( $lectureId );
+        checkBookPermision($book, $uid);
+        require dirname(dirname(__FILE__)).'/inc/PHPExcel.php';
+        global $conn;
+        $IOService = new IOService($conn);
+        $rows = $IOService->process($_FILES["file"]);
+
+        $statisticService = new StatisticService($conn);
+        $userStats = $statisticService->getUserStatistics($uid);
+        $this->wordService->createWords($rows, $book, $userStats);
+
+        $bookService = new BookService($conn);
+        return $bookService->getFetchedLectureId( $book['id'], $lectureId, $uid );
+    }
+
     /**
      * Activate user word
      *
@@ -90,7 +113,7 @@ class WordController{
     public function init(){
         global $conn;
         $this->wordService = new WordService($conn);
-        $this->userService = new userService($conn);
+        $this->userService = new UserService($conn);
     }
 
 

@@ -101,21 +101,6 @@ class BaseController
    }
 
 
-   /**
-  * Import xls/xlsx file
-  *
-  * @url POST /v1/import
-  */
-   public function importFile( $data, $uid ){
-      require dirname(dirname(__FILE__)).'/inc/PHPExcel.php';
-      global $conn;
-      $IOService = new IOService($conn);
-      $IOService->process($_FILES["file"]);
-      //print_r($_FILES);
-      //print_r($uid);
-      return array("ok" => true);
-   }
-
 
   /**
   * Log JS error

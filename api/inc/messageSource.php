@@ -40,10 +40,15 @@
 
 			"errXlsFile" => "Invalid file. Alloved are only XLS, XLSX files.",	
 
+			"errLecutreWordLimit" => "The lecture can contains max. {0} words. Create a new lecture and split the words.",
+			"errWordLimit" => "The max number of words per account is {0} you currently have {1}.",
+
 			"emailReg_head" => "Complete your registration",
 			"emailReg_descr" => "Your account has been successfully created. Activate your account by clicking on following button",
 			"emailReg_activate" => "Activate account", 
 			"emailReg_ccopyUrl" => "Or copy following url and paste it into your browser" 
+
+
 
 		);
 

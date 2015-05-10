@@ -27,6 +27,7 @@
 	$config['mailFromLabel'] = "Dril";
 
 	define("LECTURE_WORD_LIMIT", 300);
+	define("UNLIMITED", -1);
 
 	
 ?>

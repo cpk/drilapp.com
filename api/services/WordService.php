@@ -141,7 +141,7 @@ class WordService extends BaseService
 
 
     public function getBookByWordId( $wordId ){
-      $sql =  "SELECT b.* ".
+      $sql =  "SELECT b.*, bhl.`no_of_words` as no_of_words, bhl.`id` as dril_lecture_id ".
               "FROM `dril_lecture_has_word` w ".
               "INNER JOIN dril_book_has_lecture bhl ON bhl.id = w.`dril_lecture_id` ".
               "INNER JOIN dril_book b ON b.id = bhl.`dril_book_id` ".
@@ -154,8 +154,41 @@ class WordService extends BaseService
     }
 
 
+    public function createWords($words, $lecture, $userStats){
+        $count = count($words);
+        $newLectureCount = $count + intval($lecture['no_of_words']);
+        $logger = Logger::getLogger('api');
+
+        if($newLectureCount > LECTURE_WORD_LIMIT){
+          $logger->warn("User [uid=".$lecture['user_id']."] tried to import $count " . 
+                        " into [lid=" . $lecture['dril_lecture_id']. "] current count: ".$lecture['no_of_words'] );
+          throw new InvalidArgumentException( getMessage("errLecutreWordLimit", LECTURE_WORD_LIMIT) );
+        }
+        $totalWords = $userStats['wordCount'] + $count;
+        if( $userStats['wordLimit'] != UNLIMITED && $totalWords > $userStats['wordLimit'] ){
+          $logger->warn("User [uid=".$lecture['user_id']."] word limit exceeded. The user tried to import $count " . 
+                        "into [lid=" . $lecture['dril_lecture_id']."]" );
+          throw new InvalidArgumentException( getMessage("errWordLimit", $userStats['wordCount'], $userStats['wordLimit']) );
+        }
+        $sqlRows = array();
+        for( $i = 0; $i < $count; $i++ ){
+          $sqlRows[] = "(
+                        '".$this->conn->clean(StringUtils::xssClean($words[$i]['question']))."', 
+                        '".$this->conn->clean(StringUtils::xssClean($words[$i]['answer']))."',
+                        ".$lecture['dril_lecture_id'].",".
+                        "NOW() ".
+                      ")";
+        } 
+        $sql = "INSERT INTO `dril_lecture_has_word` (`question`, `answer`, `dril_lecture_id`, `created`) VALUES ".
+                implode(",", $sqlRows);
+        $this->conn->insert($sql);
+        $this->updateCountOfWordsByLectureId($lecture['dril_lecture_id']);
+    }
+
+
+
     public function getBookByLectureId( $lectureId ){
-      $sql =  "SELECT b.* ".
+      $sql =  "SELECT b.*, bhl.`no_of_words` as no_of_words, bhl.`id` as dril_lecture_id ".
               "FROM `dril_book` b ".
               "INNER JOIN dril_book_has_lecture bhl ON bhl.dril_book_id = b.`id` ".
               "WHERE bhl.id = ? LIMIT 1";
@@ -171,7 +204,7 @@ class WordService extends BaseService
       $this->conn->delete("DELETE FROM `dril_lecture_has_word` WHERE id = ?;", array( $id ));
       if($lectureId == null){
         $logger = Logger::getLogger('api');
-        $logger->error("Culdnt not update count of words.[wordId=$id][ip=" .$_SERVER['REMOTE_ADDR']."]", $e);
+        $logger->error("Culdnt not update count of words.[wid=$id][ip=" .$_SERVER['REMOTE_ADDR']."]", $e);
       }else{
         $this->updateCountOfWordsByLectureId( $lectureId  );
       }

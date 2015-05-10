@@ -9,6 +9,7 @@ class StatisticService extends BaseService
 
 
     public function getUserStatistics($uid){
+        
         $sql = "SELECT ".
                " count(distinct b.id) as bookCount, ".
                " count(distinct l.id) as lectureCount, ".
