@@ -39,6 +39,7 @@
 			"activated" => "Your account has been activated",
 
 			"errXlsFile" => "Invalid file. Alloved are only XLS, XLSX files.",	
+			"errXlsFileEmpty" => "Nothing to import. Check format and content of the file",	
 
 			"errLecutreWordLimit" => "The lecture can contains max. {0} words. Create a new lecture and split the words.",
 			"errWordLimit" => "The max number of words per account is {0} you currently have {1}.",

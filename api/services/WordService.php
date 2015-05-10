@@ -20,9 +20,9 @@ class WordService extends BaseService
     }
 
 
-    public function activateWord($data, $id){
+    public function activateWord($data){
         if($data->activate){
-          $this->updateWordActivity($id, 1);
+          $this->updateWordActivity($data->id, 1);
           $sql = "SELECT w.`id`, w.`question`, w.`answer`, w.`last_rating` as lastRating, w.`viewed`,".
                "  false as isLearned, ".
                "  UNIX_TIMESTAMP(w.`last_viewd`) as lastViewed, ".
@@ -34,7 +34,7 @@ class WordService extends BaseService
                "  INNER JOIN lang question_lang ON question_lang.id_lang = b.question_lang_id ".
                "  INNER JOIN lang answer_lang ON answer_lang.id_lang = b.answer_lang_id ".
                "WHERE w.id= ? ";
-        $result = $this->conn->select( $sql, array($id) );
+        $result = $this->conn->select( $sql, array( $data->id ) );
         if(count($result) > 0){
           return $result[0];
         }
@@ -44,6 +44,17 @@ class WordService extends BaseService
       return null;
     }
 
+    public function updateLectureActivity( $data ){
+        if(!isset($data->id) || !isset($data->activate)){
+          throw new InvalidArgumentException("Bad request.");
+        }
+        $sql = "UPDATE `dril_lecture_has_word` ".
+               "SET `is_activated`=? ".
+               "WHERE dril_lecture_id = ? ";
+        $this->conn->update($sql,  array( $data->activate ? 1 : 0, $data->id ));
+        return array("success" => 1);
+    }
+
 
     private function updateWordActivity( $id, $status ){
         $sql = "UPDATE `dril_lecture_has_word` ".
@@ -51,6 +62,8 @@ class WordService extends BaseService
                "WHERE id = ? ";
         $this->conn->update($sql,  array( $status, $id ));
     }
+
+    
 
 
     public function update( $word ){
@@ -158,6 +171,10 @@ class WordService extends BaseService
         $count = count($words);
         $newLectureCount = $count + intval($lecture['no_of_words']);
         $logger = Logger::getLogger('api');
+
+        if($count == 0){
+          throw new InvalidArgumentException( getMessage("errXlsFileEmpty") );
+        }
 
         if($newLectureCount > LECTURE_WORD_LIMIT){
           $logger->warn("User [uid=".$lecture['user_id']."] tried to import $count " . 

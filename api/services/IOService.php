@@ -10,12 +10,19 @@ class IOService extends BaseService
 	}
 
 	public function process($file){
-		$fileName = StringUtils::clear($file['name'], true);
-		$this->saveFile($file, $fileName );
-		$xlsObj = $this->loadExcelFile( $fileName );
-		$rows = $this->reedExcelFile( $xlsObj );
-		$this->removeFile($fileName);
-		return $rows;
+		$this->validateFile();
+		try{
+			$fileName = StringUtils::clear($file['name'], true);
+			$this->saveFile($file, $fileName );
+			$xlsObj = $this->loadExcelFile( $fileName );
+			$rows = $this->reedExcelFile( $xlsObj );
+			$this->removeFile($fileName);
+			return $rows;
+		}catch(Exception $ex){
+			$logger = Logger::getLogger('api');
+			$logger->error('Import of '. $_FILES['xlsFile']['name']. " failed.", $ex);
+			throw new InvalidArgumentException(getMessage("errXlsFile"));
+		}
 	}
 
 
@@ -54,7 +61,10 @@ class IOService extends BaseService
 	}
 
 	private function validateFile(){
-		$filename = basename($_FILES['xlsFile']['name']);
+		if(!isset($_FILES['errXlsFileEmpty'])){
+			throw new InvalidArgumentException(getMessage("errXlsFile"));
+		}
+		$filename = basename($_FILES['file']['name']);
 		$ext = substr($filename, strrpos($filename, '.') + 1);
 		$mimes = array( 
 		    	"application/vnd.ms-excel",

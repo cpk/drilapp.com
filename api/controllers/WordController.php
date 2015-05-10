@@ -51,19 +51,6 @@ class WordController{
     /**
      * Activate user word
      *
-     * @url POST /v1/user/words/$id/activate
-     * 
-     */
-    public function toggleWordActivation( $data, $id, $uid ){
-        $book = $this->wordService->getBookByWordId( $id );
-        checkBookPermision($book, $uid);
-        return $this->wordService->activateWord( $data, $id );
-    }
-
-
-    /**
-     * Activate user word
-     *
      * @url GET /v1/words
      * @noAuth
      * 
@@ -117,5 +104,31 @@ class WordController{
     }
 
 
+
+    /**
+     * Toggle word / lecture / all words activatoin
+     *
+     * @url POST /v1/user/toggleActivation
+     * 
+     */
+    public function toggleActivation($data, $uid){
+        if(!isset($data->type)){
+            throw new  InvalidArgumentException("Bad request");
+        }
+        switch ($data->type) {
+            case 'word':
+                $book = $this->wordService->getBookByWordId( $data->id );
+                checkBookPermision($book, $uid);
+                return $this->wordService->activateWord( $data);
+             case 'lecture':
+                $book = $this->wordService->getBookByLectureId( $data->id );
+                checkBookPermision($book, $uid);
+                return $this->wordService->updateLectureActivity( $data );   
+
+            default:
+                throw new InvalidArgumentException("Unknow activation type: " . $data->type );
+                break;
+        }
+    }
     
 }
