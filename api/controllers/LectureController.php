@@ -9,13 +9,25 @@ class LectureController{
      * Create a new lecture
      *
      * @url POST /v1/lectures
-     * 
      */
-    public function update( $data, $uid )
+    public function create( $data, $uid )
     {
         $book = $this->bookService->getBookById( $data->dril_book_id );
         checkBookPermision($book, $uid);
         return $this->lectureService->create($data);
+    }
+
+
+    /**
+     * Update lecture
+     *
+     * @url PUT /v1/lectures
+     */
+    public function update( $data, $uid )
+    {   
+        $book = $this->bookService->getBookById( $data->dril_book_id );
+        checkBookPermision($book, $uid);
+        return $this->lectureService->update( $data );
     }
 
 
@@ -31,6 +43,7 @@ class LectureController{
         $book = $wordService->getBookByLectureId( $id );
         checkBookPermision($book, $uid);
         $this->lectureService->deleteWordsOnly( $id );
+        $wordService->updateCountOfWordsByLectureId( $id );
     }
 
     

@@ -237,7 +237,7 @@ class WordService extends BaseService
     }
 
 
-    private function updateCountOfWordsByLectureId( $lectureId ){
+    public function updateCountOfWordsByLectureId( $lectureId ){
       $sql = "UPDATE `dril_book_has_lecture` " .
              "SET `no_of_words`= (SELECT count(*) FROM dril_lecture_has_word WHERE dril_lecture_id = $lectureId) ".
              "WHERE id = $lectureId";

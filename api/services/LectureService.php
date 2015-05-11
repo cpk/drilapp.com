@@ -34,21 +34,11 @@ class LectureService extends BaseService
 
 
 
-    /**
-    *
-    * 
-    */
-    public function update( $lecture ){
-        $name = trim($lecture['name']);
-        $bookId = intval($lecture['dril_book_id']);
-        $id = intval($lecture['id']);
-        if($this->isLectureNameUniqe($name, $bookId, $id)){
-            $sql =  "UPDATE `dril_book_has_lecture` SET ".
-                    " `name` = ?, `dril_book_id` = ?, `changed` = CURRENT_TIMESTAMP  ";
-            $this->conn->update($sql,  array($name, $bookId) );
-            return true;
-        }
-        return false;
+    public function update( $data ){
+        $this->validate($data);
+        $sql =  "UPDATE `dril_book_has_lecture` SET ".
+                " `name` = ?, `changed` = NOW() WHERE `id`=? ";
+        $this->conn->update($sql,  array($data->name, $data->id) );
     }
 
 
@@ -60,6 +50,7 @@ class LectureService extends BaseService
 
     public function deleteWordsOnly($lectureId){
       $this->conn->delete("DELETE FROM `dril_lecture_has_word` WHERE dril_lecture_id = ?", array( $lectureId ));
+
     }
 
 
