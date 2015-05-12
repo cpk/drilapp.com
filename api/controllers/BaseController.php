@@ -113,6 +113,24 @@ class BaseController
   }
 
 
+  /**
+  * Save report
+  *
+  * @url POST /v1/contact
+  * @noAuth
+  */
+  public function contact($data, $uid = null){
+    global $conn;
+    $user = null;
+    if($uid != null){
+      $user = $this->userService->getUserById($uid);
+    }
+
+    $contactService = new ContactService($conn);
+    $contactService->saveReport($data, $user);
+  }
+
+
    public function init(){
       global $conn;
       $this->commonService = new CommonService($conn);

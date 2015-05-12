@@ -17,6 +17,7 @@ require_once 'services/UserService.php';
 require_once 'services/CommonService.php';
 require_once 'services/StatisticService.php';
 require_once 'services/IOService.php';
+require_once 'services/ContactService.php';
 
 
 require_once 'controllers/BaseController.php';
