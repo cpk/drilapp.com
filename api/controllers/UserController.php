@@ -96,6 +96,34 @@ class UserController
         return $res;
     }
 
+    /**
+     * Toggle word / lecture / all words activatoin
+     *
+     * @url POST /v1/user/toggleActivation
+     * 
+     */
+    public function toggleActivation($data, $uid){
+        if(!isset($data->type)){
+            throw new  InvalidArgumentException("Bad request");
+        }
+        switch ($data->type) {
+            case 'word':
+                $book = $this->wordService->getBookByWordId( $data->id );
+                checkBookPermision($book, $uid);
+                return $this->wordService->activateWord( $data);
+            case 'lecture':
+                $book = $this->wordService->getBookByLectureId( $data->id );
+                checkBookPermision($book, $uid);
+                return $this->wordService->updateLectureActivity( $data );
+            case 'all':
+                $book = $this->wordService->deactiveAllUserWords($uid);
+                return;
+            default:
+                throw new InvalidArgumentException("Unknow activation type: " . $data->type );
+                break;
+        }
+    }
+
 
     public function init(){
         global $conn;

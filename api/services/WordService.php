@@ -168,6 +168,19 @@ class WordService extends BaseService
     }
 
 
+    public function deactiveAllUserWords($uid){
+      $sql = "UPDATE dril_lecture_has_word ".
+             "SET is_activated = 0 ".
+             "WHERE dril_lecture_id IN (".
+                "SELECT l.id ".
+                "FROM `dril_book_has_lecture` l ".
+                "INNER JOIN `dril_book` b ON b.id = l.dril_book_id ".
+                "WHERE b.user_id = ? ". 
+              ")";
+      $this->conn->update($sql, array($uid) );
+    }
+
+
     public function createWords($words, $lecture, $userStats){
         $count = count($words);
         $newLectureCount = $count + intval($lecture['no_of_words']);
