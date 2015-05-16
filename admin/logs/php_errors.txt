@@ -1,0 +1,7 @@
+[16-May-2015 18:40:20 Europe/Berlin] PHP Notice:  Undefined index: act in /opt/lampp/htdocs/drilapp.com/export.php on line 43
+[16-May-2015 18:40:20 Europe/Berlin] PHP Notice:  Undefined index: lang in /opt/lampp/htdocs/drilapp.com/export.php on line 44
+[16-May-2015 18:40:20 Europe/Berlin] PHP Notice:  Undefined index: ver in /opt/lampp/htdocs/drilapp.com/export.php on line 45
+[16-May-2015 18:47:41 Europe/Berlin] PHP Notice:  Undefined variable: conn in /opt/lampp/htdocs/drilapp.com/export2.php on line 107
+[16-May-2015 18:47:41 Europe/Berlin] PHP Fatal error:  Call to a member function select() on a non-object in /opt/lampp/htdocs/drilapp.com/export2.php on line 107
+[16-May-2015 18:48:09 Europe/Berlin] PHP Notice:  Undefined variable: conn in /opt/lampp/htdocs/drilapp.com/export2.php on line 96
+[16-May-2015 18:48:09 Europe/Berlin] PHP Fatal error:  Call to a member function select() on a non-object in /opt/lampp/htdocs/drilapp.com/export2.php on line 96

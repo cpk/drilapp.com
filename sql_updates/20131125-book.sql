@@ -14,14 +14,7 @@ update book set lang_question=6, lang_answer=2 where _id=18;
 update book set lang_question=2, lang_answer=6 where _id=19;
 update book set lang_question=2, lang_answer=6 where _id=20;
 
-INSERT INTO `config` (
-`id_config` ,
-`key` ,
-`val`
-)
-VALUES (
-NULL , 'dril_auth', 'b379c5f65387e482844779a5626a01c7'
-);
+INSERT INTO `config` (`id_config` ,`key` ,`val`) VALUES ( 15 , 'dril_web_auth', '3mYxaMXa8pwrXZsdf');
 
 ALTER TABLE `book` ADD `sync` BOOLEAN NOT NULL DEFAULT FALSE AFTER `lang_answer` ,
 ADD `enabled` BOOLEAN NOT NULL DEFAULT TRUE AFTER `sync` ;

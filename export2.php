@@ -6,16 +6,16 @@ header('Content-type: application/json');
   define("LANG_EN", 1);
   define("LANG_DE", 2); 
 
-ini_set("display_errors", 0);
+ini_set("display_errors", 1);
 ini_set('log_errors', 1);
 ini_set('error_log', dirname(__FILE__).'/admin/logs/php_errors.txt');
 	
-        
-require_once "admin/config.php";
-//   include_once  BASE_DIR."/inc/functions.php";
-function __autoload($class) {
-      require_once 'admin/inc/class.'.$class.'.php';
-}
+
+  require_once "admin/config.php";
+  //   include_once  BASE_DIR."/inc/functions.php";
+  function __autoload($class) {
+    require_once 'admin/inc/class.'.$class.'.php';
+  }
   
 
   
@@ -24,19 +24,33 @@ function __autoload($class) {
     $JSONarray = array( );
 
     $conn = Database::getInstance($config['db_server'], $config['db_user'], $config['db_pass'], $config['db_name']);
-    if(!isAuthorized($conn)){
-     sendUnauthorizedResponse();
-    }
-    
+    //if(!isAuthorized($conn)){
+    //  sendUnauthorizedResponse();
+    //}
+
 
     if(isset($_GET['importId'])){
-    // DRILAPP.COM ------------------------------------------------------------
-       $book  = $conn->select("SELECT `name` FROM `import_book` WHERE `import_id`=? LIMIT 1", array( intval($_GET['importId']) ));
-       $words  = $conn->select("SELECT `question` as a,`answer` as q FROM `import_word` WHERE `token`=?", array( intval($_GET['importId']) ));
-	     $conn->update("UPDATE `import_book` SET `downloads`= `downloads`+1 WHERE `import_id`=? LIMIT 1", array( intval($_GET['importId'])));
-	$arr = stripslashes_deep(array('words'=> $words, "name" => $book[0]["name"] ));       
-	echo json_encode($arr) ;
+      // DRILAPP.COM ------------------------------------------------------------
+      if(startsWith($_GET['importId'], "0")){
+         $array = loadFromNewDril();
+         if($array == null){
+            $array = loadFromOldDril();
+         } 
+      }else{
+          $array = loadFromOldDril();
+           if($array == null){
+             $array = loadFromNewDril();
+           } 
+      }
 
+       if($array == null){
+          header('HTTP/1.0 400 Bad Request');
+          echo json_encode( array( "message" => "Not found") ) ;
+       }else{
+          $array = stripslashes_deep( $array );       
+          echo json_encode( $array ) ;
+       }   
+	
     }else{
       $action = intval($_GET['act']);      
       $lang = intval($_GET['lang']);
@@ -78,7 +92,29 @@ function __autoload($class) {
     header('HTTP/1.0 400 Bad Request');
     exit();
   }
-  
+
+ function loadFromOldDril(){
+    global $conn;
+    $book  = $conn->select("SELECT `name` FROM `import_book` WHERE `import_id`=? LIMIT 1", array( intval($_GET['importId']) ));
+    if(count($book) == 0){
+      return null;
+    }
+    $words  = $conn->select("SELECT `question` as a,`answer` as q FROM `import_word` WHERE `token`=?", array( intval($_GET['importId']) ));
+    $conn->update("UPDATE `import_book` SET `downloads`= `downloads`+1 WHERE `import_id`=? LIMIT 1", array( intval($_GET['importId'])));
+    return array('words'=> $words, "name" => $book[0]["name"] );
+ }
+
+ function loadFromNewDril(){
+    global $conn;
+    $id = intval(removeZeros($_GET['importId']));
+    $lecture  = $conn->select("SELECT `name` FROM `dril_book_has_lecture` WHERE `id`=? LIMIT 1", array( $id  ));
+    if(count($lecture) == 0){
+      return null;
+    }
+    $words  = $conn->select("SELECT `question` as a,`answer` as q FROM `dril_lecture_has_word` WHERE `dril_lecture_id`=?", array( $id ));
+    $conn->update("UPDATE `dril_book_has_lecture` SET `downloaded`= `downloaded`+1 WHERE `id`=? LIMIT 1", array( $id  ));
+    return array('words'=> $words, "name" => $lecture[0]["name"] );
+ }
 
 
 function isAuthorized($conn){
@@ -94,7 +130,7 @@ function isAuthorized($conn){
 function sendUnauthorizedResponse(){
   header('WWW-Authenticate: Basic realm="My Realm"');
   header('HTTP/1.0 401 Unauthorized');
-  die();
+  exit();
 }
 
 function stripslashes_deep($value)
@@ -104,4 +140,22 @@ function stripslashes_deep($value)
                 stripslashes($value);
 
     return $value;
+}
+
+
+
+function startsWith($haystack, $needle) {
+    return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== FALSE;
+}
+
+
+function removeZeros($val){
+  for($i = 0;$i < strlen($val) || $i < 7; $i++){
+    if(startsWith($val, "0")){
+        $val = substr($val, 1);
+    }else{
+      return $val;
+    }
+  }
+  return null;
 }

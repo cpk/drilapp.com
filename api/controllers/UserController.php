@@ -37,7 +37,7 @@ class UserController
                 );
                 unset($user['pass']);
                 unset($user['salt']);
-                $result['token'] = JWT::encode($token, $drilConf['dril_auth']);
+                $result['token'] = JWT::encode($token, $drilConf['dril_web_auth']);
                 $result['user'] = $user;
                 $logger = Logger::getLogger('api');
                 $logger->info("User [id=" .$user['id']."] was successfully logged in. [ip=" .$_SERVER['SERVER_ADDR']."]");

@@ -184,7 +184,7 @@ class RestServer
     		return null;
     	}
     	$token = str_replace('Bearer ', '', $authorizationHeader);
-	    return JWT::decode($token, $drilConf['dril_auth'] );
+	    return JWT::decode($token, $drilConf['dril_web_auth'] );
 	}
 
 	private function setHeaders(){
@@ -193,8 +193,6 @@ class RestServer
 			header('Access-Control-Allow-Methods: OPTIONS, POST, DELETE, GET, PUT');
 			header('Access-Control-Allow-Credentials: true');
 			header('Access-Control-Allow-Headers: Authorization, X-Requested-With, CONTENT-TYPE, token');
-			//header('P3P: CP="NON DSP LAW CUR ADM DEV TAI PSA PSD HIS OUR DEL IND UNI PUR COM NAV INT DEM CNT STA POL HEA PRE LOC IVD SAM IVA OTC"');
-			//header('Access-Control-Max-Age: 1');
 		}
 	}
 
