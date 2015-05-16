@@ -262,7 +262,7 @@ footer .ext.play-en{right: 160px;background-image: url(../img/ext-play-en.png);}
 .user-nav ul{list-style:none;margin:0 !important;padding:5px;background:#eee;}
 .user-nav ul li.label{padding:12px 10px 11px 10px;}
 .user-nav ul li{display:inline;margin:0px !important;}
-.user-nav ul li a{padding:5px 25px;border:3px solid #fff !important;;margin:0 2px;display:inline-block;color:#eee;text-decoration:none;border-right:1px solid #eee;-webkit-border-radius: 9px;
+.user-nav ul li a{padding:5px 25px;border:3px solid #fff !important;;margin:0 2px;display:inline-block;color:#eee;text-decoration:none;border-right:1px solid #eee;-webkit-border-radius: 9px;	
 -moz-border-radius: 9px;
 border-radius: 9px;background: #45484d; /* Old browsers */
 background: -moz-linear-gradient(top,  #45484d 0%, #000000 100%); /* FF3.6+ */
@@ -274,7 +274,7 @@ background: linear-gradient(to bottom,  #45484d 0%,#000000 100%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#45484d', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
 }
 .user-nav ul li a:hover,.user-nav ul li.curr a{background:#ccc;color:#333 }
-
+.user-nav ul li:last-child{display: none;}
 .user-content{min-height:350px;position:relative;}
 .user-content h2.cst{width:910px;margin:10px;display:block;float:none;}
 .user-content #words{margin:10px;width:950px;}

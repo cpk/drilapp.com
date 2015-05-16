@@ -22,6 +22,8 @@
 			"registration" => " - registrácia nového užívateľa",
 			"registrationCreate" => "Vytvoriť účet",
 			"addBook" => "Pridať učebnicu",
+			"transmit" => "Presunúť",
+			"transmitted" => "Presuntá",
 
 			"email" => "E-mail",
 			"givenname" => "Vaše meno",

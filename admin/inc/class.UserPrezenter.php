@@ -56,6 +56,7 @@ class UserPrezenter {
                     <th>'.getMessage("bookDate").'</th>
                     <th>'.getMessage("bookPublished").'</th>
                     <th>'.getMessage("edit").'</th>
+                    <th>'.getMessage("transmit").'</th>
                     <th>&nbsp;</th>
                 </tr></thead>';
     }
@@ -71,10 +72,20 @@ class UserPrezenter {
                 '<td class="c">'.date("d.m.Y" ,strtotime($row["create"])).'</td>'.
                 '<td class="c shared'.$row["shared"].'"><a href="#">'.($row["shared"] == 1 ? $yes : $no).'</a></td>'.
                 '<td class="c edit"><a href="?book='.$row["_id"].'">'.getMessage("edit").'</a></td>'.
+                '<td class="c edit">'. $this->getTransmitCol($row).'</td>'.
                 '<td class="c delete"><a href="?id='.$row["_id"].'&amp;token='.$row["import_id"].'">'.getMessage("delete").'</a></td>'.
                "</tr>";
     }
     
+    private function getTransmitCol($row){
+        global $lang;
+        if($row['transmitted']){
+            return getMessage('transmitted');
+        }
+        return 
+        '<a title="Presunúť do WebDril" href="'.linker(29, 1, $lang).'?id='.$row["_id"].'">'.getMessage("transmit").'</a>';
+    }
+
     public function createNavigator($pageNumber, $peerPage){
         $queryStr = str_replace("lang=".$_GET['lang']."&p=".$_GET['p']."&a=index", '', $_SERVER['QUERY_STRING']);
         $queryStr = preg_replace("/&?s=[0-9]*/", "", $queryStr);

@@ -5,3 +5,14 @@
 [16-May-2015 18:47:41 Europe/Berlin] PHP Fatal error:  Call to a member function select() on a non-object in /opt/lampp/htdocs/drilapp.com/export2.php on line 107
 [16-May-2015 18:48:09 Europe/Berlin] PHP Notice:  Undefined variable: conn in /opt/lampp/htdocs/drilapp.com/export2.php on line 96
 [16-May-2015 18:48:09 Europe/Berlin] PHP Fatal error:  Call to a member function select() on a non-object in /opt/lampp/htdocs/drilapp.com/export2.php on line 96
+[16-May-2015 19:15:40 Europe/Berlin] PHP Notice:  Undefined variable: arr in /opt/lampp/htdocs/drilapp.com/admin/inc/section/intro.php on line 54
+[16-May-2015 19:15:40 Europe/Berlin] PHP Notice:  Undefined variable: ar2 in /opt/lampp/htdocs/drilapp.com/admin/inc/section/intro.php on line 54
+[16-May-2015 19:15:46 Europe/Berlin] PHP Notice:  Undefined variable: arr in /opt/lampp/htdocs/drilapp.com/admin/inc/section/intro.php on line 54
+[16-May-2015 19:15:46 Europe/Berlin] PHP Notice:  Undefined variable: ar2 in /opt/lampp/htdocs/drilapp.com/admin/inc/section/intro.php on line 54
+[16-May-2015 20:01:36 Europe/Berlin] PHP Notice:  Undefined variable: arr in /opt/lampp/htdocs/drilapp.com/admin/inc/section/intro.php on line 54
+[16-May-2015 20:01:36 Europe/Berlin] PHP Notice:  Undefined variable: ar2 in /opt/lampp/htdocs/drilapp.com/admin/inc/section/intro.php on line 54
+[16-May-2015 20:01:41 Europe/Berlin] PHP Notice:  Undefined offset: 0 in /opt/lampp/htdocs/drilapp.com/admin/inc/fnc.main.php on line 151
+[16-May-2015 21:52:02 Europe/Berlin] PHP Notice:  Undefined variable: arr in /opt/lampp/htdocs/drilapp.com/admin/inc/section/intro.php on line 54
+[16-May-2015 21:52:02 Europe/Berlin] PHP Notice:  Undefined variable: ar2 in /opt/lampp/htdocs/drilapp.com/admin/inc/section/intro.php on line 54
+[16-May-2015 22:00:59 Europe/Berlin] PHP Notice:  Undefined variable: arr in /opt/lampp/htdocs/drilapp.com/admin/inc/section/intro.php on line 54
+[16-May-2015 22:00:59 Europe/Berlin] PHP Notice:  Undefined variable: ar2 in /opt/lampp/htdocs/drilapp.com/admin/inc/section/intro.php on line 54

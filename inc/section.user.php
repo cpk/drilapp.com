@@ -9,6 +9,9 @@
 		}
 	}else{
 		switch ($meta['id_article']) {
+			case 29 :
+					include 'section.user.migrate.php';
+			break;	
 			case 16:
 			case 17:
 				 if(isset($_GET["book"])){
@@ -25,7 +28,8 @@
 				break;
 			case 19 :
 					include 'section.user.favorite.php';
-				break;	
+				break;
+			
 			default:
 				# code...
 				break;
