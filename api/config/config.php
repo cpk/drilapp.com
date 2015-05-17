@@ -26,6 +26,7 @@
 
 	define("LECTURE_WORD_LIMIT", 300);
 	define("UNLIMITED", -1);
+	define('MODE', 'DEBUG');
 
 	
 ?>

@@ -49,7 +49,8 @@ class UserService {
         global $lang;
        $data =  $this->conn->select( "SELECT b.name as book_name, b.id_user, b.author, b.level, b.descr, b.descr, b.import_id, b.create, le.name_$lang, u.login , b.lang AS lang, b.lang_a AS lang_a, ".
                                       "lang_answer.name_$lang AS lang_answer, lang_question.name_$lang AS lang_question, ".
-                                      "(SELECT count(w._id) FROM import_word w WHERE w.token=b.import_id ) as count ".
+                                      "(SELECT count(w._id) FROM import_word w WHERE w.token=b.import_id ) as count, ".
+                                      "b.transmitted ".
                                       "FROM import_book b ".
                                         "JOIN lang lang_question ON lang_question.id_lang=b.lang ".
                                         "JOIN lang lang_answer ON lang_answer.id_lang=b.lang_a ".

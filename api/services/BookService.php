@@ -55,7 +55,7 @@ class BookService extends BaseService
               ));
             $bookId = $this->conn->getInsertId();
             if(isset($book->tags)){
-              $this->tagService->createTags($book->tags, $bookId);
+              $this->tagService->createTags($book->tags, $bookId, $book->user_id);
             }
             $this->conn->simpleQuery('COMMIT;');
             return $bookId;
