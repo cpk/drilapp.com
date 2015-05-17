@@ -1,9 +1,18 @@
 <?php
-	
+
+	require_once dirname(dirname(__FILE__)).'/api/services/TagService.php';
+
 	if($_SERVER['REQUEST_METHOD'] == 'POST'){
-		
-		if(intval($_POST['existing']) == 1){
-			$success = copyToExisting($_POST);
+		try{
+			if(intval($_POST['existing']) == 1){
+				copyToExisting($_POST);
+			}else{
+				print_r($_POST);
+				exit;
+				copyToNewBook($_POST);
+			}
+		}catch(Exception $e){
+			$errorMessage2 = $e->getMessage();
 		}
 
 	}
@@ -13,9 +22,9 @@
 	$oldBook = $userService->getById($_GET['id']);
 	print_r($oldBook);
 	$langList = $conn->select("SELECT id_lang as id, name_$lang as name FROM `lang`");
-	$levelList = $conn->select("SELECT id_level as id, name_$lang as name FROM `level`");
+	$levelList =$conn->select("SELECT id_level as id, name_$lang as name FROM `level`");
 	$bookList = $conn->select("SELECT * FROM dril_book WHERE user_id = ? order by name", array($_SESSION['id']));
-	$wordList = $conn->select( "SELECT * FROM `import_word` WHERE `token`=? ", array($oldBook[0]['import_id']));	
+	$wordList = $conn->select("SELECT * FROM `import_word` WHERE `token`=? ", array($oldBook[0]['import_id']));	
 	$wordCount = count($wordList);
 	
 
@@ -149,22 +158,22 @@ $(function(){
 				  		 	<input type="text" name="bookName" class="required form-control" required value="<?php echo $oldBook[0]['book_name'] ?>" />
 			  		 	</div>
 			  		 	<div class="form-group">
-				  		 	<span for="bookName"><em>**</em>Zadajte názov lekcie:</span>
+				  		 	<span for="lectureName"><em>**</em>Zadajte názov lekcie:</span>
 				  		 	<input type="text" name="lectureName" class="required form-control" required value="<?php echo $oldBook[0]['book_name'] ?>" />
 			  		 	</div>
 			  		 	<div class="form-group">
-				  		 	<span for="bookName"><em>**</em>Jazyk otázok:</span>
+				  		 	<span for="langQuestion"><em>**</em>Jazyk otázok:</span>
 				  		 	<select class="required" name="langQuestion"><?php echo getBookOptions($oldBook[0]['lang'], $langList) ?></select>
 			  		 	</div>
 			  		 	<div class="form-group">
-				  		 	<span for="bookName"><em>**</em>Jazyk odpovedí:</span>
+				  		 	<span for="langAnswer"><em>**</em>Jazyk odpovedí:</span>
 				  		 	<select class="required" name="langAnswer"><?php echo getBookOptions($oldBook[0]['lang_a'], $langList) ?></select>
 			  		 	</div>
 			  		 	<div class="form-group">
-				  		 	<span for="bookName"><em>**</em>Úroveň náročnosti:</span>
+				  		 	<span for="level"><em>**</em>Úroveň náročnosti:</span>
 				  		 	<select class="required" name="level"><?php echo getBookOptions($oldBook[0]["level"], $levelList) ?></select>
 			  		 	</div>
-			  		 	<div class="form-group">
+			  		 	<div class="form-category">
 				  		 	<span for="bookName"><em>**</em>Zaradiť do kategorie: <a style="padding-left:20px;" href="mailto:info@drilapp.com">navrhnúť novú kategóriu</a></span>
 				  		 	<select class="required" name="category"><?php printCategories() ?></select>
 			  		 	</div>
@@ -217,7 +226,7 @@ $(function(){
 	</article>
 </div>
 
-<pre>
+
 <?php
 
 // printCategories();
@@ -261,6 +270,51 @@ function getCategoryLevel($id){
 }
 
 
+function copyToNewBook($form){
+	$oldBookId = (int)$form['id'];
+	$userService = new UserService($conn);
+	$userStats = $userService->getWebDrilStats($_SESSION['id']);
+	$oldBook = $userService->getById( $oldBookId );
+	$words = $conn->select( "SELECT * FROM `import_word` WHERE `token`=? ", array($oldBook[0]['import_id']));
+	$errorMessage = validate($oldBook, $userStats, count($words));
+	if($errorMessage){
+		throw new InvalidArgumentException($errorMessage);
+	}
+	isBookNameUniqe($form['bookName']);
+	isLectureNameUniqe($form['lectureName']);
+}
+
+function createNewBook($form, $oldBook){
+	global $conn;
+	$tagService = new TagService($conn);
+	$sql = 
+          "INSERT INTO `dril_book` ( ".
+            "`name`, ".
+            "`question_lang_id`, ".
+            "`answer_lang_id`, ".
+            "`level_id`, ".
+            "`dril_category_id`, ".
+            "`is_shared`, ".
+            "`user_id`, ".
+            "`description`, ".
+            "`changed`, ".
+            "`created`) ".
+          "VALUES (?,?,?,?,?,?,?,?, NOW(), NOW())";
+        $this->conn->insert($sql,  array(
+            $form['bookName'], 
+            $form['langQuestion'], 
+            $form['langAnswer'],
+            $form['level'],
+            $form['category'], 
+            $oldBook[0]['shared'],
+            $_SESSION['id'],
+            $oldBook[0]['descr']
+          ));
+    $bookId = $conn->getInsertId();
+    createLecture($bookId, $form['lectureName'], $oldBook);    
+}
+
+
 function copyToExisting($form){
 	global $conn;
 
@@ -272,9 +326,9 @@ function copyToExisting($form){
 	$userStats = $userService->getWebDrilStats($_SESSION['id']);
 	$oldBook = $userService->getById( $oldBookId );
 	$words = $conn->select( "SELECT * FROM `import_word` WHERE `token`=? ", array($oldBook[0]['import_id']));
-	$isNotValid = validate($oldBook, $userStats, count($words));
-	if($isNotValid){
-		return false;
+	$errorMessage = validate($oldBook, $userStats, count($words));
+	if($errorMessage){
+		throw new InvalidArgumentException($errorMessage);
 	}
 	createLecture($webDrilBookId, $lectureName,  $oldBook);
 	return true;
@@ -350,5 +404,26 @@ function validate($oldBook, $userStats, $wordCount){
 	}
 	return $errorMessage;
 }
+
+
+function isBookNameUniqe( $name ){
+   $sql =  "SELECT count(*) as book_count FROM  `dril_book` ".
+           "WHERE name = ? AND user_id = ? ";
+    $result =  $this->conn->select( $sql, array( $name, $_SESSION['id'] ));
+    if($result[0]["book_count"] > 0){
+    	throw new InvalidArgumentException("The book named \"$name\" already exists");
+    }
+}
+
+function isLectureNameUniqe( $name, $bookId){
+    $sql =  "SELECT count(*) as lecture_count FROM  `dril_book_has_lecture` l ".
+            "WHERE l.name = ? AND l.dril_book_id = ? ";  
+
+     $result =  $this->conn->select( $sql, array( $name, $bookId ));
+    return $result[0]["lecture_count"] == 0;
+    if($result[0]["lecture_count"] > 0){
+    	throw new InvalidArgumentException("The lecture named \"$name\" already exists");
+    }
+}
+
 ?>
-</pre>
