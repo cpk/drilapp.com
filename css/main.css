@@ -24,7 +24,8 @@ body{ font-family: 'Signika', sans-serif;font-size:12px;background:#f5f8f9;}
 .content-f1 p{font-size: 1.2em;}
 #accordion{padding:20px;}
 #accordion h3{background:#fff;padding:20px 20px 20px 45px ;border-bottom:1px solid #aaa;background-repeat:no-repeat;background-position: 10px center;   }
-#accordion h3{background-image:url(../img/arr1.png); }
+#accordion h3{background-image:url(../img/arr1.png); cursor: pointer;}
+#accordion h3:hover{background-color:#EDFFFF }
 #accordion h3.pj-active{background-image:url(../img/arr2.png); }
 .pj-bx{background:#f9f9f9;border:1px solid #ddd;padding:20px;}
 div.pj-bx{display: none}
@@ -33,6 +34,7 @@ div.pj-bx .form-control{width: 95%}
 .existing{width: 500px;}
 .chosen-single{min-height:35px;height:35px;line-height:40px;}
 .chosen-single span{padding-top:4px;}
+.form-group em{color: red;padding-right: 5px;}
 /* */
 
 #filter{background:#fff;padding:10px;clear:both;margin-bottom: 10px;border:1px solid #ddd;}

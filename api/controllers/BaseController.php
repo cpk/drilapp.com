@@ -101,6 +101,30 @@ class BaseController
    }
 
 
+  /**
+  * Search in tags
+  *
+  * @url GET /v1/tags
+  * @noAuth
+  */
+   public function searchInTags(){
+      global $conn;
+      $tagList = array();
+      if(isset($_GET['term']) ){
+          if(!isset($_GET['localeId'])){
+            // 1 == English
+            $localeId = 1; 
+          }else{
+            $localeId = intval($_GET['localeId']);
+          }
+        $tagService = new TagService($conn);  
+        $tagList = $tagService->findTags($_GET['term'], $localeId);
+        
+      }
+      return $tagList;
+   }
+
+
 
   /**
   * Log JS error

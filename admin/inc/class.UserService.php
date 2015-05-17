@@ -163,6 +163,18 @@ class UserService {
         }
     }
 
+    public function getWebDrilStats($uid){
+        $sql = "SELECT ".
+               " count(distinct w.id) as wordCount, ".
+               " (SELECT word_limit FROM `user` WHERE id_user = $uid) as wordLimit ".
+               "FROM dril_book b ".
+               "LEFT JOIN dril_book_has_lecture l ON b.id = l.`dril_book_id` ".
+               "LEFT JOIN dril_lecture_has_word w ON l.id = w.`dril_lecture_id` ".
+               "WHERE b.user_id = ?";
+        $res =  $this->conn->select($sql, array($uid));
+        return $res[0];
+    }
+
 
     public function createUser($user){
         $salt = createSalt();

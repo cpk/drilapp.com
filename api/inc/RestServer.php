@@ -38,9 +38,7 @@ class RestFormat
 		'plain' => RestFormat::PLAIN,
 		'txt' => RestFormat::PLAIN,
 		'html' => RestFormat::HTML,
-		'amf' => RestFormat::AMF,
-		'json' => RestFormat::JSON,
-		'xml'  => RestFormat::XML,
+		'json' => RestFormat::JSON
 	);
 }
 
@@ -438,40 +436,17 @@ class RestServer
 		header("Expires: 0");
 		header('Content-Type: ' . $this->format);
 
-		if ($this->format == RestFormat::AMF) {
-			require_once 'Zend/Amf/Parse/OutputStream.php';
-			require_once 'Zend/Amf/Parse/Amf3/Serializer.php';
-			$stream = new Zend_Amf_Parse_OutputStream();
-			$serializer = new Zend_Amf_Parse_Amf3_Serializer($stream);
-			$serializer->writeTypeMarker($data);
-			$data = $stream->getStream();}
-
-		elseif ($this->format == RestFormat::XML) {
-
 		if (is_object($data) && method_exists($data, '__keepOut')) {
-				$data = clone $data;
-				foreach ($data->__keepOut() as $prop) {
-					unset($data->$prop);
-				}
-			}
-			$data = $this->xml_encode($data);
-			if ($data && $this->mode == 'debug') {
-				$data = $this->json_format($data);
-			}
-		
-		} else {
-			if (is_object($data) && method_exists($data, '__keepOut')) {
-				$data = clone $data;
-				foreach ($data->__keepOut() as $prop) {
-					unset($data->$prop);
-				}
-			}
-			$data = json_encode($data);
-			if ($data && $this->mode == 'debug') {
-				$data = $this->json_format($data);
+			$data = clone $data;
+			foreach ($data->__keepOut() as $prop) {
+				unset($data->$prop);
 			}
 		}
-
+		$data = json_encode($data);
+		if ($data && $this->mode == 'debug') {
+			$data = $this->json_format($data);
+		}
+	
 		echo $data;
 	}
 
@@ -481,44 +456,7 @@ class RestServer
 		header("{$_SERVER['SERVER_PROTOCOL']} $code");
 	}
 	
-	private function xml_encode($mixed, $domElement=null, $DOMDocument=null) {
-    if (is_null($DOMDocument)) {
-        $DOMDocument =new DOMDocument;
-        $DOMDocument->formatOutput = true;
-        $this->xml_encode($mixed, $DOMDocument, $DOMDocument);
-        echo $DOMDocument->saveXML();
-    }
-    else {
-        if (is_array($mixed)) {
-            foreach ($mixed as $index => $mixedElement) {
-                if (is_int($index)) {
-                    if ($index === 0) {
-                        $node = $domElement;
-                    }
-                    else {
-                        $node = $DOMDocument->createElement($domElement->tagName);
-                        $domElement->parentNode->appendChild($node);
-                    }
-                }
-                else {
-                    $plural = $DOMDocument->createElement($index);
-                    $domElement->appendChild($plural);
-                    $node = $plural;
-                    if (!(rtrim($index, 's') === $index)) {
-                        $singular = $DOMDocument->createElement(rtrim($index, 's'));
-                        $plural->appendChild($singular);
-                        $node = $singular;
-                    }
-                }
- 
-                $this->xml_encode($mixedElement, $node, $DOMDocument);
-            }
-        }
-        else {
-            $domElement->appendChild($DOMDocument->createTextNode($mixed));
-        }
-    }
-}
+
 	// Pretty print some JSON
 	private function json_format($json)
 	{

@@ -49,13 +49,20 @@ class TagService extends BaseService
         return null;
     }
 
-    private function tagExists($bookId, $tagId){
-        $result = $this->conn->select(
-            "SELECT * FROM dril_book_has_tag WHERE dril_tag_id=? AND dril_book_id=? LIMIT 1",
-            array($tagId, $bookId)
+    public function findTags($tagName, $localeId, $limit = 8){
+        $code = trim(StringUtils::clear($tagName));
+        $result =  $this->conn->select(
+            "SELECT `name` FROM `dril_tag` WHERE `code` LIKE '".$this->conn->clean($code).
+            "%' AND `locale_id`=? LIMIT $limit ",  array( $localeId ) 
         );
-        return count($result) == 1;
+        $array = array();
+        for($i = 0; $i < count($result); $i++){
+            $array[] = $result[$i]['name'];
+        }
+        return $array;
     }
+
+    
 
     public function deleteTagByName($tagName){
     	$this->conn->delete("DELETE FROM `dril_tag` tag WHERE tag.name = ? LIMIT 1",  array( $tagName) );
@@ -73,6 +80,13 @@ class TagService extends BaseService
     	return $this->conn->select($sql, array($bookId) );
     }
 
+    private function tagExists($bookId, $tagId){
+        $result = $this->conn->select(
+            "SELECT * FROM dril_book_has_tag WHERE dril_tag_id=? AND dril_book_id=? LIMIT 1",
+            array($tagId, $bookId)
+        );
+        return count($result) == 1;
+    }
 
 	private function isTagNameUniqe($name){
 		$sql =  "SELECT count(*) as tag_count FROM  dril_tag tag ".

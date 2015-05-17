@@ -16,3 +16,7 @@
 [2015-05_16 22:38:08] Code: 1064 - Message: SQL preparing failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM dril_book WHERE user_id = ? order by name' at line 1 SQL: SELECT FROM dril_book WHERE user_id = ? order by name
 [2015-05_17 09:52:48] Code: 1054 - Message: SQL preparing failed: Unknown column 'title_img' in 'field list' SQL: SELECT `id_article`, `sub_id`, `type`, `title_img`, `subtitle_img`, `header_img` FROM `article`  WHERE `link_img`=? AND `active`=1 LIMIT 1
 [2015-05_17 11:01:00] Code: 1054 - Message: SQL preparing failed: Unknown column 'lang_sk' in 'field list' SQL: SELECT id_lang as id, lang_sk as name FROM `lang`
+[2015-05_17 15:33:31] Code: 1054 - Message: SQL preparing failed: Unknown column 'name' in 'field list' SQL: SELECT `id_level`, `name` FROM `level`
+[2015-05_17 15:34:41] Code: 1054 - Message: SQL preparing failed: Unknown column 'name' in 'field list' SQL: SELECT `id_level`, `name` FROM `level`
+[2015-05_17 15:35:05] Code: 1054 - Message: SQL preparing failed: Unknown column 'name' in 'field list' SQL: SELECT `id_level`, `name` FROM `level`
+[2015-05_17 16:35:33] Code: 0 - Message: SQL execution failed:  SQL: SELECT  count(distinct w.id) as wordCount,  (SELECT word_limit FROM `user` WHERE id_user = ?) as wordLimit FROM dril_book b LEFT JOIN dril_book_has_lecture l ON b.id = l.`dril_book_id` LEFT JOIN dril_lecture_has_word w ON l.id = w.`dril_lecture_id` WHERE b.user_id = ?

@@ -85,7 +85,7 @@ echo '<h1>'.$article[0]["title_${lang}"].'</h1>'.$article[0]["content_${lang}"];
                         <div class="clear"></div>
                     </span>
                      <span class="row">
-                        <span><?php echo $strings[$lang]['level']; ?></span><select name="level" class="w250"><?php echo getOptions( $conn, "level", "name" ); ?></select>
+                        <span><?php echo $strings[$lang]['level']; ?></span><select name="level" class="w250"><?php echo getOptions( $conn, "level", "name_${lang}" ); ?></select>
                         <div class="clear"></div>
                     </span>
                     <span class="row">
