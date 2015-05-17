@@ -72,7 +72,7 @@ class UserPrezenter {
                 '<td class="c">'.date("d.m.Y" ,strtotime($row["create"])).'</td>'.
                 '<td class="c shared'.$row["shared"].'"><a href="#">'.($row["shared"] == 1 ? $yes : $no).'</a></td>'.
                 '<td class="c edit"><a href="?book='.$row["_id"].'">'.getMessage("edit").'</a></td>'.
-                '<td class="c edit">'. $this->getTransmitCol($row).'</td>'.
+                '<td class="c edit transmitted-'.$row['transmitted'].'">'. $this->getTransmitCol($row).'</td>'.
                 '<td class="c delete"><a href="?id='.$row["_id"].'&amp;token='.$row["import_id"].'">'.getMessage("delete").'</a></td>'.
                "</tr>";
     }

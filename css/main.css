@@ -16,7 +16,8 @@ body{ font-family: 'Signika', sans-serif;font-size:12px;background:#f5f8f9;}
 .w50{width:50px;}
 #mobile{display: none;}
 .info.msg{border:3px solid #E4EDF2;background:#F5FBFF url(../img/info.png) no-repeat 10px center;padding-left:60px;margin-top:10px;}
-
+.transmitted-1{opacity:.4}
+.transmitted-0{background:}
 
 /* transmition */
 

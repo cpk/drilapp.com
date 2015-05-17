@@ -24,6 +24,10 @@
 				echo '<p class="ok">'.getMessage("successRegistraged").'</p>'; 
 				unset($_SESSION["status"]); 
 			}
+
+			if(isset($_GET["success"])){
+				echo '<p class="ok">Učebnica bola úspešne prenesená.</p><br />'; 
+			}
 			
 
 			$userPresenter = new UserPrezenter($conn);

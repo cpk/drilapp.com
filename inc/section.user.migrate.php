@@ -1,17 +1,17 @@
 <?php
 
-	require_once dirname(dirname(__FILE__)).'/api/services/TagService.php';
+	// require_once '/api/services/TagService.php';
 
 	if($_SERVER['REQUEST_METHOD'] == 'POST'){
 		try{
 			if(intval($_POST['existing']) == 1){
 				copyToExisting($_POST);
 			}else{
-				print_r($_POST);
-				exit;
 				copyToNewBook($_POST);
 			}
-		}catch(Exception $e){
+			header("Location: ".linker(16, 1, $lang)."?success=1");
+			exit;
+		}catch(InvalidArgumentException $e){
 			$errorMessage2 = $e->getMessage();
 		}
 
@@ -20,7 +20,7 @@
 	$userService = new UserService($conn);
 	$userStats = $userService->getWebDrilStats($_SESSION['id']);
 	$oldBook = $userService->getById($_GET['id']);
-	print_r($oldBook);
+
 	$langList = $conn->select("SELECT id_lang as id, name_$lang as name FROM `lang`");
 	$levelList =$conn->select("SELECT id_level as id, name_$lang as name FROM `level`");
 	$bookList = $conn->select("SELECT * FROM dril_book WHERE user_id = ? order by name", array($_SESSION['id']));
@@ -73,6 +73,9 @@ $(function(){
      });
 
      $(document).on('submit', 'form', function(){
+     	if($(this).hasClass('disabled')){
+     		return false;
+     	}
      	var valid = true;
      	$(this).find('select').each(function(){
      		var $select = $(this);
@@ -85,6 +88,8 @@ $(function(){
      		showStatus({msg: 'Skontrolute zadané data.', err: 1});
      		return false;
      	}
+     	$('input[name=tagList]').val($("#myTags").tagit("assignedTags"));
+     	$(this).addClass('disabled');
      });
 });
 
@@ -96,7 +101,11 @@ $(function(){
 
 
 		<h1>Presun slovíčok do nového WebDrilu</h1>
-		<?php if($errorMessage){
+		<?php 
+		if(isset($errorMessage2)){
+			echo '<p class="err">'.$errorMessage2.'</p>';
+		}
+		if($errorMessage){
 			echo '<p class="err">'.$errorMessage.'</p>';
 		}else{  ?>
 
@@ -173,8 +182,8 @@ $(function(){
 				  		 	<span for="level"><em>**</em>Úroveň náročnosti:</span>
 				  		 	<select class="required" name="level"><?php echo getBookOptions($oldBook[0]["level"], $levelList) ?></select>
 			  		 	</div>
-			  		 	<div class="form-category">
-				  		 	<span for="bookName"><em>**</em>Zaradiť do kategorie: <a style="padding-left:20px;" href="mailto:info@drilapp.com">navrhnúť novú kategóriu</a></span>
+			  		 	<div class="form-group">
+				  		 	<span for="category"><em>**</em>Zaradiť do kategorie: <a style="padding-left:20px;" href="mailto:info@drilapp.com">navrhnúť novú kategóriu</a></span>
 				  		 	<select class="required" name="category"><?php printCategories() ?></select>
 			  		 	</div>
 			  		 	<div class="form-group">
@@ -190,6 +199,7 @@ $(function(){
 				  			<button class="btn btn-primary">Presunúť</button>
 				  		</div>
 				  		<div class="clear"></div>   
+				  		<input type="hidden" name="tagList" value="" />
 			  		 	<input type="hidden" name="existing" value="0" />
 						<input type="hidden" name="id" value="<?php echo $_GET['id']; ?>" />
 			  		</form>	
@@ -271,6 +281,7 @@ function getCategoryLevel($id){
 
 
 function copyToNewBook($form){
+	global $conn;
 	$oldBookId = (int)$form['id'];
 	$userService = new UserService($conn);
 	$userStats = $userService->getWebDrilStats($_SESSION['id']);
@@ -281,7 +292,7 @@ function copyToNewBook($form){
 		throw new InvalidArgumentException($errorMessage);
 	}
 	isBookNameUniqe($form['bookName']);
-	isLectureNameUniqe($form['lectureName']);
+	createNewBook($form, $oldBook);
 }
 
 function createNewBook($form, $oldBook){
@@ -300,7 +311,7 @@ function createNewBook($form, $oldBook){
             "`changed`, ".
             "`created`) ".
           "VALUES (?,?,?,?,?,?,?,?, NOW(), NOW())";
-        $this->conn->insert($sql,  array(
+        $conn->insert($sql,  array(
             $form['bookName'], 
             $form['langQuestion'], 
             $form['langAnswer'],
@@ -311,6 +322,9 @@ function createNewBook($form, $oldBook){
             $oldBook[0]['descr']
           ));
     $bookId = $conn->getInsertId();
+    if(isset($form['tagList'])){
+    	$tagService->createTags(explode(",", $form['tagList']), $bookId, $_SESSION['id']);
+    }
     createLecture($bookId, $form['lectureName'], $oldBook);    
 }
 
@@ -337,6 +351,7 @@ function copyToExisting($form){
 
 function createLecture($webDrilBookId, $lectureName,  $oldBook){
 	global $conn;
+	isLectureNameUniqe($lectureName, $webDrilBookId);
 	$sql = "INSERT INTO `dril_book_has_lecture` (`name`,`dril_book_id`,`changed`,`created`) ".
             "VALUES (?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)";
     $conn->insert($sql,  array($lectureName, $webDrilBookId) );
@@ -407,19 +422,21 @@ function validate($oldBook, $userStats, $wordCount){
 
 
 function isBookNameUniqe( $name ){
+   global $conn;
    $sql =  "SELECT count(*) as book_count FROM  `dril_book` ".
            "WHERE name = ? AND user_id = ? ";
-    $result =  $this->conn->select( $sql, array( $name, $_SESSION['id'] ));
+    $result =  $conn->select( $sql, array( $name, $_SESSION['id'] ));
     if($result[0]["book_count"] > 0){
     	throw new InvalidArgumentException("The book named \"$name\" already exists");
     }
 }
 
 function isLectureNameUniqe( $name, $bookId){
+	global $conn;
     $sql =  "SELECT count(*) as lecture_count FROM  `dril_book_has_lecture` l ".
             "WHERE l.name = ? AND l.dril_book_id = ? ";  
 
-     $result =  $this->conn->select( $sql, array( $name, $bookId ));
+    $result =  $conn->select( $sql, array( $name, $bookId ));
     return $result[0]["lecture_count"] == 0;
     if($result[0]["lecture_count"] > 0){
     	throw new InvalidArgumentException("The lecture named \"$name\" already exists");
