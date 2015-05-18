@@ -167,15 +167,15 @@ INSERT INTO `dril_category` (`id`, `parent_id`, `ordering`, `name_en`, `name_sk`
 
 CREATE TABLE IF NOT EXISTS `dril_error` (
 `id` int(10) unsigned NOT NULL,
-  `user_agent` text CHARACTER SET latin1,
-  `cause` text CHARACTER SET latin1,
-  `error_message` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
-  `error_url` varchar(255) CHARACTER SET latin1 DEFAULT NULL,
-  `stack_trace` text CHARACTER SET latin1,
-  `version` varchar(7) CHARACTER SET latin1 DEFAULT NULL,
+  `user_agent` text,
+  `cause` text,
+  `error_message` varchar(255) DEFAULT NULL,
+  `error_url` varchar(255) DEFAULT NULL,
+  `stack_trace` text,
+  `version` varchar(7) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   `created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -234,10 +234,13 @@ CREATE TABLE IF NOT EXISTS `dril_session` (
 -- Table structure for table `dril_tag`
 --
 
+
 CREATE TABLE IF NOT EXISTS `dril_tag` (
 `id` int(10) unsigned NOT NULL,
-  `name` varchar(50) CHARACTER SET latin1 NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `name` varchar(50) NOT NULL,
+  `code` varchar(50) NOT NULL,
+  `locale_id` tinyint(3) unsigned NOT NULL
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Indexes for dumped tables

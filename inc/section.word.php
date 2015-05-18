@@ -1,5 +1,54 @@
 <div id="article">
     <article class="fullscreen">
+        <style type="text/css">
+        .alert {
+          padding: 15px;
+          margin-bottom: 20px;
+          border: 1px solid transparent;
+          border-radius: 4px;
+        }
+        .alert h4 {
+          margin-top: 0;
+          color: inherit;
+        }
+        .alert .alert-link {
+          font-weight: bold;
+        }
+        .alert > p,
+        .alert > ul {
+          margin-bottom: 0;
+        }
+        .alert > p + p {
+          margin-top: 5px;
+        }
+        .alert-success {
+          color: #3c763d;
+          background-color: #dff0d8;
+          border-color: #d6e9c6;
+        }
+        .alert-success hr {
+          border-top-color: #c9e2b3;
+        }
+        .alert-success .alert-link {
+          color: #2b542c;
+        }
+        .alert-info {
+          color: #31708f;
+          background-color: #d9edf7;
+          border-color: #bce8f1;
+        }
+        .alert-info hr {
+          border-top-color: #a6e1ec;
+        }
+        .alert-info .alert-link {
+          color: #245269;
+        }
+        </style>
+
+        <div class="alert alert-info">
+            Bola vydaná nová aplikácia WebDril dostupná na <strong><a href="http://web.drilapp.com">web.drilapp.com</a></strong>.
+        </div>
+
     <?php 
         
         

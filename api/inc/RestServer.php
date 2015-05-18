@@ -114,7 +114,7 @@ class RestServer
 			throw new RestException(200, "OK");
 			exit;
 		}
-		
+
 		list($obj, $method, $params, $this->params, $noAuth) = $this->findUrl();
 		
 		if ($obj) {
@@ -186,12 +186,10 @@ class RestServer
 	}
 
 	private function setHeaders(){
-		if($this->mode == "debug"){
-			header('Access-Control-Allow-Origin: http://localhost:9000');		
-			header('Access-Control-Allow-Methods: OPTIONS, POST, DELETE, GET, PUT');
-			header('Access-Control-Allow-Credentials: true');
-			header('Access-Control-Allow-Headers: Authorization, X-Requested-With, CONTENT-TYPE, token');
-		}
+		header('Access-Control-Allow-Origin: '.CLIENT_URL);		
+		header('Access-Control-Allow-Methods: OPTIONS, POST, DELETE, GET, PUT');
+		header('Access-Control-Allow-Credentials: true');
+		header('Access-Control-Allow-Headers: Authorization, X-Requested-With, CONTENT-TYPE, token');
 	}
 
 	public function addClass($class, $basePath = '')
@@ -279,6 +277,7 @@ class RestServer
 	protected function findUrl()
 	{
 		$urls = $this->map[$this->method];
+
 		if (!$urls) return null;
 		
 		foreach ($urls as $url => $call) {
@@ -376,6 +375,9 @@ class RestServer
 		if ($this->root) $path = preg_replace('/^' . preg_quote($this->root, '/') . '/', '', $path);
 		// remove trailing format definition, like /controller/action.json -> /controller/action
 		$path = preg_replace('/\.(\w+)$/i', '', $path);
+		if($this->mode == 'production'){
+			$path = substr($path, 1);
+		}
 		return $path;
 	}
 	

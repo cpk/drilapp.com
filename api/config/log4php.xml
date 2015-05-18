@@ -14,7 +14,7 @@
     </root>
     -->
     <logger name="api">
-        <level value="info" />
+        <level value="warn" />
         <appender_ref ref="apiAppender" />
     </logger>
 

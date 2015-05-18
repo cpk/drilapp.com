@@ -2,7 +2,7 @@
 
 $locale = getUserLocale();
 
-if($locale == null){
+if(WEB_DRIL_ON && $locale == null){
 
 ?>
 <div id="cl-dialog" title="<?php printMessage("dialog"); ?>">
