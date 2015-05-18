@@ -122,18 +122,17 @@ $(function(){
 			?>	
 
 			<div id="accordion">
-			  <h3>1. Vložiť do existujúcej učebnice</h3>
+			  <h3><?php printMessage("migrateAddToExisting"); ?></h3>
 			  <div class="pj-bx content-f1">
 			  	<p>
-			  		Vyberte jednu z existujúsich učebníc do ktorej majú byť slovíčka importované. 
-			  		Importovať slovíčka je možné len v prípade ak sa zhodujú ich jazky.
+			  		<?php printMessage("migrateAddToExistingDesc"); ?>
 			  	</p> 
 
 			  	<form method="POST">
 			  		 <div class="form-group">
-			  		 		<span for="bookId"><em>**</em>Existujúca učebnica</span>
+			  		 		<span for="bookId"><em>**</em><?php printMessage("migrateExisting"); ?></span>
 			  		 		<select class="required existing" name="bookId">
-							<option value="">-- Vyberete z existujúcich učebníc --</option>		
+							<option value=""><?php printMessage("migrateExisting2"); ?></option>		
 							<?php 
 								$html = '';
 								foreach ($bookList as $i => $book) {
@@ -144,11 +143,11 @@ $(function(){
 						</select>
 			  		</div>
 			  		 <div class="form-group">
-			  		 	<span for="lectureName"><em>**</em>Názov lekcie</span>
+			  		 	<span for="lectureName"><em>**</em><?php printMessage("migrateLectureName"); ?></span>
 			  		 	<input type="text" name="lectureName" class="required form-control" required value="<?php echo $oldBook[0]['book_name'] ?>" />
 			  		 </div>
 			  		<div class="form-group">
-			  			<button class="btn btn-primary">Presunúť</button>
+			  			<button class="btn btn-primary"><?php printMessage("migrate"); ?></button>
 			  		</div>
 					<div class="clear"></div>   
 					<input type="hidden" name="existing" value="1" />
@@ -159,44 +158,43 @@ $(function(){
 					
 				
 			  </div>
-			  <h3>2. Vyvoriť novú učebnicu</h3>
+			  <h3><?php printMessage("migrateCreateNew") ?></h3>
 			  <div class="pj-bx content-f">
 			  		<form method="POST">
 			  			<div class="form-group">
-				  		 	<span for="bookName"><em>**</em>Zadajte názov učebnice:</span>
+				  		 	<span for="bookName"><em>**</em><?php printMessage("migrateBookName"); ?>:</span>
 				  		 	<input type="text" name="bookName" class="required form-control" required value="<?php echo $oldBook[0]['book_name'] ?>" />
 			  		 	</div>
 			  		 	<div class="form-group">
-				  		 	<span for="lectureName"><em>**</em>Zadajte názov lekcie:</span>
+				  		 	<span for="lectureName"><em>**</em><?php printMessage("migrateLectureName"); ?>:</span>
 				  		 	<input type="text" name="lectureName" class="required form-control" required value="<?php echo $oldBook[0]['book_name'] ?>" />
 			  		 	</div>
 			  		 	<div class="form-group">
-				  		 	<span for="langQuestion"><em>**</em>Jazyk otázok:</span>
+				  		 	<span for="langQuestion"><em>**</em><?php printMessage("migrateLangQuestion"); ?>:</span>
 				  		 	<select class="required" name="langQuestion"><?php echo getBookOptions($oldBook[0]['lang'], $langList) ?></select>
 			  		 	</div>
 			  		 	<div class="form-group">
-				  		 	<span for="langAnswer"><em>**</em>Jazyk odpovedí:</span>
+				  		 	<span for="langAnswer"><em>**</em><?php printMessage("migrateLangAnswer"); ?>:</span>
 				  		 	<select class="required" name="langAnswer"><?php echo getBookOptions($oldBook[0]['lang_a'], $langList) ?></select>
 			  		 	</div>
 			  		 	<div class="form-group">
-				  		 	<span for="level"><em>**</em>Úroveň náročnosti:</span>
+				  		 	<span for="level"><em>**</em><?php printMessage("migrateLevel"); ?>:</span>
 				  		 	<select class="required" name="level"><?php echo getBookOptions($oldBook[0]["level"], $levelList) ?></select>
 			  		 	</div>
 			  		 	<div class="form-group">
-				  		 	<span for="category"><em>**</em>Zaradiť do kategorie: <a style="padding-left:20px;" href="mailto:info@drilapp.com">navrhnúť novú kategóriu</a></span>
+				  		 	<span for="category"><em>**</em><?php printMessage("migrateCateg"); ?>: <a style="padding-left:20px;" href="mailto:info@drilapp.com">navrhnúť novú kategóriu</a></span>
 				  		 	<select class="required" name="category"><?php printCategories() ?></select>
 			  		 	</div>
 			  		 	<div class="form-group">
-			  		 		<span for="bookName">Oštítkute učebnicu:</span>
+			  		 		<span for="bookName"><?php printMessage("migrateTags"); ?>:</span>
 			  		 		<ul id="myTags"></ul>
 							<span>
 								<br />
-								Štítky oddeľte čiarkou. Prečo označkovať učebnicu? Bude lahšie dohľadateľná pre ostatných užívateľov.
-								Príklad: "Frázové slovesa", "Chémia", "Gramatika"
+								<?php printMessage("migrageTagsDesr"); ?>
 							</span>
 			  		 	</div>
 			  		 	<div class="form-group">
-				  			<button class="btn btn-primary">Presunúť</button>
+				  			<button class="btn btn-primary"><?php printMessage("migrate"); ?></button>
 				  		</div>
 				  		<div class="clear"></div>   
 				  		<input type="hidden" name="tagList" value="" />
@@ -208,7 +206,7 @@ $(function(){
 			  </div>
 			</div>
 
-			<em>**</em> - Povinné hodnoty
+			<em>**</em> - <?php printMessage("migrateReq"); ?>
 
 			<?php } ?>
 
@@ -443,4 +441,5 @@ function isLectureNameUniqe( $name, $bookId){
     }
 }
 
+include 'loacle-dialog.php';
 ?>

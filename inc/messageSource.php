@@ -85,6 +85,29 @@
 			"importSuccess" => "Import prebehol úspešne, počet importovaných kartičiek: <b>{0}</b>", 
 			"chooseFile" => "Vyberte XLS súbor",
 			"regEmailBody" => "Dobrý deň, <br>boli ste úspešne registrovaný na portály <a href=\"http:www.drilapp.com\">www.drilapp.com</a>. Vaše prihlasovacie údaje sú nasledovné:<br><br><b>Prihlasovacie meno:</b>{0}<br><b>Prihlasovacie heslo:</b>{1}",
+
+
+			"migrateAddToExisting" => "1 .Vložiť do existujúcej učebnice",
+			"migrateCreateNew" => "2. Vyvoriť novú učebnicu",
+			"migrateAddToExistingDesc" => "Vyberte jednu z existujúsich učebníc do ktorej majú byť slovíčka importované. Importovať slovíčka je možné len v prípade ak sa zhodujú ich jazky.",
+			"migrateExisting" => "Existujúca učebnica",
+			"migrateExisting2" => "-- Vyberete z existujúcich učebníc --",
+			"migrateLectureName" => "Názov lekcie",
+			"migrate" => "Presunúť",
+			"migrateBookName" => "Zadajte názov učebnice",
+			"migrateLectureName" => "Zadajte názov lekcie",
+			"migrateLangQuestion" => "Jazyk otázok",
+			"migrateLangAnswer" => "Jazyk odpovedí",
+			"migrateLevel" => "Úroveň náročnosti",
+			"migrateCateg" => "Zaradiť do kategorie",
+			"migrateLangQuestion" => "Jazyk otázok",
+			"migrateTags" => "Oštítkute učebnicu",
+			"migrateReq" => " Povinné hodnoty",
+			"migrageTagsDesr" => "Štítky oddeľte čiarkou. Prečo označkovať učebnicu? Bude lahšie dohľadateľná pre ostatných užívateľov. Príklad: \"Frázové slovesa\", \"Chémia\", \"Gramatika\"",
+
+			"dialog" => "Nastavte Vás jazyk",
+			"dialogDescr" => "Bola nasadená nová verzia systému, ktorá je dostupná na adrese <b><a target=\"_blank\" href=\"http://web.drilapp.com\">http://web.drilapp.com</a></b>    Pre jej správne fungovanie je potrebné zvoliť Váš jazyk.",
+			"dialogChooseLang" => "Vyberte Váš jazyk",
 		);
 		$messages["en"] = array(
 			"yes" => "Yes",
@@ -163,7 +186,29 @@
 			"successfullySaved" => "Changes were successfully saved",
 			"regEmailBody" => "Hello, <br><br> you have been successfully registrated on <a href=\"http:www.drilapp.com\">www.drilapp.com</a>. Yours credentials are:<br><br><b>Login:</b>{0}<br><b>Password:</b>{1}",
 
-		);
+
+			"migrateAddToExisting" => "1 .Move to the existing textbook",
+			"migrateCreateNew" => "2. Create a new textbook in WebDril",
+			"migrateAddToExistingDesc" => "Choose one of the existing book into which should be vocabulary imported. The languages have to be the same.",
+			"migrateExisting" => "Existing book",
+			"migrateExisting2" => "-- Choose --",
+			"migrateLectureName" => "Name of lecture",
+			"migrate" => "Move",
+			"migrateBookName" => "Name of the textbook",
+			"migrateLectureName" => "Name of lecture",
+			"migrateLangQuestion" => "Language of questions",
+			"migrateLangAnswer" => "Language of answers",
+			"migrateLevel" => "Level",
+			"migrateCateg" => "Choose the book category",
+			"migrateTags" => "Tag the book",
+			"migrateReq" => " required values",
+			"migrageTagsDesr" => "The tags separate by comma. Type e.g. \"Phrasal verbs\", \"School\", \"Math\"",
+
+			"dialog" => "Setup you native language",
+			"dialogDescr" => "Web dril has been released! Please is necessary to set up you native language. WebDril is avaiable on following address: <b><a target=\"_blank\" href=\"http://web.drilapp.com\">http://web.drilapp.com</a></b> ",
+			"dialogChooseLang" => "Choose language",
+
+		);	
 
 		$key = $args[0];
 		$msg = "";

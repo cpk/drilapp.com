@@ -99,7 +99,14 @@ try{
             $userService->validateBook($_GET);
             $userService->updateBook($_GET['name'], intval($_GET['lang_q']), intval($_GET['lang_a']), intval($_GET['level']), $_GET['descr'], intval($_GET['id']));
             $data = array( "err" => 0, "msg" => getMessage("successfullySaved") );
-            break;    
+            break; 
+
+        case 9:
+            $userId = $_SESSION['id'];
+            $localeId = intval($_GET['localeId']);
+            $conn->update('UPDATE user SET locale_id = ? WHERE id_user = ? ', array($localeId,$userId));
+             $data = array( "err" => 0, "msg" => "OK" );
+            break;       
         
     	default:
     		throw new Exception("Invalid operation.");

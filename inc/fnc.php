@@ -34,3 +34,17 @@ function getBookName($id){
 	$d = $conn->select("select `name` as book_name FROM `import_book` WHERE `_id`=? LIMIT 1", array($id));
         return $d[0]['book_name'];
 }
+
+function getUserLocale(){
+	global $conn;
+	$res = $conn->select("select locale_id from user where 	id_user =  ".$_SESSION['id']);
+	if(isset($res[0]["locale_id"]) && intval($res[0]["locale_id"]) != 0){
+		return $res[0]["locale_id"];
+	}
+	return null;
+}
+
+function getLocales(){
+	global $conn, $lang;
+	return $conn->select("select id_lang as id, name_$lang as name FROM lang", array());
+}

@@ -16,3 +16,13 @@
 [16-May-2015 21:52:02 Europe/Berlin] PHP Notice:  Undefined variable: ar2 in /opt/lampp/htdocs/drilapp.com/admin/inc/section/intro.php on line 54
 [16-May-2015 22:00:59 Europe/Berlin] PHP Notice:  Undefined variable: arr in /opt/lampp/htdocs/drilapp.com/admin/inc/section/intro.php on line 54
 [16-May-2015 22:00:59 Europe/Berlin] PHP Notice:  Undefined variable: ar2 in /opt/lampp/htdocs/drilapp.com/admin/inc/section/intro.php on line 54
+[18-May-2015 21:20:19 Europe/Berlin] PHP Notice:  Undefined variable: arr in /opt/lampp/htdocs/drilapp.com/admin/inc/section/intro.php on line 54
+[18-May-2015 21:20:19 Europe/Berlin] PHP Notice:  Undefined variable: ar2 in /opt/lampp/htdocs/drilapp.com/admin/inc/section/intro.php on line 54
+[18-May-2015 21:20:31 Europe/Berlin] PHP Notice:  Undefined index: price in /opt/lampp/htdocs/drilapp.com/admin/inc/ajax.post.php on line 47
+[18-May-2015 21:20:31 Europe/Berlin] PHP Notice:  Undefined index: redirect_to in /opt/lampp/htdocs/drilapp.com/admin/inc/ajax.post.php on line 62
+[18-May-2015 21:20:31 Europe/Berlin] PHP Notice:  Undefined index: product_text in /opt/lampp/htdocs/drilapp.com/admin/inc/ajax.post.php on line 63
+[18-May-2015 21:20:31 Europe/Berlin] PHP Notice:  Undefined index: price in /opt/lampp/htdocs/drilapp.com/admin/inc/ajax.post.php on line 64
+[18-May-2015 21:20:40 Europe/Berlin] PHP Notice:  Undefined index: price in /opt/lampp/htdocs/drilapp.com/admin/inc/ajax.post.php on line 47
+[18-May-2015 21:20:40 Europe/Berlin] PHP Notice:  Undefined index: redirect_to in /opt/lampp/htdocs/drilapp.com/admin/inc/ajax.post.php on line 62
+[18-May-2015 21:20:40 Europe/Berlin] PHP Notice:  Undefined index: product_text in /opt/lampp/htdocs/drilapp.com/admin/inc/ajax.post.php on line 63
+[18-May-2015 21:20:40 Europe/Berlin] PHP Notice:  Undefined index: price in /opt/lampp/htdocs/drilapp.com/admin/inc/ajax.post.php on line 64

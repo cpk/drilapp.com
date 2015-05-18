@@ -20,6 +20,11 @@ body{ font-family: 'Signika', sans-serif;font-size:12px;background:#f5f8f9;}
 .transmitted-0{background:}
 
 /* transmition */
+#cl-dialog{font-size:15px !important;}
+#cl-dialog fieldset{margin:10px 0;}
+#cl-dialog select, label{display:block;}
+#cl-dialog select{padding:5px;width:320px;border:1px solid #333;background:#eee;}
+#cl-dialog label{width:320px;padding:0;height:25px;font-size:16px;margin:30px 0 10px 0;}
 
 .content-f1{min-height: 200px;}
 .content-f1 p{font-size: 1.2em;}

@@ -39,3 +39,5 @@
 		<div class="clear"></div>
 	</article>
 </div>
+
+<?php include 'locale-dialog.php'; ?>

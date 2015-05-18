@@ -3,3 +3,4 @@
 [2015-05_16 20:01:36]- Message: Not a valid response (401) url: https://www.google.com/analytics/feeds/data?ids=ga:66126284&start-date=2015-04-15&end-date=2015-05-15&dimensions=ga:date&metrics=ga:visits&sort=ga:date 
 [2015-05_16 21:52:02]- Message: Not a valid response (401) url: https://www.google.com/analytics/feeds/data?ids=ga:66126284&start-date=2015-04-15&end-date=2015-05-15&dimensions=ga:date&metrics=ga:visits&sort=ga:date 
 [2015-05_16 22:00:59]- Message: Not a valid response (401) url: https://www.google.com/analytics/feeds/data?ids=ga:66126284&start-date=2015-04-15&end-date=2015-05-15&dimensions=ga:date&metrics=ga:visits&sort=ga:date 
+[2015-05_18 21:20:19]- Message: Not a valid response (401) url: https://www.google.com/analytics/feeds/data?ids=ga:66126284&start-date=2015-04-17&end-date=2015-05-17&dimensions=ga:date&metrics=ga:visits&sort=ga:date 
