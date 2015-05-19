@@ -155,7 +155,7 @@ class UserService extends BaseService
         if($_SERVER['REMOTE_ADDR'] == '127.0.0.1'){
             $url = 'http://localhost:9000/#/login#'.$user['token'];
         }else{
-            $url = 'http://web.drilapp.com/#/login#'.$user['token'];
+            $url = 'http://web.drilapp.com/login#'.$user['token'];
         }
         $model = array(
             "head" => getMessage("emailReg_head"),
