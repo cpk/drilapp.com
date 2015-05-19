@@ -602,6 +602,7 @@ class PHPMailer
         global $config;
         $mail = new PHPMailer();
         $mail->IsSMTP();
+        $mail->CharSet = 'UTF-8';
         $mail->Host = $config['mailHost'];
         $mail->SMTPAuth = true;
         $mail->Username = $config['mailUsername'];

@@ -26,8 +26,8 @@
 
 	define("LECTURE_WORD_LIMIT", 300);
 	define("UNLIMITED", -1);
-	define('CLIENT_URL', 'http://web.drilapp.com');
-	define('MODE', 'production');
+	define('CLIENT_URL', 'http://localhost:9000');
+	define('MODE', 'debug');
 
 	
 ?>
