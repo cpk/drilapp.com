@@ -117,7 +117,7 @@
 	        </span>
 	         <span class="row">
 	            <span><?php printMessage('bookLevel'); ?></span>
-	            <select name="level" class="w250"><?php echo getOptions( $conn, "level", "name" , $book[0]['level']); ?></select>
+	            <select name="level" class="w250"><?php echo getOptions( $conn, "level", "name_${lang}" , $book[0]['level']); ?></select>
 	            <div class="clear"></div>
 	        </span>
 	        <span class="row">

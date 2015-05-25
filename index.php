@@ -88,6 +88,11 @@
          
 
     </header>
+    <div class="webdril">
+      <p>
+      Vyskúšajte nový <strong><a href="http://web.drilapp.com">WebDril</a></strong> a presuňte si Vaše slovíčka.
+      </p>
+    </div>
     
     <div id="sliderbox">
         <div id="slider-w" class="def-width relative">

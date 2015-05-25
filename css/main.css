@@ -19,6 +19,11 @@ body{ font-family: 'Signika', sans-serif;font-size:12px;background:#f5f8f9;}
 .transmitted-1{opacity:.4}
 .transmitted-0{background:}
 
+.webdril{padding:5px;}
+.webdril p{display:block;width:600px;margin:auto;text-align:center;}
+.webdril p a{color:#FF3C00;text-decoration:underline;}
+.webdril p a:hover{color:#000;text-decoration:none;}
+
 /* transmition */
 #cl-dialog{font-size:15px !important;}
 #cl-dialog fieldset{margin:10px 0;}

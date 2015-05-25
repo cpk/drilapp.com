@@ -28,3 +28,4 @@
 [2015-05_18 21:40:56] Code: 1054 - Message: SQL preparing failed: Unknown column 'id' in 'field list' SQL: select id, name_en as name from lang
 [2015-05_18 21:41:17] Code: 1054 - Message: SQL preparing failed: Unknown column 'id' in 'field list' SQL: select id, name_en as name from lang
 [2015-05_18 21:45:04] Code: 1054 - Message: SQL preparing failed: Unknown column 'id' in 'field list' SQL: select id, name_en as name from lang
+[2015-05_24 11:22:21] Code: 1054 - Message: SQL preparing failed: Unknown column 'name' in 'field list' SQL: SELECT `id_level`, `name` FROM `level`
