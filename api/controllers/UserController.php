@@ -14,6 +14,8 @@ class UserController
      * @noAuth
      */   
    public function login( $data ){
+        $logger = Logger::getLogger('api');
+        $logger->debug("login: " . $data->username);
         global $drilConf;
         if(!isset($data) || !isset($data->username)){
             throw new RestException(401, 'Credentials are required.');

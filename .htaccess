@@ -1,4 +1,4 @@
-
+#RewriteBase /
 RewriteEngine On
 #Options +FollowSymlinks
 #RewriteCond %{HTTP_HOST} !^www\.
