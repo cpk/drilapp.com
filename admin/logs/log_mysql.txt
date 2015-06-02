@@ -31,3 +31,4 @@
 [2015-05_24 11:22:21] Code: 1054 - Message: SQL preparing failed: Unknown column 'name' in 'field list' SQL: SELECT `id_level`, `name` FROM `level`
 [2015-05_30 21:35:07] Code: 1146 - Message: SQL preparing failed: Table 'db_drilapp_dev.review' doesn't exist SQL: SELECT * from review ORDER BY RAND() LIMIT 1
 [2015-05_30 22:29:28] Code: 1054 - Message: SQL preparing failed: Unknown column 'name' in 'field list' SQL: SELECT `id_level`, `name` FROM `level`
+[2015-06_02 21:51:22] Code: 1049 - Message: Unknown database 'db_drilapp_dev'

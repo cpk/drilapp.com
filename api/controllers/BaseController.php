@@ -155,6 +155,20 @@ class BaseController
   }
 
 
+   /**
+  * Sync
+  *
+  * @url POST /v1/sync
+  * @noAuth
+  */
+  public function sync($data, $uid = null){
+    global $conn;
+    $logger = Logger::getLogger('api');
+    $logger->info('syncing...');
+    
+  }
+
+
    public function init(){
       global $conn;
       $this->commonService = new CommonService($conn);

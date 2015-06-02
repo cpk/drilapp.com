@@ -114,7 +114,8 @@ class RestServer
 			throw new RestException(200, "OK");
 			exit;
 		}
-
+		$logger = Logger::getLogger('api');
+		$logger->info('URL: ' .$this->url . ' Method: '.$this->method);
 		list($obj, $method, $params, $this->params, $noAuth) = $this->findUrl();
 		
 		if ($obj) {
@@ -140,6 +141,7 @@ class RestServer
 					$this->sendData($this->unauthorized());
 					exit;					
 				}
+				$logger->info('IS authorized: ' .($authData != null ? 'yes' : 'no'));
 				if($authData != null){
 					$params['uid'] = $authData->uid;
 				}
@@ -430,6 +432,8 @@ class RestServer
 	public function getData()
 	{
 		$data = file_get_contents('php://input');
+		$logger = Logger::getLogger('api');
+		$logger->info('data: ' . $data); 
 		$data = json_decode($data);
 		return $data;
 	}
