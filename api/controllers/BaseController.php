@@ -163,9 +163,8 @@ class BaseController
   */
   public function sync($data, $uid = null){
     global $conn;
-    $logger = Logger::getLogger('api');
-    $logger->info('syncing...');
-    
+    $syncService = new SyncService($conn);
+    $syncService->sync($data, 1);
   }
 
 

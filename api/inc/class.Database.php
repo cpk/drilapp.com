@@ -47,6 +47,21 @@ class Database
         }			
     }
 
+    public function beginTransaction(){
+        $this->mysql->autocommit(false);
+        $this->mysql->begin_transaction();
+    }
+    
+    public function commit(){
+        $this->mysql->commit();
+    }
+
+    public function rollback(){
+        $this->mysql->rollback();
+    }
+
+    
+
     
     /** ---------------------------------------------------------------------------------
      * SINGLETON method

@@ -9,91 +9,160 @@ class SyncService extends BaseService
 
 
   public function sync($data, $uid){
-        $now = $this->now();
-        $mappingArray = $this->syncBooks($now, $data, $uid);
-        $mappingArray = $this->syncLectures($now, $data, $mappingArray);
-        
-  }
-
-
-  private function syncWords($now, $data, $lectureIds){
-    foreach ($data->wordList as $word) {
-        if($word['sid'] == null){
-
-        }else{
-
-        }
+    try{
+        //print_r($data);exit;
+        $this->conn->beginTransaction();
+        $time = $this->time();
+        $mappingArray = $this->syncBooks($time, $data, $uid);
+        $mappingArray = $this->syncLectures($time, $data, $mappingArray);
+        $lectureIds = $this->syncWords($time, $data, $mappingArray);
+        $lectureIds = $this->syncDeletedRows($data, $lectureIds);
+        $this->updateCountOfWordsInLectures($lectureIds);
+        $this->conn->commit();
+    }catch(MysqlException $e){
+      $this->conn->rollback();
+      $logger = Logger::getLogger('api');
+      $logger->error('Sync for user [uid=$uid] failed');
     }
   }
 
-  private function updateWord($now, $word){
-     $sql = "UPDATE `dril_lecture_has_word` ".
-            "SET `question`=?, `answer`=?,  last_rating=?, viewed=?, avg_rating=?, active=?, changed='$now' ".
-            "WHERE id = ?";
+
+  private function updateCountOfWordsInLectures($lecuteIdList){
+    $sql = "";
+    foreach ($lecuteIdList as $lectureId) {
+        $sql .=  "UPDATE `dril_book_has_lecture` " .
+             "SET `no_of_words`= (SELECT count(*) FROM dril_lecture_has_word WHERE dril_lecture_id = $lectureId) ".
+             "WHERE id = $lectureId;";
+    }
+    if($sql != ""){
+        $this->conn->simpleQuery($sql);
+    }
+  }
+
+  private function syncDeletedRows($data, $lectureIds){
+    $tables = array( "word" => "dril_lecture_has_word", "lecture" => "dril_book_has_lecture", "book" => "dril_book" );
+    $sql = "";
+    foreach ($data->deletedList as $row) {
+        $sql .= "DELETE FROM ".$tables[$row->tableName]." WHERE id=".$row->sid.";";
+        if($row->tableName == "word"){
+          $lectureId = $this->conn->simpleQuery('SLECT lecture_id FROM dril_lecture_has_word WHERE id = '. $row->sid);
+          if(!in_array($lectureId, $lectureIds )){
+            $lectureIds[] = $lectureId;
+          }
+        }
+    }
+    if($sql != ""){
+      $this->conn->simpleQuery($sql);
+    }
+    // list of lectures ID which  in which should be updated counts of words.
+    return $lectureIds;
+  }
+
+
+// ===================================================
+  private function syncWords($time, $data, $mappingArray){
+    $lectureIds = array();
+    foreach ($data->wordList as $word) {
+        if($word->sid == null){
+          $lid = $this->createWord($time, $word, $mappingArray );
+          if(!in_array($lid, $lectureIds)){
+            $lectureIds[] = $lid;
+          }
+        }else{
+          $this->updateWord($time, $word);
+        }
+    }
+    // for updating couts
+    return $lectureIds;
+  }
+
+
+  private function createWord($time, $word, $mappingArray){
+
+    $lectureId = isset($mappingArray[$word->lectureId]) ? $mappingArray[$word->lectureId] : $word->lectureId;
+         
+   $sql = "INSERT INTO `dril_lecture_has_word` ".
+          " (`question`, `answer`, `dril_lecture_id`, `last_rating`, `viewed`, `avg_rating`, `is_activated`, `changed`, `created`) ".
+               "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? )";
         $this->conn->insert($sql,  array(
-            $word['question'], 
-            $word['answer'], 
-            $word['lastRating'], 
-            $word['hits'], 
-            $word['avgRating'], 
-            $word['is_activated'], 
-            $word['hits'],
-            $word['sid']
+            $word->question, 
+            $word->answer, 
+            $lectureId,
+            $word->lastRating, 
+            $word->hits, 
+            $word->avgRating, 
+            $word->active,
+            $time['createTime'],
+            $time['createTime']
+        ));
+     return $lectureId;   
+  }
+
+  private function updateWord($time, $word){
+     $sql = "UPDATE `dril_lecture_has_word` ".
+            "SET `question`=?, `answer`=?, last_rating=?, viewed=?, avg_rating=?, is_activated=?, changed=? ".
+            "WHERE id = ?";
+        $this->conn->update($sql,  array(
+            $word->question, 
+            $word->answer, 
+            $word->lastRating, 
+            $word->hits, 
+            $word->avgRating, 
+            $word->active, 
+            $time['syncTime'],
+            $word->sid
         ));
   }
 
-  public function createLecture($now, $lecture, $bookIds){
-    $sql = "INSERT INTO `dril_book_has_lecture` (`name`,`dril_book_id`,`changed`,`created`) ".
-    "VALUES (?, ?, '$now', '$now')";
-    $bookId = isset($bookIds[$lecture['bookId']]) ? $bookIds[$lecture['bookId']] : $lecture['bookId'];
-    $this->conn->insert($sql,  array($lecture['lectureName'], $bookId) );
-    return $this->getLectureById($this->conn->getInsertId());
-}
+// ===================================================
 
-  private function syncLectures($now, $data, $bookIds){
+  private function syncLectures($time, $data, $mappingArray){
+    $ids = array();
     foreach ($data->lectureList  as $lecture) {
-        if($lecture['sid'] == null){
-          $mappingArray[$lecture['id']] = $this->createLecture($now, $lecture, $bookIds);
+        if($lecture->sid == null){
+          $ids[$lecture->id] = $this->createLecture($time, $lecture, $mappingArray);
         }else{
-          updateLecture($now, $lecture);
+          updateLecture($time, $lecture);
         }
     }
-    return $mappingArray;
+    return $ids;
   }
 
 
-public function updateLecture($now, $lecture){
-  $sql =  "UPDATE `dril_book_has_lecture` SET `name` = ?, `changed` = '$now' WHERE `id`=? ";
-  $this->conn->update($sql,  array($lecture['lectureName'], $$lecture['sid']) );
+private function updateLecture($time, $lecture){
+  $sql = "UPDATE `dril_book_has_lecture` SET `name` = ?, `changed` = '".$time['syncTime']."' WHERE `id`=? ";
+  $this->conn->update($sql,  array($lecture->lectureName, $lecture->sid) );
 }
 
 
 
-public function createLecture($now, $lecture, $bookIds){
+private function createLecture($time, $lecture, $mappingArray){
     $sql = "INSERT INTO `dril_book_has_lecture` (`name`,`dril_book_id`,`changed`,`created`) ".
-    "VALUES (?, ?, '$now', '$now')";
-    $bookId = isset($bookIds[$lecture['bookId']]) ? $bookIds[$lecture['bookId']] : $lecture['bookId'];
-    $this->conn->insert($sql,  array($lecture['lectureName'], $bookId) );
-    return $this->getLectureById($this->conn->getInsertId());
+    "VALUES (?, ?, '".$time['createTime']."', '".$time['createTime']."')";
+
+    $bookId = isset($mappingArray[$lecture->bookId]) ? $mappingArray[$lecture->bookId] : $lecture->bookId;
+
+    $this->conn->insert($sql,  array($lecture->lectureName, $bookId) );
+    return $this->conn->getInsertId();
 }
 
 
-
+// ===================================================
   private function syncBooks($now, $data, $uid){
-     $bookIds = array();
+     $mappingArray = array();
      foreach ($data->bookList as $book) {
-       if($book['sid'] == null){
-          $bookIds[$book['id']] = $this->createBook($now, $book, $uid);
+       if($book->sid == null){
+          $mappingArray[$book->id] = $this->createBook($now, $book, $uid);
        }else{
           $this->updateBook($now, $book);
        }
      }
-     return $bookIds;
+     return $mappingArray;
   }
 
   
 
-  public function updateBook($now, $book ){
+  private function updateBook($now, $book ){
         $sql = 
           "UPDATE `dril_book` SET ".
             "`name` = ?, ".
@@ -101,20 +170,20 @@ public function createLecture($now, $lecture, $bookIds){
             "`answer_lang_id` = ?, ". 
             "`level_id` = ?, ".
             "`is_shared` = ?, ".
-            "`changed` = '$now' ".
+            "`changed` = '".$time['syncTime']."' ".
           "WHERE id = ? LIMIT 1";
         $this->conn->update($sql,  array(
-            $book['bookName'], 
-            $book['questionLang'], 
-            $book['answerLang'], 
-            $book['level'], 
-            $book['shared'], 
-            $book['sid'],
+            $book->bookName, 
+            $book->questionLang, 
+            $book->answerLang, 
+            $book->level, 
+            $book->shared, 
+            $book->sid,
         ));
     }
 
 
-  public function createBook($now, $book, $uid){
+  private function createBook($time, $book, $uid){
       $sql = 
         "INSERT INTO `dril_book` ( ".
           "`name`, ".
@@ -123,20 +192,23 @@ public function createLecture($now, $lecture, $bookIds){
           "`level_id`, ".
           "`is_shared`, ".
           "`user_id`, ".
-          "'$now', ".
-          "'$now') ".
-        "VALUES (?,?,?,?,?,?, NOW(), NOW())";
+          "`changed`, ".
+          "`created`) ".
+        "VALUES (?,?,?,?,?,?, '".$time['createTime']."', '".$time['createTime']."')";
       $this->conn->insert($sql,  array(
-          $book['bookName'], $book['questionLang'], $book['answerLang'], 
-          $book['level'], $book['shared'], $uid
+          $book->bookName, 
+          $book->questionLang, 
+          $book->answerLang, 
+          $book->level, 
+          $book->shared, $uid
         ));
-      $bookId = $this->conn->getInsertId();
+      return $this->conn->getInsertId();
     }
 
 
-   public function now(){
-      $now = $conn->simpleQuery("select CURRENT_TIMESTAMP as timestamp;");
-      return $now[0]['timestamp'];
+   private function time(){
+      $now = $this->conn->simpleQuery("select NOW() as syncTime, DATE_SUB(NOW(), INTERVAL 1 SECOND) as createTime ");
+      return $now[0];
    } 
 
 
