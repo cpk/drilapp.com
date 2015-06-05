@@ -10,7 +10,6 @@ class SyncService extends BaseService
 
   public function sync($data, $uid){
     try{
-        //print_r($data);exit;
         $this->conn->beginTransaction();
         $time = $this->time();
         $mappingArray = $this->syncBooks($time, $data, $uid);
@@ -19,6 +18,7 @@ class SyncService extends BaseService
         $lectureIds = $this->syncDeletedRows($data, $lectureIds);
         $this->updateCountOfWordsInLectures($lectureIds);
         $this->conn->commit();
+        echo 'succes';
     }catch(MysqlException $e){
       $this->conn->rollback();
       $logger = Logger::getLogger('api');
@@ -30,24 +30,23 @@ class SyncService extends BaseService
   private function updateCountOfWordsInLectures($lecuteIdList){
     $sql = "";
     foreach ($lecuteIdList as $lectureId) {
-        $sql .=  "UPDATE `dril_book_has_lecture` " .
-             "SET `no_of_words`= (SELECT count(*) FROM dril_lecture_has_word WHERE dril_lecture_id = $lectureId) ".
-             "WHERE id = $lectureId;";
-    }
-    if($sql != ""){
-        $this->conn->simpleQuery($sql);
+        $sql =  "UPDATE dril_book_has_lecture " .
+                 "SET `no_of_words`= (SELECT count(*) FROM dril_lecture_has_word WHERE dril_lecture_id = $lectureId) ".
+                 "WHERE id = $lectureId;";
+        $this->conn->simpleQuery($sql);         
     }
   }
 
   private function syncDeletedRows($data, $lectureIds){
+
     $tables = array( "word" => "dril_lecture_has_word", "lecture" => "dril_book_has_lecture", "book" => "dril_book" );
     $sql = "";
     foreach ($data->deletedList as $row) {
-        $sql .= "DELETE FROM ".$tables[$row->tableName]." WHERE id=".$row->sid.";";
+        $sql .= "DELETE FROM ".$tables[$row->tableName]." WHERE id=".intval($row->sid).";";
         if($row->tableName == "word"){
-          $lectureId = $this->conn->simpleQuery('SLECT lecture_id FROM dril_lecture_has_word WHERE id = '. $row->sid);
-          if(!in_array($lectureId, $lectureIds )){
-            $lectureIds[] = $lectureId;
+          $res = $this->conn->simpleQuery('SELECT dril_lecture_id FROM dril_lecture_has_word WHERE id = '. $row->sid);
+          if(!in_array($res[0]['dril_lecture_id'], $lectureIds )){
+            $lectureIds[] = $res[0]['dril_lecture_id'];
           }
         }
     }
