@@ -164,7 +164,7 @@ class BaseController
   public function sync($data, $uid = null){
     global $conn;
     $syncService = new SyncService($conn);
-    $syncService->sync($data, 1);
+    return $syncService->sync($data, 1);
   }
 
 

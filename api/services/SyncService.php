@@ -8,24 +8,76 @@ class SyncService extends BaseService
     }
 
 
-  public function sync($data, $uid){
+  public function sync($data, $uid, $isLogin = false){
+    if(intval($uid) == 0){
+      throw new InvalidArgumentException("Invalidat data");
+    }
+
     try{
         $this->conn->beginTransaction();
         $time = $this->time();
-        $mappingArray = $this->syncBooks($time, $data, $uid);
-        $mappingArray = $this->syncLectures($time, $data, $mappingArray);
-        $lectureIds = $this->syncWords($time, $data, $mappingArray);
-        $lectureIds = $this->syncDeletedRows($data, $lectureIds);
-        $this->updateCountOfWordsInLectures($lectureIds);
+        if(!$isLogin){
+          $mappingArray = $this->syncBooks($time, $data, $uid);
+          $mappingArray = $this->syncLectures($time, $data, $mappingArray);
+          $lectureIds = $this->syncWords($time, $data, $mappingArray);
+          $lectureIds = $this->syncDeletedRows($data, $lectureIds);
+          $this->updateCountOfWordsInLectures($lectureIds);
+          $lastSync = $data->serverLastSync;
+        }else{
+          $lastSync = '1970-01-01 00:00:00';
+        }
+        $syncParams = array($uid, $lastSync, $time['createTime']);
+        $result['bookList'] = $this->getUnsyncBooks( $syncParams );
+        $result['lectureList'] = $this->getUnsyncLectures( $syncParams );
+        $result['wordList'] = $this->getUnsyncWords( $syncParams );
+        if(!$isLogin){
+          $result['deletedList'] = $this->getDeletedList( $syncParams );
+          $result['serverLastSync'] = $time['syncTime'];
+        }
         $this->conn->commit();
-        echo 'succes';
+        return $result;
     }catch(MysqlException $e){
       $this->conn->rollback();
       $logger = Logger::getLogger('api');
-      $logger->error('Sync for user [uid=$uid] failed');
+      $logger->error("Sync for user [uid=$uid] failed");
     }
   }
+  // ===================================================
+  // OUT
+  private function getUnsyncBooks($params){
+    $sql = "SELECT id, name as bookName, question_lang_id as questionLang, answer_lang_id as answerLang, ".
+            "is_shared as shared, level_id as level, dril_category_id as categoryId ".
+            "FROM dril_book WHERE user_id = ? AND changed > ? AND changed < ?";
+    return $this->conn->select($sql, $params);
+  }
 
+  private function getUnsyncLectures($params){
+    $sql = "SELECT l.id, l.name as lectureName, l.dril_book_id as bookId ".
+           "FROM dril_book_has_lecture l ".
+           "INNER JOIN dril_book b ON b.id = l.dril_book_id ".
+           "WHERE b.user_id = ? AND l.changed > ? AND l.changed < ?";
+   return $this->conn->select($sql, $params);
+  }
+
+  private function getUnsyncWords( $params ){
+    $sql = "SELECT w.id, w.question, w.answer, w.is_activated as active, w.viewed as hits, ".
+           "w.avg_rating as avgRating, w.dril_lecture_id as lectureId ".
+           "FROM dril_lecture_has_word w ".
+           "INNER JOIN dril_book_has_lecture l ON l.id = w.dril_lecture_id ".
+           "INNER JOIN dril_book b ON b.id = l.dril_book_id ".
+           "WHERE b.user_id = ? AND l.changed > ? AND l.changed < ?";
+    return $this->conn->select($sql, $params);
+  }
+
+  private function getDeletedList( $params ){
+    $sql = "SELECT `id`, `table` FROM `dril_deleted_rows` ".
+           "WHERE user_id = ? AND deleted_time > ? AND deleted_time < ?";
+    return $this->conn->select($sql, $params );
+  }
+
+
+  // ===================================================
+  // IN
 
   private function updateCountOfWordsInLectures($lecuteIdList){
     $sql = "";
@@ -45,7 +97,7 @@ class SyncService extends BaseService
         $sql .= "DELETE FROM ".$tables[$row->tableName]." WHERE id=".intval($row->sid).";";
         if($row->tableName == "word"){
           $res = $this->conn->simpleQuery('SELECT dril_lecture_id FROM dril_lecture_has_word WHERE id = '. $row->sid);
-          if(!in_array($res[0]['dril_lecture_id'], $lectureIds )){
+          if(isset($res[0]) && !in_array($res[0]['dril_lecture_id'], $lectureIds )){
             $lectureIds[] = $res[0]['dril_lecture_id'];
           }
         }

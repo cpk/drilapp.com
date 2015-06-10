@@ -16,7 +16,7 @@ class UserController
    public function login( $data ){
         $logger = Logger::getLogger('api');
         $logger->debug("login: " . $data->username);
-        global $drilConf;
+        global $drilConf, $conn;
         if(!isset($data) || !isset($data->username)){
             throw new RestException(401, 'Credentials are required.');
         }
@@ -28,17 +28,22 @@ class UserController
             throw new InvalidArgumentException(getMessage("errUserUnactivated"));
         }
         if(hash_hmac('sha256', $data->password , $user['salt']) == $user['pass']){
+            $androidDeviceLogin = isset($data->deviceId);
             try {
 
                 $token = array(
-                   // "iss" => "http://www.drilapp.com",
-                   // "aud" => "http://web.drilapp.com",
                     "iat" => time(),
-                    "exp" => time() + 10200,
+                    "exp" => time() + ($androidDeviceLogin ?  31556926 : 10200),
                     "uid" => $user['id']
                 );
                 unset($user['pass']);
                 unset($user['salt']);
+
+                if($androidDeviceLogin){
+                    $this->logAndroidDevice($data, $user['id']);
+                    $syncService = new SyncService($conn);
+                    $result = $syncService->sync($data, $user['id'], true);
+                }
                 $result['token'] = JWT::encode($token, $drilConf['dril_web_auth']);
                 $result['user'] = $user;
                 $logger = Logger::getLogger('api');
@@ -52,6 +57,18 @@ class UserController
             throw new RestException(401, "Bad username or password " .$data->username);   
         }
 
+   }
+   private function logAndroidDevice($data, $uid){
+        global $conn;
+        if(!isset($data->deviceName)){
+            return false;
+        }
+        $res = $conn->select("SELECT count(*) FROM dril_device WHERE device_id = ? AND user_id = ?", array( $data->deviceId, $uid ));
+        if($res[0]['count(*)'] == 0){
+            $conn->insert("INSERT INTO `dril_device`(`device_id`, `user_id`,  `last_sync`, `name`) VALUES (?,?,NOW(),?)",
+                    array($data->deviceId, $uid, $data->deviceName)
+            );
+        }
    }
 
     /**
