@@ -61,7 +61,7 @@ class SyncService extends BaseService
 
   private function getUnsyncWords( $params ){
     $sql = "SELECT w.id, w.question, w.answer, w.is_activated as active, w.viewed as hits, ".
-           "w.avg_rating as avgRating, w.dril_lecture_id as lectureId ".
+           "w.avg_rating as avgRating, w.dril_lecture_id as lectureId, w.last_rating as lastRate ".
            "FROM dril_lecture_has_word w ".
            "INNER JOIN dril_book_has_lecture l ON l.id = w.dril_lecture_id ".
            "INNER JOIN dril_book b ON b.id = l.dril_book_id ".
@@ -133,7 +133,7 @@ class SyncService extends BaseService
     $lectureId = isset($mappingArray[$word->lectureId]) ? $mappingArray[$word->lectureId] : $word->lectureId;
          
    $sql = "INSERT INTO `dril_lecture_has_word` ".
-          " (`question`, `answer`, `dril_lecture_id`, `last_rating`, `viewed`, `avg_rating`, `is_activated`, `changed`, `created`) ".
+          " (`question`, `answer`, `dril_lecture_id`, `last_rating`, `viewed`, `avg_rating`, `is_activated`,`last_rating`,`changed`, `created`) ".
                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? )";
         $this->conn->insert($sql,  array(
             $word->question, 
@@ -143,6 +143,7 @@ class SyncService extends BaseService
             $word->hits, 
             $word->avgRating, 
             $word->active,
+            $word->lastRate,
             $time['createTime'],
             $time['createTime']
         ));
@@ -151,7 +152,7 @@ class SyncService extends BaseService
 
   private function updateWord($time, $word){
      $sql = "UPDATE `dril_lecture_has_word` ".
-            "SET `question`=?, `answer`=?, last_rating=?, viewed=?, avg_rating=?, is_activated=?, changed=? ".
+            "SET `question`=?, `answer`=?, last_rating=?, viewed=?, avg_rating=?, is_activated=?, `last_rating` =?, changed=? ".
             "WHERE id = ?";
         $this->conn->update($sql,  array(
             $word->question, 
@@ -160,6 +161,7 @@ class SyncService extends BaseService
             $word->hits, 
             $word->avgRating, 
             $word->active, 
+            $word->lastRate,
             $time['syncTime'],
             $word->sid
         ));
