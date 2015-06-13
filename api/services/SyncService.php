@@ -65,12 +65,12 @@ class SyncService extends BaseService
            "FROM dril_lecture_has_word w ".
            "INNER JOIN dril_book_has_lecture l ON l.id = w.dril_lecture_id ".
            "INNER JOIN dril_book b ON b.id = l.dril_book_id ".
-           "WHERE b.user_id = ? AND l.changed > ? ";
+           "WHERE b.user_id = ? AND w.changed > ? ";
     return $this->conn->select($sql, $params);
   }
 
   private function getDeletedList( $params ){
-    $sql = "SELECT `id`, `table` FROM `dril_deleted_rows` ".
+    $sql = "SELECT `deleted_id` as id, `table` FROM `dril_deleted_rows` ".
            "WHERE user_id = ? AND deleted_time > ? AND deleted_time < ?";
     return $this->conn->select($sql, $params );
   }
@@ -90,21 +90,17 @@ class SyncService extends BaseService
   }
 
   private function syncDeletedRows($data, $lectureIds){
-
     $tables = array( "word" => "dril_lecture_has_word", "lecture" => "dril_book_has_lecture", "book" => "dril_book" );
-    $sql = "";
     foreach ($data->deletedList as $row) {
-        $sql .= "DELETE FROM ".$tables[$row->tableName]." WHERE id=".intval($row->sid).";";
         if($row->tableName == "word"){
           $res = $this->conn->simpleQuery('SELECT dril_lecture_id FROM dril_lecture_has_word WHERE id = '. $row->sid);
           if(isset($res[0]) && !in_array($res[0]['dril_lecture_id'], $lectureIds )){
             $lectureIds[] = $res[0]['dril_lecture_id'];
           }
         }
+        $this->conn->simpleQuery("DELETE FROM `".$tables[$row->tableName]."` WHERE `id`=".intval($row->sid).";");
     }
-    if($sql != ""){
-      $this->conn->simpleQuery($sql);
-    }
+    
     // list of lectures ID which  in which should be updated counts of words.
     return $lectureIds;
   }
