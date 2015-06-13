@@ -26,14 +26,14 @@ class SyncService extends BaseService
         }else{
           $lastSync = '1970-01-01 00:00:00';
         }
-        $syncParams = array($uid, $lastSync, $time['createTime']);
+        $syncParams = array($uid, $lastSync);
         $result['bookList'] = $this->getUnsyncBooks( $syncParams );
         $result['lectureList'] = $this->getUnsyncLectures( $syncParams );
         $result['wordList'] = $this->getUnsyncWords( $syncParams );
         if(!$isLogin){
-          $result['deletedList'] = $this->getDeletedList( $syncParams );
-          $result['serverLastSync'] = $time['syncTime'];
+          $result['deletedList'] = $this->getDeletedList( array($uid, $lastSync, $time['createTime']));
         }
+        $result['serverLastSync'] = $time['syncTime'];
         $this->conn->commit();
         return $result;
     }catch(MysqlException $e){
@@ -47,7 +47,7 @@ class SyncService extends BaseService
   private function getUnsyncBooks($params){
     $sql = "SELECT id, name as bookName, question_lang_id as questionLang, answer_lang_id as answerLang, ".
             "is_shared as shared, level_id as level, dril_category_id as categoryId ".
-            "FROM dril_book WHERE user_id = ? AND changed > ? AND changed < ?";
+            "FROM dril_book WHERE user_id = ? AND changed > ? "; // AND changed < ?
     return $this->conn->select($sql, $params);
   }
 
@@ -55,17 +55,17 @@ class SyncService extends BaseService
     $sql = "SELECT l.id, l.name as lectureName, l.dril_book_id as bookId ".
            "FROM dril_book_has_lecture l ".
            "INNER JOIN dril_book b ON b.id = l.dril_book_id ".
-           "WHERE b.user_id = ? AND l.changed > ? AND l.changed < ?";
+           "WHERE b.user_id = ? AND l.changed > ?";
    return $this->conn->select($sql, $params);
   }
 
   private function getUnsyncWords( $params ){
     $sql = "SELECT w.id, w.question, w.answer, w.is_activated as active, w.viewed as hits, ".
-           "w.avg_rating as avgRating, w.dril_lecture_id as lectureId, w.last_rating as lastRate ".
+           "IFNULL(w.avg_rating,0) as avgRating, w.dril_lecture_id as lectureId, IFNULL(w.last_rating,0) as lastRate ".
            "FROM dril_lecture_has_word w ".
            "INNER JOIN dril_book_has_lecture l ON l.id = w.dril_lecture_id ".
            "INNER JOIN dril_book b ON b.id = l.dril_book_id ".
-           "WHERE b.user_id = ? AND l.changed > ? AND l.changed < ?";
+           "WHERE b.user_id = ? AND l.changed > ? ";
     return $this->conn->select($sql, $params);
   }
 
@@ -133,13 +133,12 @@ class SyncService extends BaseService
     $lectureId = isset($mappingArray[$word->lectureId]) ? $mappingArray[$word->lectureId] : $word->lectureId;
          
    $sql = "INSERT INTO `dril_lecture_has_word` ".
-          " (`question`, `answer`, `dril_lecture_id`, `last_rating`, `viewed`, `avg_rating`, `is_activated`,`last_rating`,`changed`, `created`) ".
+          " (`question`, `answer`, `dril_lecture_id`, `viewed`, `avg_rating`, `is_activated`,`last_rating`,`changed`, `created`) ".
                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? )";
         $this->conn->insert($sql,  array(
             $word->question, 
             $word->answer, 
             $lectureId,
-            $word->lastRating, 
             $word->hits, 
             $word->avgRating, 
             $word->active,
@@ -152,12 +151,11 @@ class SyncService extends BaseService
 
   private function updateWord($time, $word){
      $sql = "UPDATE `dril_lecture_has_word` ".
-            "SET `question`=?, `answer`=?, last_rating=?, viewed=?, avg_rating=?, is_activated=?, `last_rating` =?, changed=? ".
+            "SET `question`=?, `answer`=?, viewed=?, avg_rating=?, is_activated=?, `last_rating` =?, changed=? ".
             "WHERE id = ?";
         $this->conn->update($sql,  array(
             $word->question, 
             $word->answer, 
-            $word->lastRating, 
             $word->hits, 
             $word->avgRating, 
             $word->active, 
@@ -175,7 +173,7 @@ class SyncService extends BaseService
         if($lecture->sid == null){
           $ids[$lecture->id] = $this->createLecture($time, $lecture, $mappingArray);
         }else{
-          updateLecture($time, $lecture);
+          $this->updateLecture($time, $lecture);
         }
     }
     return $ids;
@@ -215,7 +213,7 @@ private function createLecture($time, $lecture, $mappingArray){
 
   
 
-  private function updateBook($now, $book ){
+  private function updateBook($time, $book ){
         $sql = 
           "UPDATE `dril_book` SET ".
             "`name` = ?, ".
