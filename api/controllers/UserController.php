@@ -14,6 +14,7 @@ class UserController
      * @noAuth
      */   
    public function login( $data ){
+        global $lang;
         $logger = Logger::getLogger('api');
         $logger->debug("login: " . $data->username);
         global $drilConf, $conn;
@@ -29,12 +30,13 @@ class UserController
         }
         if(hash_hmac('sha256', $data->password , $user['salt']) == $user['pass']){
             $androidDeviceLogin = isset($data->deviceId);
+            setLang( $user['localeCode'] );
             try {
-
                 $token = array(
                     "iat" => time(),
                     "exp" => time() + ($androidDeviceLogin ?  31556926 : 10200),
-                    "uid" => $user['id']
+                    "uid" => $user['id'],
+                    "locale" => $lang
                 );
                 unset($user['pass']);
                 unset($user['salt']);
@@ -78,6 +80,7 @@ class UserController
      * @noAuth
      */
     public function create( $data ) {
+        $this->setLangByLocaleId($data->localeId);
         $user = $this->userService->create($data);
         $this->userService->sendRegistrationEmail($user);
     }
@@ -143,6 +146,15 @@ class UserController
         }
     }
 
+    private function setLangByLocaleId($localeId){
+         global $conn;
+        if(isset($localeId)){
+            $res = $conn->select("SELECT `code` FROM `lang` WHERE `id_lang` = ?", array( $localeId ));
+            if(count($res) == 1){
+                setLang($res[0]['code']);
+            }
+        }
+    }
 
     public function init(){
         global $conn;

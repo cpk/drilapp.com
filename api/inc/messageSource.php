@@ -7,8 +7,46 @@
 		$argsSize = func_num_args();
 
 		$messages["sk"] = array(
-			
+			"errBookUniqeName" => "Učebnica s názvom \"{0}\" sa už vo Vašom drile nachádza",
+			"errBookShortName" => "Názov učebnice musí byť aspoň 8 znakov dlhý",
+			"errBookLongName" => "Názov učebnice je príliš dlhý (max 200 characters)",
+			"errBookLangs" => "Prosím, zvoľte jazyky",
+			"errBookLevel" => "Prosím, zvoľte úroveň",
+			"errBookDescr" => "Popis učebnice je príliš dlhý (max. 200 znakov)",
+
+			"errLectureUniqeName" => "Lekcia s názvom \"{0}\" sa už v učebnici nachádza",
+			"errLectureShortName" => "Vyplnte názov lekcie",
+			"errLectureLongName" => "Názov lekcie je príliš dlhý (max 150 characters)",
+			"errLectureBookId" => "Identifikátor učebnice je vyžadovaný",
+
+			"errUserEmailUniqe" => "Zadaný e-mail sa už v databáze nachádza",
+			"errUserEmailLength" => "Zadaný e-mail je príliš dlhý (max 45 znakov)",
+			"errUserEmailInvalid" => "Neplatná emailová adresa",
+			"errUserLoginUniqe" => "Zadané prihlasovacie meno '{0}' sa už používa",
+			"errUserLoginLength" => "Povolná dĺžka prihlasovacieho mena je 5 až 20 znakov",
+			"errUserFirstNameLength" => "Maximálna dĺžka mena je 30 znakov",
+			"errUserLastNameLength" => "Maximálna dĺžka priezviska je 30 znakov",
+			"errUserPasswordLength" => "Heslo je príliš krátke, musí mať min. 6 znakov",
+			"errUserPasswordMatch" => "Zadané heslá sa nezhodujú",
+			"errUserLocaleEmpty" => "Prosím zvoľte Váš jazyk",
+
+			"errUserUnactivated" => "Váš účet zatial nebol aktivovaný, skontrolujte Vášu e-mailovú schárnku",	
+			"errUnexpected" => "Nastala neočakávana chyba, operáciu zopakujte neskôr",
+
+			"activated" => "Váš učet bol úspešne aktivovaný",
+
+			"errXlsFile" => "Neplatný súbor. Nahrávať je možné len súbory s koncovkou xls a xlsx",	
+			"errXlsFileEmpty" => "Súbor je prázdny",	
+
+			"errLecutreWordLimit" => "Lekcia môže obsahovať maximálne {0} slovíčok. Vytvorte novú lekciu a rozdelte slovíčka",
+			"errWordLimit" => "Maximálný povolený počet slovíčok na Vašom účte je {0} momentálne je evidovaných {1}.",
+
+			"emailReg_head" => "Dokončenie registrácie",
+			"emailReg_descr" => "Váš účet bol úspešne vytvorený. Dokončite registráciu kliknutím na nasledujúce tlačítko",
+			"emailReg_activate" => "Aktivácia účtu", 
+			"emailReg_ccopyUrl" => "alebo vložte nasledujúci odkaz do Vášho webového prehliadača" 
 		);
+
 		$messages["en"] = array(
 			"errBookUniqeName" => "You already have the book with name \"{0}\", choose different",
 			"errBookShortName" => "The book name is too short.",
@@ -48,9 +86,6 @@
 			"emailReg_descr" => "Your account has been successfully created. Activate your account by clicking on following button",
 			"emailReg_activate" => "Activate account", 
 			"emailReg_ccopyUrl" => "Or copy following url and paste it into your browser" 
-
-
-
 		);
 
 		$key = $args[0];

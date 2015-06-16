@@ -144,6 +144,9 @@ class RestServer
 				$logger->info('IS authorized: ' .($authData != null ? 'yes' : 'no'));
 				if($authData != null){
 					$params['uid'] = $authData->uid;
+					if(isset($authData->locale)){
+						setLang($authData->locale);
+					}
 				}
 				
 				$result = call_user_func_array(array($obj, $method), $params);

@@ -9,8 +9,8 @@ class UserService extends BaseService
 
 
     public function getUserById($uid, $full = false){
-        $cols = " u.`id_user` as id, u.`login`, u.`email`, u.`givenname` as `firstName`, ".
-                " u.`locale_id` as localeId, u.`target_locale_id` as targetLocaleId, word_limit as wordLimit, ".
+        $cols = " u.`id_user` as id, u.`login`, u.`email`, u.`givenname` as `firstName`, u.`active`, u.`blocked`, ".
+                " u.`locale_id` as localeId, u.`target_locale_id` as targetLocaleId, u.word_limit as wordLimit, ".
                 " u.`surname` as `lastName`, u.`pass`, u.`salt`, l.`code` as localeCode, l2.`code` as targetLocaleCode ";
         
         $sql = "SELECT ".($full ? "u.*, l.`code` as localeCode, l2.`code` as targetLocaleCode  " : $cols ).
@@ -29,7 +29,7 @@ class UserService extends BaseService
     public function getUserByLogin( $login ){
 
          $cols = " u.`id_user` as id, u.`login`, u.`email`, u.`givenname` as `firstName`, u.`active`, u.`blocked`, ".
-                " u.`locale_id` as localeId, u.`target_locale_id` as targetLocaleId, word_limit as wordLimit, ".
+                " u.`locale_id` as localeId, u.`target_locale_id` as targetLocaleId, u.word_limit as wordLimit, ".
                 " u.`surname` as `lastName`, u.`pass`, u.`salt`, l.`code` as localeCode, l2.`code` as targetLocaleCode ";
         
         $sql = "SELECT $cols ".
@@ -38,7 +38,7 @@ class UserService extends BaseService
                "LEFT JOIN `lang` l2 ON l2.`id_lang` = u.`target_locale_id` ".
                "WHERE `login`=? OR `email`=? LIMIT 1";
 
-        $data = $this->conn->select( $sql , array($login) ); 
+        $data = $this->conn->select( $sql , array($login, $login) ); 
         if(count($data) > 0){
             return $data[0];
         }
@@ -211,9 +211,9 @@ class UserService extends BaseService
     }
 
     private function baseValidation($user){
-        if(strlen($user->firstName) == 0 || strlen($user->firstName) > 30){
+        if(!isset($user->firstName) || strlen($user->firstName) == 0 || strlen($user->firstName) > 30){
             throw new InvalidArgumentException(getMessage("errUserFirstNameLength"));
-        }else if(strlen($user->lastName) == 0 || strlen($user->lastName) > 30){
+        }else if(!isset($user->lastName) || strlen($user->lastName) == 0 || strlen($user->lastName) > 30){
             throw new InvalidArgumentException(getMessage("errUserLastNameLength"));
         }else if(!isset($user->localeId)){
             throw new InvalidArgumentException(getMessage("errUserLocaleEmpty"));

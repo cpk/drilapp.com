@@ -90,6 +90,7 @@ class SyncService extends BaseService
   }
 
   private function syncDeletedRows($data, $lectureIds){
+    $logger = Logger::getLogger('api');
     $tables = array( "word" => "dril_lecture_has_word", "lecture" => "dril_book_has_lecture", "book" => "dril_book" );
     foreach ($data->deletedList as $row) {
         if($row->tableName == "word"){
