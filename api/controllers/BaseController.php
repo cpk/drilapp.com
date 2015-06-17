@@ -159,12 +159,11 @@ class BaseController
   * Sync
   *
   * @url POST /v1/sync
-  * @noAuth
   */
-  public function sync($data, $uid = null){
+  public function sync($data, $uid ){
     global $conn;
     $syncService = new SyncService($conn);
-    return $syncService->sync($data, 1);
+    return $syncService->sync($data, $uid);
   }
 
 

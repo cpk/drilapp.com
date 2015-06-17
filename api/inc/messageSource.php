@@ -5,18 +5,58 @@
 		$lang = getLang();
 		$args = func_get_args();
 		$argsSize = func_num_args();
+		
+		$messages["cs"] = array(
+			"errBookUniqeName" => "Učebnice s názvem \"{0}\"se již ve Vašem drilu nachází",
+			"errBookShortName" => "Název učebnice musí být alespoň 8 znaků dlouhý",
+			"errBookLongName" => "Název učebnice je příliš dlouhý (max 200 znaků)",
+			"errBookLangs" => "Prosím, vyberte jazyky",
+			"errBookLevel" => "Prosím, vyberte úroveň",
+			"errBookDescr" => "Popis učebnice je příliš dlouhý (max. 200 znaků)",
 
+			"errLectureUniqeName" => "Lekce s názvem \"{0}\"se již v učebnici nachází",
+			"errLectureShortName" => "Vyplňte název lekce",
+			"errLectureLongName" => "Název lekce je příliš dlouhý (max 150 znaků)",
+			"errLectureBookId" => "Identifikátor učebnice je vyžadován",
+
+			"errUserEmailUniqe" => "Zadaný e-mail se už v databázi nachází",
+			"errUserEmailLength" => "Zadaný e-mail je příliš dlouhý (max 45 znaků)",
+			"errUserEmailInvalid" => "Neplatná emailová adresa",
+			"errUserLoginUniqe" => "Zadané přihlašovací jméno '{0}' se již používá",
+			"errUserLoginLength" => "Povolná délka přihlašovacího jména je 5 až 20 znaků",
+			"errUserFirstNameLength" => "Maximální délka jména je 30 znaků",
+			"errUserLastNameLength" => "Maximální délka příjmení je 30 znaků",
+			"errUserPasswordLength" => "Heslo je příliš krátké, musí mít min. 6 znaků",
+			"errUserPasswordMatch" => "Zadaná hesla se neshodují",
+			"errUserLocaleEmpty" => "Prosím zvolte Váš jazyk",
+
+			"errUserUnactivated" => "Váš účet zatím nebyl aktivován, zkontrolujte Vaši e-mailovou schárnku",
+			"errUnexpected" => "Nastala neočekávaná chyba, operaci zopakujte později",
+
+			"activated" => "Váš učet byl úspěšně aktivován",
+
+			"errXlsFile" => "Neplatný soubor. Nahrávat lze pouze soubory s koncovkou xls a xlsx",
+			"errXlsFileEmpty" => "Soubor je prázdný",
+
+			"errLecutreWordLimit" => "Lekce může obsahovat maximálně {0} slovíček. Vytvořte novou lekci a rozdělte slovíčka",
+			"errWordLimit" => "Maximální povolený počet slovíček na Vašem účtu je {0} momentálně je evidováno {1}.",
+
+			"emailReg_head" => "Dokončení registrace",
+			"emailReg_descr" => "Váš účet byl úspěšně vytvořen. Dokončete registraci kliknutím na následující tlačítko",
+			"emailReg_activate" => "Aktivace účtu",
+			"emailReg_ccopyUrl" => "nebo vložte následující odkaz do Vašeho webového prohlížeče"
+		 );
 		$messages["sk"] = array(
 			"errBookUniqeName" => "Učebnica s názvom \"{0}\" sa už vo Vašom drile nachádza",
 			"errBookShortName" => "Názov učebnice musí byť aspoň 8 znakov dlhý",
-			"errBookLongName" => "Názov učebnice je príliš dlhý (max 200 characters)",
+			"errBookLongName" => "Názov učebnice je príliš dlhý (max 200 znakov)",
 			"errBookLangs" => "Prosím, zvoľte jazyky",
 			"errBookLevel" => "Prosím, zvoľte úroveň",
 			"errBookDescr" => "Popis učebnice je príliš dlhý (max. 200 znakov)",
 
 			"errLectureUniqeName" => "Lekcia s názvom \"{0}\" sa už v učebnici nachádza",
 			"errLectureShortName" => "Vyplnte názov lekcie",
-			"errLectureLongName" => "Názov lekcie je príliš dlhý (max 150 characters)",
+			"errLectureLongName" => "Názov lekcie je príliš dlhý (max 150 znakov)",
 			"errLectureBookId" => "Identifikátor učebnice je vyžadovaný",
 
 			"errUserEmailUniqe" => "Zadaný e-mail sa už v databáze nachádza",

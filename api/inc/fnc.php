@@ -2,7 +2,7 @@
   $lang = "en";
   function setLang($locale = false){
     global $lang;
-    $avaiableLang = array("sk", "en");
+    $avaiableLang = array("sk", "en", "cs");
     if($locale){
       if(in_array($locale, $avaiableLang)){
         $lang = $locale;
