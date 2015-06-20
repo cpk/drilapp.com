@@ -10,7 +10,7 @@ class SyncService extends BaseService
 
   public function sync($data, $uid, $isLogin = false){
     if(intval($uid) == 0){
-      throw new InvalidArgumentException("Invalidat data");
+      throw new InvalidArgumentException("Invalid data");
     }
 
     try{
@@ -23,6 +23,7 @@ class SyncService extends BaseService
           $lectureIds = $this->syncDeletedRows($data, $lectureIds);
           $this->updateCountOfWordsInLectures($lectureIds);
           $lastSync = $data->serverLastSync;
+          $this->updateLastSync($uid, $data->deviceId, $time['syncTime']);
         }else{
           $lastSync = '1970-01-01 00:00:00';
         }
@@ -259,6 +260,11 @@ private function createLecture($time, $lecture, $mappingArray){
       return $now[0];
    } 
 
+   private function updateLastSync($uid, $device, $time){
+      $this->conn->update("UPDATE dril_device SET last_sync = ? WHERE user_id = ? AND device_id = ? LIMIT 1",
+          array($time, $uid, $device)
+        );
+   }
 
 }
 

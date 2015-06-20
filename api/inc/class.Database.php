@@ -51,7 +51,7 @@ class Database
         $this->mysql->autocommit(false);
         $this->mysql->begin_transaction();
     }
-    
+        
     public function commit(){
         $this->mysql->commit();
     }
