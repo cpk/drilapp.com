@@ -115,12 +115,10 @@ class RestServer
 			exit;
 		}
 		$logger = Logger::getLogger('api');
-		$logger->info('URL: ' .$this->url . ' Method: '.$this->method);
 		list($obj, $method, $params, $this->params, $noAuth) = $this->findUrl();
 		
 		if ($obj) {
-			$logger = Logger::getLogger('api');
-			$logger->trace("Handling " .$this->method. " ".$this->url );
+			
 			if (is_string($obj)) {
 				if (class_exists($obj)) {
 					$obj = new $obj();
@@ -141,7 +139,7 @@ class RestServer
 					$this->sendData($this->unauthorized());
 					exit;					
 				}
-				$logger->info('IS authorized: ' .($authData != null ? 'yes' : 'no'));
+
 				if($authData != null){
 					$params['uid'] = $authData->uid;
 					if(isset($authData->locale)){
@@ -175,15 +173,12 @@ class RestServer
 
 	private function authData(){
 		global $drilConf;
-		$logger = Logger::getLogger('api');
 		$requestHeaders = apache_request_headers();
 		if(!isset($requestHeaders['Authorization'])){
-			$logger->debug("Empty authorization header");
 			return null;
 		}
     	$authorizationHeader = $requestHeaders['Authorization'];
     	if($authorizationHeader == null){
-    		$logger->debug("Authorization header was null.");
     		return null;
     	}
     	$token = str_replace('Bearer ', '', $authorizationHeader);

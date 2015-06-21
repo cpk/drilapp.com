@@ -9,13 +9,14 @@ class DrilService extends BaseService
 
 
     public function getData($data){
-        if(isset($data->localeId) && isset($data->targetLocaleId)){
+        if(isset($data->localeId) && isset($data->targetLocaleId) && isset($data->device)){
             $localeId = intval($data->localeId);
         	$targetLocaleId = intval($data->targetLocaleId);
             try{
                 $this->conn->beginTransaction();
                 $bookList = $this->findBooks($localeId, $targetLocaleId);
                 $res = $this->fetchDataFor($bookList);
+                $this->logRequest($data);
                 $this->conn->commit();
                 return $res;
             }catch(MysqlException $e){
@@ -30,6 +31,12 @@ class DrilService extends BaseService
             "wordList" => array(),
         );
     	
+    }
+
+    private function logRequest($data){
+        $this->conn->insert(
+            "INSERT INTO dril_install_log (`locale_id`, `target_locale_id`, `device`, `ip_address`) ".
+            "VALUES (?,?,?,?)", array($data->localeId, $data->targetLocaleId, $data->device, $_SERVER['REMOTE_ADDR']));
     }
 
     private function findBooks($loc1, $loc2){
@@ -63,8 +70,8 @@ class DrilService extends BaseService
 
     private function getWords($where){
     	return $this->conn->select(
-				"SELECT w.id, w.question, w.answer, w.is_activated as active, w.viewed as hits, ".
-           		"IFNULL(w.avg_rating,0) as avgRating, w.dril_lecture_id as lectureId, IFNULL(w.last_rating,0) as lastRate  ".
+				"SELECT w.id, w.question, w.answer, w.is_activated as active, 0 as hits, ".
+           		"0 as avgRating, w.dril_lecture_id as lectureId, 0 as lastRate  ".
 				"FROM dril_lecture_has_word w ".
 				"INNER JOIN dril_book_has_lecture l ON w.dril_lecture_id = l.id ".
 				"INNER JOIN dril_book b ON l.dril_book_id = b.id ".

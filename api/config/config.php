@@ -28,6 +28,7 @@
 	define("UNLIMITED", -1);
 	define('CLIENT_URL', 'http://localhost:9000');
 	define('MODE', 'debug');
+	define('ERROR_REPORTING', 'E_ALL');
 
 	
 ?>

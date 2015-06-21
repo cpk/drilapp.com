@@ -82,7 +82,7 @@ class UserController
     public function create( $data ) {
         $this->setLangByLocaleId($data->localeId);
         $user = $this->userService->create($data);
-        //$this->userService->sendRegistrationEmail($user);
+        $this->userService->sendRegistrationEmail($user);
         return array( "status" => "created");
     }
 
