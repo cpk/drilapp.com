@@ -155,7 +155,7 @@ class BaseController
   }
 
 
-   /**
+  /**
   * Sync
   *
   * @url POST /v1/sync
@@ -174,7 +174,17 @@ class BaseController
    }
 
 
-
+  /**
+  * Retrieve books/lectures/word for given locales
+  *
+  * @url POST /v1/dril
+  * @noAuth
+  */
+  public function initDril($data){
+    global $conn;
+    $drilService = new DrilService($conn);
+    return $drilService->getData($data);
+  }
 
 
 
