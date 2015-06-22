@@ -114,7 +114,7 @@ class RestServer
 			throw new RestException(200, "OK");
 			exit;
 		}
-		$logger = Logger::getLogger('api');
+
 		list($obj, $method, $params, $this->params, $noAuth) = $this->findUrl();
 		
 		if ($obj) {
@@ -136,6 +136,8 @@ class RestServer
 				
 				$authData = $this->authData();
 				if (!$noAuth && $authData == null) {
+					$logger = Logger::getLogger('api');
+					$logger->debug('Unauthorized request: ' . $this->url. " method ". $this->method );
 					$this->sendData($this->unauthorized());
 					exit;					
 				}
@@ -153,9 +155,11 @@ class RestServer
 					$this->sendData($result);
 				}
 			}catch (RestException $e) {
+				$logger = Logger::getLogger('api');
                 $logger->warn("API error: ".$e->getMessage()." [ip=" .$_SERVER['REMOTE_ADDR']."]");
 				$this->handleError($e->getCode(), $e->getMessage());
 			}catch (InvalidArgumentException $e) {
+				$logger = Logger::getLogger('api');
                 $logger->info("Validation error: ".$e->getMessage()." [ip=" .$_SERVER['REMOTE_ADDR']."]", $e);
 				$this->handleError(400, $e->getMessage());
 			}catch (MysqlException $e) {

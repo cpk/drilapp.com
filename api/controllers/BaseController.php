@@ -167,15 +167,8 @@ class BaseController
   }
 
 
-   public function init(){
-      global $conn;
-      $this->commonService = new CommonService($conn);
-      $this->userService = new UserService($conn);
-   }
-
-
   /**
-  * Retrieve books/lectures/word for given locales
+  * Retrieve books for given locales
   *
   * @url POST /v1/dril
   * @noAuth
@@ -187,7 +180,11 @@ class BaseController
   }
 
 
-
+   public function init(){
+      global $conn;
+      $this->commonService = new CommonService($conn);
+      $this->userService = new UserService($conn);
+   }
    	
 }
 

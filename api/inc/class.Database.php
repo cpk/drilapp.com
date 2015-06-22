@@ -19,6 +19,8 @@ class Database
 {
     private static $instance;
     private $mysql; 
+    private $transactionSupported = false;
+
     
     /** ---------------------------------------------------------------------------------
      * Create connection to database if not exists 
@@ -41,7 +43,7 @@ class Database
             if (!$this->mysql->query("set names 'utf8'")){
                 throw new MysqlException( $this->mysql->errno, $this->mysql->error );
             }
-            
+            $transactionSupported =  method_exists (  $this->mysql , "begin_transaction" );
         }else{
              throw new MysqlException( "-1" , "Duplicate connection.");
         }			
@@ -49,15 +51,19 @@ class Database
 
     public function beginTransaction(){
         $this->mysql->autocommit(false);
-        $this->mysql->begin_transaction();
+        if( $transactionSupported ){
+            $this->mysql->begin_transaction();
+        }
     }
         
     public function commit(){
         $this->mysql->commit();
+        $this->mysql->autocommit(true);
     }
 
     public function rollback(){
         $this->mysql->rollback();
+        $this->mysql->autocommit(true);
     }
 
     
