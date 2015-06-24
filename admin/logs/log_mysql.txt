@@ -33,3 +33,5 @@
 [2015-05_30 22:29:28] Code: 1054 - Message: SQL preparing failed: Unknown column 'name' in 'field list' SQL: SELECT `id_level`, `name` FROM `level`
 [2015-06_02 21:51:22] Code: 1049 - Message: Unknown database 'db_drilapp_dev'
 [2015-06_03 09:00:20] Code: 1054 - Message: SQL preparing failed: Unknown column 'name' in 'field list' SQL: SELECT `id_level`, `name` FROM `level`
+[2015-06_24 22:47:57] Code: 1054 - Message: SQL preparing failed: Unknown column 'user_id' in 'field list' SQL: SELECT user_id FROM  import_book WHERE _id = 3453
+[2015-06_24 22:48:40] Code: 1048 - Message: SQL execution failed: Column 'user_id' cannot be null SQL: INSERT INTO `dril_book` ( `name`, `question_lang_id`, `answer_lang_id`, `level_id`, `dril_category_id`, `is_shared`, `user_id`, `description`, `changed`, `created`) VALUES (?,?,?,?,?,?,?,?, NOW(), NOW())

@@ -316,7 +316,7 @@ function createNewBook($form, $oldBook){
             $form['level'],
             $form['category'], 
             $oldBook[0]['shared'],
-            $_SESSION['id'],
+            getUserId($form['id']),
             $oldBook[0]['descr']
           ));
     $bookId = $conn->getInsertId();
@@ -326,6 +326,11 @@ function createNewBook($form, $oldBook){
     createLecture($bookId, $form['lectureName'], $oldBook);    
 }
 
+function getUserId($bookId){
+	global $conn;
+	$r = $conn->select("SELECT id_user FROM  import_book WHERE _id = " . intval($bookId));
+	return count($r) == 1 && $r[0]['id_user'] != null ? $r[0]['id_user'] : $_SESSION['id'];
+}
 
 function copyToExisting($form){
 	global $conn;
@@ -372,8 +377,8 @@ function importWordsIntoLecture($lectureId, $oldBook){
         $sqlRows = array();
         for( $i = 0; $i < $count && $i < LECTURE_WORD_LIMIT; $i++ ){
           $sqlRows[] = "(
-                        '".($swap ? $wordList[$i]['answer'] : $wordList[$i]['question'])."', 
-                        '".(!$swap ? $wordList[$i]['answer'] : $wordList[$i]['question'])."',
+                        '".$conn->clean(($swap ? $wordList[$i]['answer'] : $wordList[$i]['question']))."', 
+                        '".$conn->clean((!$swap ? $wordList[$i]['answer'] : $wordList[$i]['question']))."',
                         ".$lectureId.",".
                         "NOW() ".
                       ")";
@@ -407,7 +412,7 @@ function validate($oldBook, $userStats, $wordCount){
 	$errorMessage = false;
 	if(count($oldBook) == 0){
 		$errorMessage = "The book was not found";
-	}else if($oldBook[0]['id_user'] != (int)$_SESSION['id']){
+	}else if($_SESSION['id'] != 1 && $oldBook[0]['id_user'] != (int)$_SESSION['id']){
 		$errorMessage = "Access denied";
 	}else if($oldBook[0]['transmitted'] == 1){
 		$errorMessage = "The book was already transmitted.";
