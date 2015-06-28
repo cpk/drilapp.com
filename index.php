@@ -90,7 +90,14 @@
     </header>
     <div class="webdril">
       <p>
-      Vyskúšajte nový <strong><a href="http://web.drilapp.com">WebDril</a></strong> a presuňte si Vaše slovíčka.
+      <?php 
+        if($lang == "sk"){
+          echo 'Bola vydaná nová verzia webových stránok dostupná na <strong><a href="http://web.drilapp.com">WebDril</a></strong>.';
+        }else{
+          echo 'The new version of this page was released. Try out the new WebDril on <strong><a href="http://web.drilapp.com">WebDril</a></strong>';
+        }
+      ?>
+      
       </p>
     </div>
     

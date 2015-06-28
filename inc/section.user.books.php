@@ -17,6 +17,9 @@
 		<div class="user-nav gradientGray">
 			<?php include 'section.user.nav.php'; ?>
 		</div>
+		
+		<?php include 'alert.php'; ?>
+		
 		<div class="user-content">
 			<?php
 			
