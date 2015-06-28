@@ -41,8 +41,9 @@ class DrilService extends BaseService
             "b.is_shared as shared, b.level_id as level, b.dril_category_id as categoryId ".
             "FROM dril_book b ".
             "INNER JOIN dril_book_has_lecture l ON l.dril_book_id = b.id ".
-            "WHERE is_shared=1 AND (question_lang_id = $loc1 AND answer_lang_id = $loc2) OR (question_lang_id = $loc2 AND answer_lang_id = $loc1)".
-            "HAVING sum(l.no_of_words) > 2 ".
+            "WHERE b.is_shared=1 AND ((b.question_lang_id = $loc1 AND b.answer_lang_id = $loc2) OR (b.question_lang_id = $loc2 AND b.answer_lang_id = $loc1))".
+            "GROUP BY b.id ".
+            "HAVING sum(l.no_of_words) > 20 ".
             "ORDER BY RAND()".
             "LIMIT 5");
     }
@@ -96,7 +97,8 @@ class DrilService extends BaseService
             if(!$isFirst){
                 $where .= ' OR ';
             }
-            $where .= ' b.id = ' . $book['id'];
+            $where .= ' (b.id=' . $book['id']. ') ' ;
+            $isFirst = false;
         }
         return $where ;
     }
