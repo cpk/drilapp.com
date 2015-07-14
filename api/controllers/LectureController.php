@@ -34,6 +34,22 @@ class LectureController{
     /**
      * Activate user word
      *
+     * @url DELETE /v1/user/lectures/$id/words
+     * 
+     */
+    public function deleteLectureWords($id, $uid){
+        global $conn;
+        $wordService = new WordService($conn);
+        $book = $wordService->getBookByLectureId( $id );
+        checkBookPermision($book, $uid);
+        $wordService->deleteWordsOnly( $id );
+        $wordService->updateCountOfWordsByLectureId( $id );
+    }
+
+
+     /**
+     * Activate user word
+     *
      * @url DELETE /v1/user/lectures/$id
      * 
      */
@@ -42,8 +58,7 @@ class LectureController{
         $wordService = new WordService($conn);
         $book = $wordService->getBookByLectureId( $id );
         checkBookPermision($book, $uid);
-        $this->lectureService->deleteWordsOnly( $id );
-        $wordService->updateCountOfWordsByLectureId( $id );
+        $this->lectureService->delete( $id );
     }
 
     
