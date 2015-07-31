@@ -15,6 +15,7 @@ class DrilService extends BaseService
             try{
                 $this->conn->beginTransaction();
                 $bookList = $this->findBooks($localeId, $targetLocaleId);
+                $this->updateDownloads($bookList);
                 $res = $this->fetchDataFor($bookList);
                 $this->logRequest($data);
                 $this->conn->commit();
@@ -46,6 +47,14 @@ class DrilService extends BaseService
             "HAVING sum(l.no_of_words) > 20 ".
             "ORDER BY RAND()".
             "LIMIT 5");
+    }
+
+    private function updateDownloads($bookList){
+        $ids = array();
+        foreach ($bookList as  $book) {
+            $ids[] = "id=". $book['id'];
+        }
+        $this->conn->update("UPDATE dril_book SET download = download + 1 WHERE ". implode(" OR ", $ids)) ;
     }
 
 
