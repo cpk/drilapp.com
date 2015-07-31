@@ -203,16 +203,14 @@ class WordService extends BaseService
         }
         $sqlRows = array();
         for( $i = 0; $i < $count; $i++ ){
-          $sqlRows[] = "(
-                        '".$this->conn->clean(StringUtils::xssClean($words[$i]['question']))."', 
-                        '".$this->conn->clean(StringUtils::xssClean($words[$i]['answer']))."',
-                        ".$lecture['dril_lecture_id'].",".
-                        "NOW() ".
-                      ")";
+            $sql = "INSERT INTO `dril_lecture_has_word` (`question`, `answer`, `dril_lecture_id`, `created`) VALUES ( ?,?,?,NOW() )";
+            $this->conn->insert( $sql, array(
+                StringUtils::xssClean($words[$i]['question']), 
+                StringUtils::xssClean($words[$i]['answer']),
+                $lecture['dril_lecture_id']
+            ));
+          
         } 
-        $sql = "INSERT INTO `dril_lecture_has_word` (`question`, `answer`, `dril_lecture_id`, `created`) VALUES ".
-                implode(",", $sqlRows);
-        $this->conn->insert($sql);
         $this->updateCountOfWordsByLectureId($lecture['dril_lecture_id']);
     }
 

@@ -1,0 +1,1 @@
+ALTER TABLE `dril_book` ADD `forked_book_id` INT NOT NULL AFTER `dril_category_id`;

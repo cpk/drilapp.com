@@ -117,7 +117,7 @@ class BookController
         return $this->bookService->getFatchedBooks();
     }
 
-      /**
+     /**
      * Retrieve user book page
      *
      * @url GET /v1/user/books
@@ -126,6 +126,18 @@ class BookController
 
         $_GET['userId'] = $uid;
         return $this->bookService->getFatchedBooks();
+    }
+
+
+    /**
+     * Forks user books
+     *
+     * @url GET /v1/books/$id/fork
+     *
+     */
+    public function forkBook( $id, $uid ){
+
+        return $this->bookService->forkBook($id, $uid);
     }
 
 

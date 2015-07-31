@@ -124,6 +124,34 @@ class BookService extends BaseService
     }
 
 
+    public function forkBook($id, $uid){
+      $query = 
+      "INSERT INTO `dril_book`( `name`, `description`, `question_lang_id`, `answer_lang_id`, `level_id`, `downloaded`, `user_id`, `changed`,`created`,  `download`, `is_shared`, `dril_category_id`, `forked_book_id`) ( ".
+        "  SELECT `name`, `description`, `question_lang_id`, `answer_lang_id`, `level_id`, `downloaded`, $uid, NOW(),NOW(), 0, 0, `dril_category_id`, `id` ".
+        "  FROM `dril_book` ".
+        "  WHERE id = ".intval($id). " ".
+        "  LIMIT 1 ".
+      ")";
+      $this->conn->simpleQuery($query);
+      $bookId = $this->conn->getInsertId();
+      $lectures = $this->lectureService->getAllBookLectures($id, $uid);
+      $this->forkLectures($bookId, $lectures, $uid);
+      return array('bookId' => $bookId );
+    }
+
+
+    private function forkLectures($toBookId, $lectures, $uid){
+      $statsSevice = new StatisticService($this->conn);
+      foreach ($lectures as $lecture) {          
+          $lecture = (object) $lecture ;
+          $lectureWords = $this->wordService->getAllWordByLectureId( $lecture->id );
+          $lecture->dril_book_id = $toBookId;
+          $lecture = $this->lectureService->create($lecture);
+          $lecture['dril_lecture_id'] = $lecture['id'];
+          $this->wordService->createWords($lectureWords, $lecture, $statsSevice->getUserStatistics($uid));
+      }
+    }
+
     public function getFetchedBookById( $id ){
       $book = $this->getBookById($id);
       if($book != null){
