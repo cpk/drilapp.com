@@ -29,6 +29,13 @@ class BookService extends BaseService
               
     }
 
+    private function getAllUserWhoForked($bookId){
+      $sql = "SELECT u.id_user as id, u.login ".
+             "FROM `user` u ".
+             "LEFT JOIN dril_book b ON b.user_id=u.id_user ".
+             "WHERE b.forked_book_id = ? GROUP BY u.id_user";
+      return $this->conn->select($sql, array( $bookId ));
+    }
 
 
     public function create( $book ){
@@ -155,6 +162,7 @@ class BookService extends BaseService
     public function getFetchedBookById( $id ){
       $book = $this->getBookById($id);
       if($book != null){
+        $book['forked'] = $this->getAllUserWhoForked( $id );
         $book['tags'] = $this->tagService->getAllBookTags($id);
         $book['lectures'] = $this->lectureService->getAllBookLectures($id);
       }
