@@ -215,7 +215,7 @@ class UserService extends BaseService
         if($_SERVER['REMOTE_ADDR'] == '127.0.0.1'){
             $url = 'http://localhost:9000/forgottenPass#'.$user['token'];
         }else{
-            $url = 'http://web.drilapp.com/forgottenPassn#'.$user['token'];
+            $url = 'http://web.drilapp.com/forgottenPass#'.$user['token'];
         }
         $model = array(
             "head" => getMessage("emailPass_head"),

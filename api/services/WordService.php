@@ -81,7 +81,7 @@ class WordService extends BaseService
 
 
     public function getAllWordByLectureId( $id, $uid ){
-      $sql = "SELECT `id`, `question`, `answer` ".( $uid == null ? '' : ", `is_activated` as isActivated " ).
+      $sql = "SELECT `id`, `question`, `answer` ".( !isset($uid) || $uid == null ? '' : ", `is_activated` as isActivated " ).
              "FROM `dril_lecture_has_word` ".
              "WHERE dril_lecture_id = ? ".
              "ORDER BY id";

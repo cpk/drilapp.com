@@ -157,7 +157,7 @@ class BookService extends BaseService
       $statsSevice = new StatisticService($this->conn);
       foreach ($lectures as $lecture) {
           $lecture = (object) $lecture ;
-          $lectureWords = $this->wordService->getAllWordByLectureId( $lecture->id );
+          $lectureWords = $this->wordService->getAllWordByLectureId( $lecture->id, null);
           $lecture->dril_book_id = $toBookId;
           $lecture = $this->lectureService->create($lecture);
           $lecture['dril_lecture_id'] = $lecture['id'];
@@ -175,7 +175,7 @@ class BookService extends BaseService
     public function getFetchedBookById( $id ){
       $book = $this->getBookById($id);
       if($book != null){
-        $book['forked'] = $this->getAllUserWhoForked( $id );
+        $book['forkedByUsers'] = $this->getAllUserWhoForked( $id );
         $book['tags'] = $this->tagService->getAllBookTags($id);
         $book['lectures'] = $this->lectureService->getAllBookLectures($id);
       }
