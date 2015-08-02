@@ -2,8 +2,8 @@
 
 class UserController
 {
-   
-   private $userService;    
+
+   private $userService;
    private $wordService;
    private $settingsService;
 
@@ -12,7 +12,7 @@ class UserController
      *
      * @url PUT /v1/user/login
      * @noAuth
-     */   
+     */
    public function login( $data ){
         global $lang;
         $logger = Logger::getLogger('api');
@@ -21,7 +21,7 @@ class UserController
         if(!isset($data) || !isset($data->username)){
             throw new RestException(401, 'Credentials are required.');
         }
-        
+
         $user = $this->userService->getUserByLogin( $data->username );
         if($user == null){
             throw new RestException(401, 'Credentials are required.');
@@ -52,11 +52,11 @@ class UserController
                 $logger->info("User [id=" .$user['id']."] was successfully logged in. [ip=" .$_SERVER['SERVER_ADDR']."]");
                return $result;
 
-            } catch(UnexpectedValueException $ex) { 
-              throw new RestException(401, "Invalid security token " .$data->username);   
-            }    
+            } catch(UnexpectedValueException $ex) {
+              throw new RestException(401, "Invalid security token " .$data->username);
+            }
         }else{
-            throw new RestException(401, "Bad username or password " .$data->username);   
+            throw new RestException(401, "Bad username or password " .$data->username);
         }
 
    }
@@ -95,7 +95,7 @@ class UserController
     public function update( $data ) {
         $this->userService->update( $data );
     }
-    
+
     /**
      * Activate user account
      *
@@ -119,11 +119,33 @@ class UserController
         return $res;
     }
 
+
+    /**
+     * Sends reset password email
+     *
+     * @url PUT /v1/user/sendResetPassEmail
+     * @noAuth
+     */
+    public function sendResetPassEmail($data){
+        $this->userService->generateForgottenPasswordToken($data->username);
+    }
+
+    /**
+     * Resets user password email
+     *
+     * @url PUT /v1/user/resetPass
+     * @noAuth
+     */
+    public function resetUserPassword($data){
+        $this->userService->resetUserPassword($data);
+    }
+
+
     /**
      * Toggle word / lecture / all words activatoin
      *
      * @url POST /v1/user/toggleActivation
-     * 
+     *
      */
     public function toggleActivation($data, $uid){
         if(!isset($data->type)){
@@ -162,4 +184,4 @@ class UserController
         $this->userService = new UserService($conn);
         $this->wordService = new WordService($conn);
     }
-}   
+}

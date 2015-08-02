@@ -8,13 +8,13 @@ class BookService extends BaseService
 	public function __construct(&$conn, &$lectureService  = null, &$wordService  = null, &$tagService = null)
     {
        parent::__construct($conn);
-       
+
        if($tagService == null){
          $this->tagService = new TagService($conn);
        }else{
         $this->tagService = $tagService;
        }
-       
+
        if($wordService == null){
         $this->wordService = new WordService($conn);
        }else{
@@ -26,7 +26,7 @@ class BookService extends BaseService
        }else{
         $this->lectureService = $lectureService;
        }
-              
+
     }
 
     private function getAllUserWhoForked($bookId){
@@ -40,9 +40,9 @@ class BookService extends BaseService
 
     public function create( $book ){
         $this->validate( $book );
-        $this->conn->simpleQuery('START TRANSACTION;');  
+        $this->conn->simpleQuery('START TRANSACTION;');
         if($this->isBookNameUniqe($book->name, $book->user_id)){
-            $sql = 
+            $sql =
               "INSERT INTO `dril_book` ( ".
                 "`name`, ".
                 "`question_lang_id`, ".
@@ -56,8 +56,8 @@ class BookService extends BaseService
                 "`created`) ".
               "VALUES (?,?,?,?,?,?,?,?, NOW(), NOW())";
             $this->conn->insert($sql,  array(
-                $book->name, $book->question_lang_id, $book->answer_lang_id, 
-                $book->level_id, $book->category_id,$book->isShared, 
+                $book->name, $book->question_lang_id, $book->answer_lang_id,
+                $book->level_id, $book->category_id,$book->isShared,
                 $book->user_id, $book->description
               ));
             $bookId = $this->conn->getInsertId();
@@ -74,11 +74,11 @@ class BookService extends BaseService
 
     public function update( $book ){
         $this->validate( $book );
-        $sql = 
+        $sql =
           "UPDATE `dril_book` SET ".
             "`name` = ?, ".
             "`question_lang_id` = ?, ".
-            "`answer_lang_id` = ?, ". 
+            "`answer_lang_id` = ?, ".
             "`level_id` = ?, ".
             "`user_id` = ?, ".
             "`is_shared` = ?, ".
@@ -87,12 +87,12 @@ class BookService extends BaseService
             "`changed` = CURRENT_TIMESTAMP ".
           "WHERE id = ? LIMIT 1";
         $this->conn->update($sql,  array(
-            $book->name, 
-            $book->question_lang_id, 
-            $book->answer_lang_id, 
-            $book->level_id, 
+            $book->name,
+            $book->question_lang_id,
+            $book->answer_lang_id,
+            $book->level_id,
             $book->user_id,
-            $book->is_shared, 
+            $book->is_shared,
             $book->dril_category_id,
             $book->description,
             $book->id
@@ -114,7 +114,7 @@ class BookService extends BaseService
 
     public function getBookById( $id ){
       $lang = getLang();
-      
+
       $sql = "SELECT `book`.*, `category`.name_$lang as category_name, count(`bisf`.`dril_book_id`) as favorited ".
              "FROM dril_view_$lang book ".
              "LEFT JOIN dril_category category ON `category`.`id` = `book`.`dril_category_id` ".
@@ -122,7 +122,7 @@ class BookService extends BaseService
              "WHERE `book`.id = ? ".
              "GROUP BY `book`.id ".
              "LIMIT 1";
-      
+
       $result = $this->conn->select($sql , array($id));
       if(count($result) == 1){
           return $result[0];
@@ -132,15 +132,21 @@ class BookService extends BaseService
 
 
     public function forkBook($id, $uid){
-      $query = 
-      "INSERT INTO `dril_book`( `name`, `description`, `question_lang_id`, `answer_lang_id`, `level_id`, `downloaded`, `user_id`, `changed`,`created`,  `download`, `is_shared`, `dril_category_id`, `forked_book_id`) ( ".
-        "  SELECT `name`, `description`, `question_lang_id`, `answer_lang_id`, `level_id`, `downloaded`, $uid, NOW(),NOW(), 0, 0, `dril_category_id`, `id` ".
-        "  FROM `dril_book` ".
-        "  WHERE id = ".intval($id). " ".
-        "  LIMIT 1 ".
-      ")";
+			if($this->bookIsAlreadyForked($id, $uid)){
+				throw new RestException(400, getMessage("errForkExists"));
+			}
+      $query =
+	      "INSERT INTO `dril_book`( `name`, `description`, `question_lang_id`, `answer_lang_id`, `level_id`, `downloaded`, `user_id`, `created`,  `dril_category_id`, `forked_book_id`) ( ".
+	        "  SELECT `name`, `description`, `question_lang_id`, `answer_lang_id`, `level_id`, `downloaded`, $uid, NOW(), `dril_category_id`, `id` ".
+	        "  FROM `dril_book` ".
+	        "  WHERE is_shared = 1 AND id = ".intval($id). " ".
+	        "  LIMIT 1 ".
+	      ")";
       $this->conn->simpleQuery($query);
       $bookId = $this->conn->getInsertId();
+			if(!isset($bookId) || intval($bookId) == 0){
+				throw new RestException(400, getMessage("errFork"));
+			}
       $lectures = $this->lectureService->getAllBookLectures($id, $uid);
       $this->forkLectures($bookId, $lectures, $uid);
       return array('bookId' => $bookId );
@@ -149,7 +155,7 @@ class BookService extends BaseService
 
     private function forkLectures($toBookId, $lectures, $uid){
       $statsSevice = new StatisticService($this->conn);
-      foreach ($lectures as $lecture) {          
+      foreach ($lectures as $lecture) {
           $lecture = (object) $lecture ;
           $lectureWords = $this->wordService->getAllWordByLectureId( $lecture->id );
           $lecture->dril_book_id = $toBookId;
@@ -158,6 +164,13 @@ class BookService extends BaseService
           $this->wordService->createWords($lectureWords, $lecture, $statsSevice->getUserStatistics($uid));
       }
     }
+
+		public function bookIsAlreadyForked($bookId, $uid){
+			$res = $this->conn->select(
+				"SELECT count(*) FROM `dril_book` WHERE `forked_book_id`=? AND `user_id`= ?",
+				array($bookId, $uid));
+			return $res[0]["count(*)"] > 0;
+		}
 
     public function getFetchedBookById( $id ){
       $book = $this->getBookById($id);
@@ -202,7 +215,7 @@ class BookService extends BaseService
     }
 
 
-    
+
     public function isBookNameUniqe( $name, $userId, $bookId = null){
        $sql =  "SELECT count(*) as book_count FROM  `dril_book` ".
                "WHERE name = ? AND user_id = ? ";
@@ -221,14 +234,14 @@ class BookService extends BaseService
         $category = "category";
         $queryStr = "query";
         $where = array();
-      
+
 
         if(isset($_GET['sharedOnly'])){
           $where[] = "`book`.`is_shared` = 1 ";
         }
 
         if(isset($_GET['userId']) && intval($_GET['userId']) > 0){
-          $where[] = "`book`.`user_id` = ". $_GET['userId']; 
+          $where[] = "`book`.`user_id` = ". $_GET['userId'];
         }
 
         // SOURCE LANGUAGE
@@ -252,7 +265,7 @@ class BookService extends BaseService
         if(isset($_GET[$category]) && intval($_GET[$category]) > 0){
           $where[] = " (`book`.`dril_category_id` = ".$_GET[$category].") ";
         }
-        
+
         if(isset($_GET[$queryStr])){
             $q = $this->conn->clean($_GET[$queryStr]);
             $where[] = "( `book`.`name` LIKE '%".$q."%' OR `book`.`login` LIKE '%".$q."%' )";
@@ -266,7 +279,7 @@ class BookService extends BaseService
       $currentPage = isset($_GET["currentPage"]) ? intval($_GET["currentPage"]) : 1;
       $currentPage = $currentPage < 1 ? 1 : $currentPage;
       $offset =  $peerPage * ($currentPage - 1);
-      
+
       if($peerPage == 0 || $peerPage > 100){
         $peerPage = 15;
         $offset = 0;
@@ -299,17 +312,17 @@ class BookService extends BaseService
     private function validate(&$book){
       $book->name = trim($book->name);
       if(strlen($book->name) < 8){
-        throw new InvalidArgumentException(getMessage("errBookShortName"), 1); 
+        throw new InvalidArgumentException(getMessage("errBookShortName"), 1);
       }
       if(strlen($book->name) > 200){
-        throw new InvalidArgumentException(getMessage("errBookLongName"), 1); 
+        throw new InvalidArgumentException(getMessage("errBookLongName"), 1);
       }
       $bookId = isset($book->id) ? $book->id : null;
       if(!$this->isBookNameUniqe($book->name, $book->user_id, $bookId )){
-        throw new InvalidArgumentException(getMessage("errBookUniqeName", $book->name), 1); 
+        throw new InvalidArgumentException(getMessage("errBookUniqeName", $book->name), 1);
       }
       if(intval($book->question_lang_id) == 0 || intval($book->answer_lang_id) == 0){
-        throw new InvalidArgumentException(getMessage("errBookLangs"), 1);  
+        throw new InvalidArgumentException(getMessage("errBookLangs"), 1);
       }
       if(intval($book->level_id) == 0){
         throw new InvalidArgumentException(getMessage("errBookLevel"), 1);
@@ -320,7 +333,7 @@ class BookService extends BaseService
       if(intval($book->user_id) == 0){
         throw new InvalidArgumentException(getMessage("errUnexpected"), 1);
       }
-      
+
     }
 
 }

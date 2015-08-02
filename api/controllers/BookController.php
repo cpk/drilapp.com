@@ -2,11 +2,11 @@
 
 class BookController
 {
-    
+
     private $bookService;
 
     /**
-     * Gets the book by id 
+     * Gets the book by id
      *
      * @url GET /v1/book/$id
      * @noAuth
@@ -21,7 +21,7 @@ class BookController
 
 
     /**
-     * Gets the book by id 
+     * Gets the book by id
      *
      * @url GET /v1/user/book/$id
      */
@@ -50,7 +50,7 @@ class BookController
      * Gets fetched lecture
      *
      * @url GET /v1/user/book/$bookId/lecture/$lectureId
-     * 
+     *
      */
     public function getUserFetchedLecture($bookId, $lectureId, $uid){
 
@@ -85,7 +85,7 @@ class BookController
         checkBookPermision($book, $uid);
         $this->bookService->update($data);
         return $this->bookService->getFetchedBookById($id);
-        
+
     }
 
 
@@ -132,11 +132,10 @@ class BookController
     /**
      * Forks user books
      *
-     * @url GET /v1/books/$id/fork
+     * @url PUT /v1/books/$id/fork
      *
      */
     public function forkBook( $id, $uid ){
-
         return $this->bookService->forkBook($id, $uid);
     }
 
@@ -145,5 +144,5 @@ class BookController
         global $conn;
         $this->bookService = new BookService($conn);
     }
-   
+
 }

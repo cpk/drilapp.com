@@ -14,7 +14,7 @@ class WordService extends BaseService
         $this->conn->insert($sql,  array(
             $word->question, $word->answer, $word->dril_lecture_id
         ));
-        $id = $this->conn->getInsertId();    
+        $id = $this->conn->getInsertId();
         $this->updateCountOfWordsByLectureId( $word->dril_lecture_id );
         return $this->getWordById( $id );
     }
@@ -64,7 +64,7 @@ class WordService extends BaseService
         $this->conn->update($sql,  array( $status, $id ));
     }
 
-    
+
 
 
     public function update( $word ){
@@ -106,7 +106,7 @@ class WordService extends BaseService
              "  INNER JOIN lang question_lang ON question_lang.id_lang = b.question_lang_id ".
              "  INNER JOIN lang answer_lang ON answer_lang.id_lang = b.answer_lang_id ".
              "WHERE w.id = ? ";
-      $word = $this->conn->select( $sql, array($id) ); 
+      $word = $this->conn->select( $sql, array($id) );
       if(count($word) == 1){
         return $word[0];
       }
@@ -126,7 +126,7 @@ class WordService extends BaseService
              "  INNER JOIN lang answer_lang ON answer_lang.id_lang = b.answer_lang_id ".
              "WHERE w.is_activated = true AND b.user_id = ? ".
              "LIMIT 300";
-      return $this->conn->select( $sql, array($userId) ); 
+      return $this->conn->select( $sql, array($userId) );
     }
 
 
@@ -143,14 +143,14 @@ class WordService extends BaseService
              "  INNER JOIN lang answer_lang ON answer_lang.id_lang = b.answer_lang_id ".
              "WHERE b.is_shared = true AND (question_lang.id_lang = 1 OR answer_lang.id_lang = 1)".
              "ORDER BY RAND() LIMIT $limit ";
-      return $this->conn->select( $sql ); 
+      return $this->conn->select( $sql );
     }
 
     private function validate($word){
       if(strlen(trim($word->answer)) == 0 || strlen(trim($word->question)) == 0){
-        throw new  InvalidArgumentException("The Question and the answer is required", 1); 
+        throw new  InvalidArgumentException("The Question and the answer is required", 1);
       }
-    
+
     }
 
 
@@ -160,7 +160,7 @@ class WordService extends BaseService
               "INNER JOIN dril_book_has_lecture bhl ON bhl.id = w.`dril_lecture_id` ".
               "INNER JOIN dril_book b ON b.id = bhl.`dril_book_id` ".
               "WHERE w.id = ? ";
-      $result =  $this->conn->select( $sql, array($wordId) ); 
+      $result =  $this->conn->select( $sql, array($wordId) );
        if(count($result) == 1){
           return $result[0];
       }
@@ -175,7 +175,7 @@ class WordService extends BaseService
                 "SELECT l.id ".
                 "FROM `dril_book_has_lecture` l ".
                 "INNER JOIN `dril_book` b ON b.id = l.dril_book_id ".
-                "WHERE b.user_id = ? ". 
+                "WHERE b.user_id = ? ".
               ")";
       $this->conn->update($sql, array($uid) );
     }
@@ -187,17 +187,17 @@ class WordService extends BaseService
         $logger = Logger::getLogger('api');
 
         if($count == 0){
-          throw new InvalidArgumentException( getMessage("errXlsFileEmpty") );
+          return false;
         }
 
         if($newLectureCount > LECTURE_WORD_LIMIT){
-          $logger->warn("User [uid=".$lecture['user_id']."] tried to import $count " . 
+          $logger->warn("User [uid=".$lecture['user_id']."] tried to import $count " .
                         " into [lid=" . $lecture['dril_lecture_id']. "] current count: ".$lecture['no_of_words'] );
           throw new InvalidArgumentException( getMessage("errLecutreWordLimit", LECTURE_WORD_LIMIT) );
         }
         $totalWords = $userStats['wordCount'] + $count;
         if( $userStats['wordLimit'] != UNLIMITED && $totalWords > $userStats['wordLimit'] ){
-          $logger->warn("User [uid=".$lecture['user_id']."] word limit exceeded. The user tried to import $count " . 
+          $logger->warn("User [uid=".$lecture['user_id']."] word limit exceeded. The user tried to import $count " .
                         "into [lid=" . $lecture['dril_lecture_id']."]" );
           throw new InvalidArgumentException( getMessage("errWordLimit", $userStats['wordCount'], $userStats['wordLimit']) );
         }
@@ -205,12 +205,12 @@ class WordService extends BaseService
         for( $i = 0; $i < $count; $i++ ){
             $sql = "INSERT INTO `dril_lecture_has_word` (`question`, `answer`, `dril_lecture_id`, `created`) VALUES ( ?,?,?,NOW() )";
             $this->conn->insert( $sql, array(
-                StringUtils::xssClean($words[$i]['question']), 
+                StringUtils::xssClean($words[$i]['question']),
                 StringUtils::xssClean($words[$i]['answer']),
                 $lecture['dril_lecture_id']
             ));
-          
-        } 
+
+        }
         $this->updateCountOfWordsByLectureId($lecture['dril_lecture_id']);
     }
 
@@ -221,7 +221,7 @@ class WordService extends BaseService
               "FROM `dril_book` b ".
               "INNER JOIN dril_book_has_lecture bhl ON bhl.dril_book_id = b.`id` ".
               "WHERE bhl.id = ? LIMIT 1";
-      $result =  $this->conn->select( $sql, array($lectureId) ); 
+      $result =  $this->conn->select( $sql, array($lectureId) );
        if(count($result) == 1){
           return $result[0];
       }
@@ -252,7 +252,7 @@ class WordService extends BaseService
       $sql = "UPDATE `dril_book_has_lecture` " .
              "SET `no_of_words`= (SELECT count(*) FROM dril_lecture_has_word WHERE dril_lecture_id = $lectureId) ".
              "WHERE id = $lectureId";
-      $this->conn->select( $sql );    
+      $this->conn->select( $sql );
     }
 }
 

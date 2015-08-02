@@ -1,11 +1,11 @@
 
 <?php
-	
+
 	function getMessage(){
 		$lang = getLang();
 		$args = func_get_args();
 		$argsSize = func_num_args();
-		
+
 		$messages["cs"] = array(
 			"errBookUniqeName" => "Učebnice s názvem \"{0}\"se již ve Vašem drilu nachází",
 			"errBookShortName" => "Název učebnice musí být alespoň 8 znaků dlouhý",
@@ -29,6 +29,8 @@
 			"errUserPasswordLength" => "Heslo je příliš krátké, musí mít min. 6 znaků",
 			"errUserPasswordMatch" => "Zadaná hesla se neshodují",
 			"errUserLocaleEmpty" => "Prosím zvolte Váš jazyk",
+			"errFork" => "Nemáte dostatečná oprávnění",
+			"errForkExists" => "Učebnice již byla do Vašich učebních přidána",
 
 			"errUserUnactivated" => "Váš účet zatím nebyl aktivován, zkontrolujte Vaši e-mailovou schárnku",
 			"errUnexpected" => "Nastala neočekávaná chyba, operaci zopakujte později",
@@ -44,7 +46,12 @@
 			"emailReg_head" => "Dokončení registrace",
 			"emailReg_descr" => "Váš účet byl úspěšně vytvořen. Dokončete registraci kliknutím na následující tlačítko",
 			"emailReg_activate" => "Aktivace účtu",
-			"emailReg_ccopyUrl" => "nebo vložte následující odkaz do Vašeho webového prohlížeče"
+			"emailReg_ccopyUrl" => "nebo vložte následující odkaz do Vašeho webového prohlížeče",
+
+			"emailPass_head" => "Zapomenuté heslo",
+			"emailPass_descr" => "Vaše heslo si můžete resetovat po kliknutí na následující tlačítko",
+			"emailPass_activate" => "Resetovat heslo",
+			"emailPass_ccopyUrl" => "nebo zkopírujte následující odkaz do vašeho prohlížeče"
 		 );
 		$messages["sk"] = array(
 			"errBookUniqeName" => "Učebnica s názvom \"{0}\" sa už vo Vašom drile nachádza",
@@ -69,22 +76,29 @@
 			"errUserPasswordLength" => "Heslo je príliš krátke, musí mať min. 6 znakov",
 			"errUserPasswordMatch" => "Zadané heslá sa nezhodujú",
 			"errUserLocaleEmpty" => "Prosím zvoľte Váš jazyk",
+			"errFork" => "Nemáte dostatočné oprávnenie",
+			"errForkExists" => "Učebnica už bola do Vaších učebních pridaná",
 
-			"errUserUnactivated" => "Váš účet zatial nebol aktivovaný, skontrolujte Vášu e-mailovú schárnku",	
+			"errUserUnactivated" => "Váš účet zatial nebol aktivovaný, skontrolujte Vášu e-mailovú schárnku",
 			"errUnexpected" => "Nastala neočakávana chyba, operáciu zopakujte neskôr",
 
 			"activated" => "Váš učet bol úspešne aktivovaný",
 
-			"errXlsFile" => "Neplatný súbor. Nahrávať je možné len súbory s koncovkou xls a xlsx",	
-			"errXlsFileEmpty" => "Súbor je prázdny",	
+			"errXlsFile" => "Neplatný súbor. Nahrávať je možné len súbory s koncovkou xls a xlsx",
+			"errXlsFileEmpty" => "Súbor je prázdny",
 
 			"errLecutreWordLimit" => "Lekcia môže obsahovať maximálne {0} slovíčok. Vytvorte novú lekciu a rozdelte slovíčka",
 			"errWordLimit" => "Maximálný povolený počet slovíčok na Vašom účte je {0} momentálne je evidovaných {1}.",
 
 			"emailReg_head" => "Dokončenie registrácie",
 			"emailReg_descr" => "Váš účet bol úspešne vytvorený. Dokončite registráciu kliknutím na nasledujúce tlačítko",
-			"emailReg_activate" => "Aktivácia účtu", 
-			"emailReg_ccopyUrl" => "alebo vložte nasledujúci odkaz do Vášho webového prehliadača" 
+			"emailReg_activate" => "Aktivácia účtu",
+			"emailReg_ccopyUrl" => "alebo vložte nasledujúci odkaz do Vášho webového prehliadača",
+
+			"emailPass_head" => "Zabudnuté heslo",
+			"emailPass_descr" => "Môžete resetovať aktuálne heslo po kliknutí na nasledujúce tlačidlo",
+			"emailPass_activate" => "Resetovať heslo",
+			"emailPass_ccopyUrl" => "Alebo skopírujte nasledujúci odaz do vášho prehliadača"
 		);
 
 		$messages["en"] = array(
@@ -111,21 +125,32 @@
 			"errUserPasswordMatch" => "The confirmation password does not match the password",
 			"errUserLocaleEmpty" => "The user locale is required.",
 
-			"errUserUnactivated" => "Your account has not been activated yet. Check your e-mail address.",	
+			"errUserUnactivated" => "Your account has not been activated yet. Check your e-mail address.",
 			"errUnexpected" => "An unexpected error has occurred.",
+			"errFork" => "You are not authorized to fork this book",
+			"errForkExists" => "The book was already forked",
+
+			"errUserNotFound" => "User with given e-mail address was not found",
+			"errTokenNotFound" => "The token expired",
 
 			"activated" => "Your account has been activated",
 
-			"errXlsFile" => "Invalid file. Alloved are only XLS, XLSX files.",	
-			"errXlsFileEmpty" => "Nothing to import. Check format and content of the file",	
+			"errXlsFile" => "Invalid file. Alloved are only XLS, XLSX files.",
+			"errXlsFileEmpty" => "Nothing to import. Check format and content of the file",
 
 			"errLecutreWordLimit" => "The lecture can contains max. {0} words. Create a new lecture and split the words.",
 			"errWordLimit" => "The max number of words per account is {0} you currently have {1}.",
 
 			"emailReg_head" => "Complete your registration",
-			"emailReg_descr" => "Your account has been successfully created. Activate your account by clicking on following button",
-			"emailReg_activate" => "Activate account", 
-			"emailReg_ccopyUrl" => "Or copy following url and paste it into your browser" 
+			"emailReg_descr" => "Your account has been successfully created. Activate your account by clicking on the following button",
+			"emailReg_activate" => "Activate account",
+			"emailReg_ccopyUrl" => "Or copy following url and paste it into your browser",
+
+			"emailPass_head" => "Forgotten password",
+			"emailPass_descr" => "You can reset your current password after clicking on the following button",
+			"emailPass_activate" => "Reset password",
+			"emailPass_ccopyUrl" => "Or copy following url and paste it into your browser"
+
 		);
 
 		$key = $args[0];
