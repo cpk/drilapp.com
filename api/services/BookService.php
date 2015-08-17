@@ -115,10 +115,11 @@ class BookService extends BaseService
     public function getBookById( $id ){
       $lang = getLang();
 
-      $sql = "SELECT `book`.*, `category`.name_$lang as category_name, count(`bisf`.`dril_book_id`) as favorited ".
+      $sql = "SELECT `book`.*, `category`.name_$lang as category_name, count(`bisf`.`dril_book_id`) as favorited, fb.`name` as `forked_name`, fb.`login` as `forked_login` ".
              "FROM dril_view_$lang book ".
              "LEFT JOIN dril_category category ON `category`.`id` = `book`.`dril_category_id` ".
              "LEFT JOIN `dril_book_is_favorited` bisf ON `bisf`.`dril_book_id` = `book`.`id` ".
+						 "LEFT JOIN `dril_view_$lang` fb ON `fb`.`forked_book_id` = `book`.`id` ".
              "WHERE `book`.id = ? ".
              "GROUP BY `book`.id ".
              "LIMIT 1";
@@ -209,7 +210,12 @@ class BookService extends BaseService
        $whereClause = $this->where();
        $count = $this->conn->select("SELECT count(*) FROM dril_view_".$lang." book ".$whereClause);
        $orderClause = $this->orderBy();
-       $result["books"] = $this->conn->select("SELECT * FROM dril_view_$lang book $whereClause  $orderClause ".$this->getLimit());
+				$sql = "SELECT book.*, fb.`name` as `forked_name`, fb.`login` as `forked_login` ".
+							 " FROM dril_view_$lang book ".
+							 " LEFT JOIN `dril_view_$lang` fb ON `fb`.`id` = `book`.`forked_book_id` ".
+							 " $whereClause  $orderClause ".$this->getLimit();
+
+       $result["books"] = $this->conn->select($sql);
        $result["count"] = $count[0]["count(*)"];
        return $result;
     }
