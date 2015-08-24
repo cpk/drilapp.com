@@ -115,11 +115,13 @@ class BookService extends BaseService
     public function getBookById( $id ){
       $lang = getLang();
 
-      $sql = "SELECT `book`.*, `category`.name_$lang as category_name, count(`bisf`.`dril_book_id`) as favorited, fb.`name` as `forked_name`, fb.`login` as `forked_login` ".
+      $sql = "SELECT `book`.*, `category`.name_$lang as category_name, count(`bisf`.`dril_book_id`) as favorited, fb.`name` as `forked_name`, fu.`login` as `forked_login` ".
              "FROM dril_view_$lang book ".
              "LEFT JOIN dril_category category ON `category`.`id` = `book`.`dril_category_id` ".
              "LEFT JOIN `dril_book_is_favorited` bisf ON `bisf`.`dril_book_id` = `book`.`id` ".
-						 "LEFT JOIN `dril_view_$lang` fb ON `fb`.`forked_book_id` = `book`.`id` ".
+						 // "LEFT JOIN `dril_view_$lang` fb ON `fb`.`id` = `book`.`forked_book_id` ".
+						 "LEFT JOIN `dril_book` fb ON `fb`.`id` = `book`.`forked_book_id` ".
+						 "LEFT JOIN `user` fu ON `fu`.`id_user` = `fb`.`user_id` ".
              "WHERE `book`.id = ? ".
              "GROUP BY `book`.id ".
              "LIMIT 1";
