@@ -27,7 +27,7 @@ class DrilService extends BaseService
             }
         }
         return $this->emptyResponse();
-        
+
     }
 
     private function logRequest($data){
@@ -54,6 +54,7 @@ class DrilService extends BaseService
         foreach ($bookList as  $book) {
             $ids[] = "id=". $book['id'];
         }
+        Logger:getLogger('api')-info("UPDATE dril_book SET download = download + 1 WHERE ". implode(" OR ", $ids));
         $this->conn->update("UPDATE dril_book SET download = download + 1 WHERE ". implode(" OR ", $ids)) ;
     }
 

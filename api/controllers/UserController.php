@@ -128,6 +128,7 @@ class UserController
      */
     public function sendResetPassEmail($data){
         $this->userService->generateForgottenPasswordToken($data->username);
+        return array("sent" => true);
     }
 
     /**
