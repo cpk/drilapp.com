@@ -23,7 +23,7 @@ class DrilService extends BaseService
             }catch(MysqlException $e){
                 $this->conn->rollback();
                 $logger = Logger::getLogger('api');
-                $logger->error("Loading books for Android device failed");
+                $logger->error("Loading books for Android device failed. Request Body: " . @file_get_contents('php://input'));
             }
         }
         return $this->emptyResponse();
@@ -50,6 +50,9 @@ class DrilService extends BaseService
     }
 
     private function updateDownloads($bookList){
+        if(count($bookList) == 0){
+          return;
+        }
         $ids = array();
         foreach ($bookList as  $book) {
             $ids[] = "id=". $book['id'];

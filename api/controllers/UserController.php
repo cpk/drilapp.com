@@ -128,6 +128,9 @@ class UserController
      */
     public function sendResetPassEmail($data){
         $this->userService->generateForgottenPasswordToken($data->username);
+        $logger = Logger::getLogger('api');
+        $logger->warn('Sent forgotten pass email to [user='.$data->username.'] '.
+                  (isset($data->deviceId) ? '[deviceId='.$data->deviceId.']' : ' from web.'));
         return array("sent" => true);
     }
 
