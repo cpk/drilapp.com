@@ -3,37 +3,46 @@
 class DrilService extends BaseService
 {
 
+    private $logger;
+
     public function __construct(&$conn){
        parent::__construct($conn);
+       $this->logger = Logger::getLogger('api');
     }
 
 
     public function getData($data){
-        if(isset($data->localeId) && isset($data->targetLocaleId) && isset($data->device)){
+        if(isset($data->device)){
+            $deviceId = $data->device;
+        }else if(isset($data->deviceId)){
+            $deviceId = $data->deviceId;
+        }
+        if(isset($data->localeId) && isset($data->targetLocaleId) && isset($deviceId)){
             $localeId = intval($data->localeId);
             $targetLocaleId = intval($data->targetLocaleId);
+            $this->logger->info("Fetching data for [device=".$deviceId."] [localeId=$localeId] [targetLocaleId=$targetLocaleId]");
             try{
                 $this->conn->beginTransaction();
                 $bookList = $this->findBooks($localeId, $targetLocaleId);
+                $this->logger->debug("No of books found: ".count($bookList));
                 $this->updateDownloads($bookList);
                 $res = $this->fetchDataFor($bookList);
-                $this->logRequest($data);
+                $this->logRequest($localeId, $targetLocaleId, $deviceId);
                 $this->conn->commit();
                 return $res;
             }catch(MysqlException $e){
                 $this->conn->rollback();
-                $logger = Logger::getLogger('api');
-                $logger->error("Loading books for Android device failed. Request Body: " . @file_get_contents('php://input'));
             }
         }
+        $this->logger->warn("Request failed. Body: [". @file_get_contents('php://input'). "] [ip=".$_SERVER['REMOTE_ADDR']."]");
         return $this->emptyResponse();
 
     }
 
-    private function logRequest($data){
+    private function logRequest($localeId, $targetLocaleId, $deviceId){
         $this->conn->insert(
             "INSERT INTO dril_install_log (`locale_id`, `target_locale_id`, `device`, `ip_address`) ".
-            "VALUES (?,?,?,?)", array($data->localeId, $data->targetLocaleId, $data->device, $_SERVER['REMOTE_ADDR']));
+            "VALUES (?,?,?,?)", array($localeId, $targetLocaleId, $deviceId, $_SERVER['REMOTE_ADDR']));
     }
 
     private function findBooks($loc1, $loc2){
@@ -44,7 +53,7 @@ class DrilService extends BaseService
             "INNER JOIN dril_book_has_lecture l ON l.dril_book_id = b.id ".
             "WHERE b.is_shared=1 AND ((b.question_lang_id = $loc1 AND b.answer_lang_id = $loc2) OR (b.question_lang_id = $loc2 AND b.answer_lang_id = $loc1))".
             "GROUP BY b.id ".
-            "HAVING sum(l.no_of_words) > 20 ".
+            "HAVING sum(l.no_of_words) > 1 ".
             "ORDER BY RAND()".
             "LIMIT 5");
     }
@@ -57,7 +66,6 @@ class DrilService extends BaseService
         foreach ($bookList as  $book) {
             $ids[] = "id=". $book['id'];
         }
-        Logger:getLogger('api')-info("UPDATE dril_book SET download = download + 1 WHERE ". implode(" OR ", $ids));
         $this->conn->update("UPDATE dril_book SET download = download + 1 WHERE ". implode(" OR ", $ids)) ;
     }
 
