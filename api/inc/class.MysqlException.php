@@ -6,7 +6,6 @@ class MysqlException extends Exception{
     	$logger = Logger::getLogger('database');
     	$logger->error("MySQL error: ".$message." [ip=" .$_SERVER['REMOTE_ADDR']."]", $this);
         parent::__construct( $message, $code);
-    } 
+    }
 }
-
 ?>
