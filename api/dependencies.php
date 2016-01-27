@@ -1,4 +1,5 @@
 <?php
+
 require_once 'log4php/Logger.php';
 require_once 'config/log4php.php';
 require_once 'inc/JWT.php';

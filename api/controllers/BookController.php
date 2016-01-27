@@ -5,6 +5,7 @@ class BookController
 
     private $bookService;
 
+
     /**
      * Gets the book by id
      *
@@ -66,7 +67,7 @@ class BookController
      */
     public function create( $data , $uid)
     {
-
+        Logger::getLogger('api')->info('User $uid, creating book '. json_encode( (array)$data ) .' / '. $_SERVER['REMOTE_ADDR'] );
         $data->user_id = $uid;
         $id =  $this->bookService->create($data);
         return array("id" => $id);
@@ -80,7 +81,7 @@ class BookController
      */
     public function update( $id, $data, $uid )
     {
-
+        Logger::getLogger('api')->info('User $uid, updating book [id=$id] '. json_encode( (array)$data ) .' / '. $_SERVER['REMOTE_ADDR'] );
         $book = $this->bookService->getBookById( $id );
         checkBookPermision($book, $uid);
         $this->bookService->update($data);
@@ -96,12 +97,11 @@ class BookController
      */
     public function delete( $id , $uid )
     {
-
+        Logger::getLogger('api')->info('User $uid, removing book [id=$id] '. $_SERVER['REMOTE_ADDR'] );
         $book = $this->bookService->getBookById( $id );
         checkBookPermision($book, $uid);
         $this->bookService->delete($id);
-        $logger = Logger::getLogger('api');
-        $logger->warn("User [id=$uid] deleted book [id=$id] from ". $_SERVER['REMOTE_ADDR'] );
+        Logger::getLogger('api')->warn("User [id=$uid] deleted book [id=$id] from ". $_SERVER['REMOTE_ADDR'] );
 
     }
 

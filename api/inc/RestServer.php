@@ -118,7 +118,7 @@ class RestServer
 			$this->data = $this->getData();
 		}
 		if($this->method == 'OPTIONS'){
-			throw new RestException(200, "OK");
+			$this->sendData(200);
 			exit;
 		}
 
@@ -170,7 +170,7 @@ class RestServer
                 $logger->info("Validation error: ".$e->getMessage()." [ip=" .$_SERVER['REMOTE_ADDR']."]", $e);
 				$this->handleError(400, $e->getMessage());
 			}catch (MysqlException $e) {
-				$this->handleError(500, "Unexpected error has occurred." . @file_get_contents('php://input'));
+				$this->handleError(500, "Unexpected error has occurred. Request body:" . @file_get_contents('php://input'));
 			}catch (Exception $e) {
                 $logger->error("Error: [ip=" .$_SERVER['REMOTE_ADDR']."]", $e);
 				$this->handleError(500, "Unexpected error has occurred.");

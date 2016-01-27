@@ -36,7 +36,7 @@ class UserService extends BaseService
                "FROM `user` u ".
                "INNER JOIN `lang` l ON l.`id_lang` = u.`locale_id` ".
                "LEFT JOIN `lang` l2 ON l2.`id_lang` = u.`target_locale_id` ".
-               "WHERE u.`active`=1 AND u.`login`=? OR u.`email`=? LIMIT 1";
+               "WHERE u.`active`=1 AND (u.`login`=? OR u.`email`=?) LIMIT 1";
 
         $data = $this->conn->select( $sql , array($login, $login) );
         if(count($data) > 0){
@@ -231,9 +231,9 @@ class UserService extends BaseService
         $mail->MsgHTML($message);
 
         if(!$mail->Send()) {
-            $logger->error("Snding forgotten password email to User [id=" .$user['id_user']."] failed. Error [".$mail->ErrorInfo."] [ip=" .$_SERVER['SERVER_ADDR']."]");
+            $logger->error("Snding forgotten password email to User [id=" .$user['id']."] failed. Error [".$mail->ErrorInfo."] [ip=" .$_SERVER['SERVER_ADDR']."]");
         }else{
-            $logger->info("Forgotten password email sent successfully to User [id=" .$user['id_user']."]. [ip=" .$_SERVER['SERVER_ADDR']."]");
+            $logger->info("Forgotten password email sent successfully to User [id=" .$user['id']."]. [ip=" .$_SERVER['SERVER_ADDR']."]");
         }
     }
 
@@ -248,7 +248,7 @@ class UserService extends BaseService
         }
         $logger = Logger::getLogger('api');
         $logger->warn("User [id=" .$user['id_user']."] tried to activated expired [token=$token]. [ip=" .$_SERVER['SERVER_ADDR']."]");
-        return array('success' => false);
+        return array('success' => true);
     }
 
     private function validate($user){
