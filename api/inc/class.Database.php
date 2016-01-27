@@ -7,31 +7,31 @@
  * @author Peter Jurkovic
  * @link www.peterjurkovic.sk
  * @version 20110715
- * 
+ *
  * Error info:
  * -1 : Invalid connection information
  * -2 : Error in type detection of value
- * 
+ *
  */
 
 
-class Database 
+class Database
 {
     private static $instance;
-    private $mysql; 
+    private $mysql;
     private $transactionSupported = false;
 
-    
+
     /** ---------------------------------------------------------------------------------
-     * Create connection to database if not exists 
-     * 
+     * Create connection to database if not exists
+     *
      * @param String $server Server name
      * @param String $user usernam of database
      * @param String $pass password of database
      * @param String $database name of database
      * @thorws MysqlException if conecting failed of bad login information to DB
      */
-    
+
     private function __construct($server, $user, $pass, $database){
 
         if(self::$instance == NULL){
@@ -43,19 +43,19 @@ class Database
             if (!$this->mysql->query("set names 'utf8'")){
                 throw new MysqlException( $this->mysql->errno, $this->mysql->error );
             }
-            $transactionSupported =  method_exists (  $this->mysql , "begin_transaction" );
+            $this->transactionSupported =  method_exists (  $this->mysql , "begin_transaction" );
         }else{
              throw new MysqlException( "-1" , "Duplicate connection.");
-        }			
+        }
     }
 
     public function beginTransaction(){
         $this->mysql->autocommit(false);
-        if( $transactionSupported ){
+        if( $this->transactionSupported ){
             $this->mysql->begin_transaction();
         }
     }
-        
+
     public function commit(){
         $this->mysql->commit();
         $this->mysql->autocommit(true);
@@ -66,18 +66,18 @@ class Database
         $this->mysql->autocommit(true);
     }
 
-    
 
-    
+
+
     /** ---------------------------------------------------------------------------------
      * SINGLETON method
      * Create new instance of database if not exists or return self instance
-     * 
+     *
      * @param String $server Server name
      * @param String $user usernam of database
      * @param String $pass password of database
      * @param String $database name of database
-     * @return SELF instance 
+     * @return SELF instance
      */
     public static function getInstance( $server, $user, $pass, $database ){
 
@@ -86,89 +86,89 @@ class Database
         }
         return self::$instance;
     }
-    
-       
-    
+
+
+
     /** ---------------------------------------------------------------------------------
     * Run a query and return stored statement
-    * 
+    *
     * @param {string} SQL query with "?" params
     * @param {array} data
     * @return Mysqli statemnt
-    * @throws MysqlException, if an error occured 
+    * @throws MysqlException, if an error occured
     */
     public function query($query , $data){
-        
+
         $stmt = $this->mysql->stmt_init();
-        
+
         if(!$stmt->prepare($query)){
             throw new MysqlException( $this->mysql->errno, "SQL preparing failed: ". $this->mysql->error , $query );
         }
-       
-        
+
+
         if($data != null && count($data) > 0 ){
             $stmtData = $this->getTypes( $data );
             $params = $this->arrayToReffArray( $stmtData["values"] );
             array_unshift( $params, implode('', $stmtData["types"]));
             call_user_func_array(array($stmt, 'bind_param'), $params);
-        } 
+        }
 
         if(!$stmt->execute()){
             throw new MysqlException( $this->mysql->errno, "SQL execution failed: ". $this->mysql->error , $query );
         }
 		//echo  $query;
 		$stmt->store_result();
-        return $stmt;     
+        return $stmt;
     }
-    
-     
-    
+
+
+
     /** ---------------------------------------------------------------------------------
-     * Select data form database 
-     * 
+     * Select data form database
+     *
      * @param {string} SQL query with "?" params
      * @param {array} data
-     * @return (array) Returned data from database, where in index = row 
-     * @throws MysqlException, if an error occured 
+     * @return (array) Returned data from database, where in index = row
+     * @throws MysqlException, if an error occured
      */
     public function select($query, $data = NULL){
         $stmt = $this->query($query , $data);
-       
-        
+
+
         if(!isset($stmt) || $stmt->num_rows < 1){
             return array();
         }
-        
+
         $meta = $stmt->result_metadata();
 
         $params = array();
-        while ( $field = $meta->fetch_field() ) {  
-           $params[] = &$row[$field->name];  
-        }  
-        
-        call_user_func_array(array($stmt, 'bind_result'), $params);  
-	
+        while ( $field = $meta->fetch_field() ) {
+           $params[] = &$row[$field->name];
+        }
+
+        call_user_func_array(array($stmt, 'bind_result'), $params);
 
 
-        while ( $stmt->fetch() ) {  
-            $x = array();  
-            foreach( $row as $key => $val ) {  
+
+        while ( $stmt->fetch() ) {
+            $x = array();
+            foreach( $row as $key => $val ) {
 				$x[$key] = $val;
-            }  
-            $results[] = $x;  
-        }  
+            }
+            $results[] = $x;
+        }
 
        $stmt->close();
-       return $results;  
-     
+       return $results;
+
     }
-    
+
     /** ---------------------------------------------------------------------------------
      *
      * @param {string} SQL query with "?" params
      * @param {array} data
-     * @return (boolean) true, if query is executed successfully 
-     * @throws MysqlException, if an error occured 
+     * @return (boolean) true, if query is executed successfully
+     * @throws MysqlException, if an error occured
      */
     public function insert($query, $data = NULL ){
         $stmt = $this->query($query , $data);
@@ -178,13 +178,13 @@ class Database
         }
         return false;
     }
-	
+
 	/** ---------------------------------------------------------------------------------
      *
      * @param {string} SQL query with "?" params
      * @param {array} data
-     * @return (boolean) true, if query is executed successfully 
-     * @throws MysqlException, if an error occured 
+     * @return (boolean) true, if query is executed successfully
+     * @throws MysqlException, if an error occured
      */
     public function update($query, $data = NULL ){
         $stmt = $this->query($query , $data);
@@ -194,51 +194,51 @@ class Database
 		}
 		return false;
     }
-	
+
 	/** ---------------------------------------------------------------------------------
      *
      * @param {string} SQL query with "?" params
      * @param {array} data
-     * @return (boolean) true, if query is executed successfully 
-     * @throws MysqlException, if an error occured 
+     * @return (boolean) true, if query is executed successfully
+     * @throws MysqlException, if an error occured
      */
     public function delete($query, $data = NULL){
         return  $this->insert($query, $data);
     }
-    
-    
-    
+
+
+
     /** ---------------------------------------------------------------------------------
      * Make an array of references to the values of another array
-     * 
+     *
      * @param array of values
      * @return array references array
      */
     private function arrayToReffArray( &$array ){
         $reffArray = array();
         foreach($array as $key => &$val){
-            $reffArray[$key] = &$val; 
+            $reffArray[$key] = &$val;
         }
         return $reffArray;
     }
-    
-    
+
+
      /** ---------------------------------------------------------------------------------
-     * Generate type of given data to String 
+     * Generate type of given data to String
      * i - integer type
      * d - double type
-     * s - string type 
-     * 
+     * s - string type
+     *
      * @param array of values
-     * @return array with index "types" with contains string witch data type and 
+     * @return array with index "types" with contains string witch data type and
      * index "values" witch contains cleanded data
      */
     private function getTypes( $data ){
         $result["types"] =  array();
         $result["values"] =  array();
-        
+
         if( count($data) > 0 ){
-            
+
             foreach ($data as $key => $value){
                 $type = gettype( $value );
                 switch ($type){
@@ -255,28 +255,28 @@ class Database
                         $result["types"][] = "s";
                         $result["values"][] = (strpos($key, "content") !== false ? $this->mysql->real_escape_string( $value ) : $value ) ;
                         break;
-                    case 'NULL': 
+                    case 'NULL':
 						$result["types"][] = "s";
                         $result["values"][] =  $value;
 						break;
-                    case 'unknown type': 
+                    case 'unknown type':
                     default:
                         throw new MysqlException( "-2", "Error: can not detect type of key: ". $key . " - value: ".gettype($value)  );
                 } // switch
-                
+
             } // foreach
             return $result;
-        } // if	
-        
+        } // if
+
     } // fnc
-    
-    
-    
-    
-    
+
+
+
+
+
     /** ---------------------------------------------------------------------------------
      * Universal method to querying to the database
-     * 
+     *
      * @param String SQL with data
      * @return array if SQL query is SELECT, true otherwise
      * @throws MysqlException if query failed.
@@ -295,18 +295,18 @@ class Database
             }
         }else{
             if ($this->mysql->query($sql)){
-                return true;	
+                return true;
             }else{
                 throw new MysqlException( $this->mysql->errno, $this->mysql->error,  $sql);
             }
         }
     }
-	
-	
+
+
 	public function clean($str){
 		return $this->mysql->real_escape_string($str);
 	}
-	
+
 	public function getInsertId(){
 		return $this->mysql->insert_id;
 	}
