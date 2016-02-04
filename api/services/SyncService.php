@@ -16,8 +16,8 @@ class SyncService extends BaseService
     try{
         $this->conn->beginTransaction();
         $time = $this->time();
+        $logger = Logger::getLogger('api');
         if(!is_object ($data)){
-          $logger = Logger::getLogger('api');
           $body = file_get_contents('php://input');
           $headers = '';
           foreach (getallheaders() as $name => $value) {
@@ -25,6 +25,7 @@ class SyncService extends BaseService
           }
           $logger->warn($headers .' | '. $body);
         }
+        $logger->info("User [$uid] submitted ".($isLogin ? "login" : "sync")." request from ". $this->getUserAgent().' | '. $_SERVER['REMOTE_ADDR']);
         if(!$isLogin){
           $mappingArray = $this->syncBooks($time, $data, $uid);
           $mappingArray = $this->syncLectures($time, $data, $mappingArray);
@@ -240,6 +241,14 @@ private function createLecture($time, $lecture, $mappingArray){
         ));
     }
 
+  private function getUserAgent(){
+    foreach (getallheaders() as $name => $value) {
+         if($name == "User-Agent"){
+            return "$name: $value";
+         }
+    }
+    return "User-Agent: NOT_SET";
+  }
 
   private function createBook($time, $book, $uid){
       $sql = 
