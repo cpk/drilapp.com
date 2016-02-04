@@ -75,7 +75,7 @@ class Text2Speach {
      * @return     String     - mp3 file path 
      * @link https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
      */ 
-    public function getFilePath($text, $lang) { 
+    public function getFilePath($text, $lang, $token) { 
          
        
         if (!isset($lang)) { 
@@ -117,7 +117,7 @@ class Text2Speach {
             $text = urlencode($text);
 
             // Download new file
-            $this->download("http://translate.google.com/translate_tts?ie=UTF-8&q={$text}&tl={$lang}&total={$this->wordCount}&idx=0&textlen={$this->textLen}", $file);
+            $this->download("http://translate.google.com/translate_tts?ie=UTF-8&q={$text}&tl={$lang}&total={$this->wordCount}&idx=0&textlen={$this->textLen}&tk=$token&client=t", $file);
         }
         
          
@@ -183,6 +183,7 @@ class Text2Speach {
         }else{ // use curl  
             $ch = curl_init();  
             curl_setopt($ch, CURLOPT_URL, $url);  
+            curl_setopt($ch, CURLOPT_REFERER, "http://translate.google.com/");
             curl_setopt($ch, CURLOPT_AUTOREFERER, true);
             curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:37.0) Gecko/20100101 Firefox/37.0");  
             curl_setopt($ch, CURLOPT_HEADER, 0);  

@@ -16,6 +16,15 @@ class SyncService extends BaseService
     try{
         $this->conn->beginTransaction();
         $time = $this->time();
+        if(!is_object ($data)){
+          $logger = Logger::getLogger('api');
+          $body = file_get_contents('php://input');
+          $headers = '';
+          foreach (getallheaders() as $name => $value) {
+              $headers .= "$name: $value, ";
+          }
+          $logger->warn($headers .' | '. $body);
+        }
         if(!$isLogin){
           $mappingArray = $this->syncBooks($time, $data, $uid);
           $mappingArray = $this->syncLectures($time, $data, $mappingArray);
