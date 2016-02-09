@@ -199,7 +199,7 @@ class WordService extends BaseService
         if( $userStats['wordLimit'] != UNLIMITED && $totalWords > $userStats['wordLimit'] ){
           $logger->warn("User [uid=".$lecture['user_id']."] word limit exceeded. The user tried to import $count " .
                         "into [lid=" . $lecture['dril_lecture_id']."]" );
-          throw new InvalidArgumentException( getMessage("errWordLimit", $userStats['wordCount'], $userStats['wordLimit']) );
+          throw new InvalidArgumentException( getMessage("errWordLimit", $userStats['wordLimit'], $userStats['wordCount']) );
         }
         $sqlRows = array();
         for( $i = 0; $i < $count; $i++ ){
